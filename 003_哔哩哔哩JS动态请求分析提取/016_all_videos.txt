@@ -1,0 +1,380 @@
+{'title': '猫和老鼠鬼畜配音20', 'url': 'https://www.bilibili.com/video/av67555874/', 'author': '韬哥zZ', 'view': 4, 'like': 1}
+{'title': '【川普】Believer', 'url': 'https://www.bilibili.com/video/av67562016/', 'author': 'Dark__Fox', 'view': 2, 'like': 0}
+{'title': '新 片 头', 'url': 'https://www.bilibili.com/video/av67562038/', 'author': '林小蝶', 'view': 18, 'like': 6}
+{'title': '【8848】贤哥手机', 'url': 'https://www.bilibili.com/video/av67561019/', 'author': '伽v看蟹黄堡秘方', 'view': 17, 'like': 4}
+{'title': '【枪声音乐】中秋无敌，来个电音，嗨翻天', 'url': 'https://www.bilibili.com/video/av67556347/', 'author': 'YrptN', 'view': 21, 'like': 7}
+{'title': '波你太美，baby啊♂～', 'url': 'https://www.bilibili.com/video/av67558969/', 'author': '林夕小伙', 'view': 17, 'like': 1}
+{'title': '野♂狼Disco', 'url': 'https://www.bilibili.com/video/av67527001/', 'author': '爱穹妹的小浪浪', 'view': 1517, 'like': 307}
+{'title': '【神楽めあ】天狗disco', 'url': 'https://www.bilibili.com/video/av67556714/', 'author': '学渣只能说一句花Q', 'view': 235, 'like': 86}
+{'title': '【枪声音乐】Alone；我并非孤单一人，感谢有你陪伴', 'url': 'https://www.bilibili.com/video/av67551514/', 'author': 'LovelyR拾弎酱', 'view': 485, 'like': 154}
+{'title': '【LOLX电音】信号踩点，萌新UP尝试驾驭电音', 'url': 'https://www.bilibili.com/video/av67552761/', 'author': '白凤梨梨', 'view': 9, 'like': 1}
+{'title': '【古诗Rap】70位鬼畜明星带你一口气背完长恨歌', 'url': 'https://www.bilibili.com/video/av67521049/', 'author': '壹号旋转木马', 'view': 42, 'like': 3}
+{'title': '【让子弹飞】孙笑川:我真的只吃了一碗窝窝头！', 'url': 'https://www.bilibili.com/video/av67554728/', 'author': '萝卜史塔克RadishStark', 'view': 27, 'like': 4}
+{'title': '【韩美娟鬼畜】你帮了我我还扎你【一人饮酒醉】', 'url': 'https://www.bilibili.com/video/av67555001/', 'author': '小素群', 'view': 14, 'like': 0}
+{'title': '巴啦啦小猪仙——佩奇魔仙', 'url': 'https://www.bilibili.com/video/av67549862/', 'author': '你梦见你梦见你', 'view': 21, 'like': 1}
+{'title': '纳尔巴德雷克赛祝各位中秋节快乐！唱的太感动了我枯了你们呢', 'url': 'https://www.bilibili.com/video/av67555122/', 'author': '运气很好的小焦', 'view': 144, 'like': 39}
+{'title': '【枪声音乐】听枪声带你漂洋过海（误）', 'url': 'https://www.bilibili.com/video/av67552903/', 'author': '风之子o影男', 'view': 343, 'like': 83}
+{'title': '【刘醒 梁非凡】芒种', 'url': 'https://www.bilibili.com/video/av67552924/', 'author': '向往的啊榮', 'view': 30, 'like': 4}
+{'title': '【RAP】中秋节到了 也 佛 了', 'url': 'https://www.bilibili.com/video/av67553722/', 'author': '某某栗_', 'view': 95, 'like': 16}
+{'title': '用绝对赛车打开BAD GUY 会发生什么', 'url': 'https://www.bilibili.com/video/av67553811/', 'author': 'musikaaaa', 'view': 8, 'like': 0}
+{'title': '曲曲曲曲曲奇☆', 'url': 'https://www.bilibili.com/video/av67554655/', 'author': '天法蛮法天', 'view': 6, 'like': 0}
+{'title': '【枪声音乐】Come And Get It', 'url': 'https://www.bilibili.com/video/av67553787/', 'author': 'EnsommeWanderer', 'view': 16, 'like': 5}
+{'title': 'shelter 枪乐 手机制作', 'url': 'https://www.bilibili.com/video/av67547735/', 'author': 'l姬坂小乃爱l', 'view': 7, 'like': 2}
+{'title': '晓明哥不要啊', 'url': 'https://www.bilibili.com/video/av67542858/', 'author': '笔名叫做周树人', 'view': 15, 'like': 3}
+{'title': '【卢本伟主演】头号玩家！第二集：卢本伟身陷九九八十一难，能否通关？', 'url': 'https://www.bilibili.com/video/av67530671/', 'author': '哦呼w', 'view': 45248, 'like': 12231}
+{'title': '【全明星芒种】狗你太美……', 'url': 'https://www.bilibili.com/video/av67514179/', 'author': '倒悬的橘子', 'view': 10690, 'like': 1487}
+{'title': '掌握明学的点读机，竟然点出了窝窝头？？', 'url': 'https://www.bilibili.com/video/av67503120/', 'author': '祈如斯', 'view': 27, 'like': 5}
+{'title': '【枪声音乐】愿我如星君如月，夜夜流光相皎洁。战地3 - Silverio ♫', 'url': 'https://www.bilibili.com/video/av67551021/', 'author': '兔淘米', 'view': 17, 'like': 6}
+{'title': '【律师函警告】:美国油管疯传的特朗普鬼畜！！', 'url': 'https://www.bilibili.com/video/av67550662/', 'author': '学弟孤墨', 'view': 12, 'like': 1}
+{'title': '[白泽]啊啊啊啊妈！！！有怪物要吃了你儿子啊妈啊啊啊啊啊啊', 'url': 'https://www.bilibili.com/video/av67549798/', 'author': '白泽今天又咕了', 'view': 7, 'like': 0}
+{'title': '【全明星rap】超极限踩点！带感highscore！', 'url': 'https://www.bilibili.com/video/av67548481/', 'author': '通宵了嘛Ori', 'view': 20, 'like': 0}
+{'title': '【大型互动鬼畜剧】隐形科学家第一集', 'url': 'https://www.bilibili.com/video/av67542602/', 'author': 'EX萌新', 'view': 185, 'like': 45}
+{'title': '【双倍快乐】轮到三笠和炮姐给你洗脑了', 'url': 'https://www.bilibili.com/video/av67549551/', 'author': 'Gerba', 'view': 12, 'like': 2}
+{'title': '【马云】野狼disco，感受金融大佬退休前的狂欢。', 'url': 'https://www.bilibili.com/video/av67549269/', 'author': '清溪鬼咕子', 'view': 92, 'like': 6}
+{'title': '[明日方舟】彩 虹 罗 德 岛', 'url': 'https://www.bilibili.com/video/av67547780/', 'author': '-假装有个名字-', 'view': 7, 'like': 0}
+{'title': '[8848颜值手机]你离成功就差一部这样的手机', 'url': 'https://www.bilibili.com/video/av67548956/', 'author': 'o螨虫o', 'view': 25, 'like': 3}
+{'title': '耳光王用匈牙利圆舞曲的方式把他们都扇了一遍', 'url': 'https://www.bilibili.com/video/av67548626/', 'author': '锅巴-果干七', 'view': 12, 'like': 2}
+{'title': '【哲学】胜利时刻', 'url': 'https://www.bilibili.com/video/av67548228/', 'author': '八鳥未琉Clay', 'view': 9, 'like': 1}
+{'title': '电人一时爽，一直电人一直爽！', 'url': 'https://www.bilibili.com/video/av67545782/', 'author': '电鸡小子杨永信', 'view': 68, 'like': 4}
+{'title': '【元首RAP】野狼DISCO', 'url': 'https://www.bilibili.com/video/av67546922/', 'author': '冠希204', 'view': 303, 'like': 102}
+{'title': '【泠鸢rap】野鸟disco——我左开车，右抱烤箱（野狼disco）', 'url': 'https://www.bilibili.com/video/av67545051/', 'author': '晨曦-_-落日', 'view': 49, 'like': 9}
+{'title': '某新星rap手要与书记同台献唱！', 'url': 'https://www.bilibili.com/video/av67545699/', 'author': 'イ浅梦-', 'view': 13, 'like': 2}
+{'title': '【韩美娟】哔哔赖赖扎就完了', 'url': 'https://www.bilibili.com/video/av67512114/', 'author': '薤薤薤白', 'view': 57, 'like': 2}
+{'title': '【面筋哥&吟游诗人】芒种', 'url': 'https://www.bilibili.com/video/av67544863/', 'author': '怡香love', 'view': 21, 'like': 3}
+{'title': 'Ｄｒ．ＳH I T 屎纪元', 'url': 'https://www.bilibili.com/video/av67464819/', 'author': '瞬间爆炸型LowSing', 'view': 24585, 'like': 3422}
+{'title': '十几个五五开VS旭旭宝宝！游乐王子！', 'url': 'https://www.bilibili.com/video/av67542891/', 'author': '居然是个凡人', 'view': 129, 'like': 16}
+{'title': '【神医RAP】跟着这个节奏噶韭菜', 'url': 'https://www.bilibili.com/video/av67542701/', 'author': '在下魔术羊', 'view': 415, 'like': 104}
+{'title': '【枪声音乐/中秋特辑】不知道起什么标题反正中秋节快乐就完事了', 'url': 'https://www.bilibili.com/video/av67542003/', 'author': 'sha7ma', 'view': 36, 'like': 7}
+{'title': '【鬼畜配音】熊出没：强哥要当小姨子了', 'url': 'https://www.bilibili.com/video/av67539669/', 'author': '幻灭君丶', 'view': 352, 'like': 51}
+{'title': '【知名美女主播深夜渴望男人】毛肚组合-侠客行（武林外传）', 'url': 'https://www.bilibili.com/video/av67539958/', 'author': '我想锄大地', 'view': 91, 'like': 8}
+{'title': '熊凤山教你背古诗--第2弹', 'url': 'https://www.bilibili.com/video/av67535851/', 'author': '坠落吃货天堂的小猪', 'view': 282, 'like': 21}
+{'title': '【华农兄弟】夜曲  竹鼠：弱小 无助 又可怜', 'url': 'https://www.bilibili.com/video/av67537129/', 'author': '一吱小麋鹿', 'view': 37, 'like': 2}
+{'title': '【五五开】头号玩家', 'url': 'https://www.bilibili.com/video/av67536713/', 'author': '行为艺术者', 'view': 95, 'like': 6}
+{'title': '最炫♂民族风', 'url': 'https://www.bilibili.com/video/av67538150/', 'author': '要个BUFF真难', 'view': 23, 'like': 7}
+{'title': '【华农兄弟】华农金洋兄弟领衔主演——特效向华农王朝·第一集·华农篡位', 'url': 'https://www.bilibili.com/video/av67412287/', 'author': '妖山的包子铺official', 'view': 78, 'like': 7}
+{'title': '【滴歪艾斯】￥张九龄￥土味trap版小娟 feat. 王九龙&劣质快板', 'url': 'https://www.bilibili.com/video/av67538045/', 'author': '打着灯笼都找不到', 'view': 205, 'like': 31}
+{'title': '【Giao哥】Giao语说唱教学', 'url': 'https://www.bilibili.com/video/av67534562/', 'author': 'hululu大魔王321', 'view': 121, 'like': 5}
+{'title': '【8848】小 韭 篮 手 机', 'url': 'https://www.bilibili.com/video/av67533949/', 'author': '崆佰丶', 'view': 36, 'like': 3}
+{'title': '【枪声音乐】建议中秋节边吃月饼边看枪乐', 'url': 'https://www.bilibili.com/video/av67510513/', 'author': '六条腿の章鱼', 'view': 104, 'like': 25}
+{'title': '【哲学】弥♂撒', 'url': 'https://www.bilibili.com/video/av67532632/', 'author': '青鸟笙', 'view': 42, 'like': 1}
+{'title': '♂VAN乱代表我的心♂（月亮代表我的心）', 'url': 'https://www.bilibili.com/video/av67514267/', 'author': '雨打烂芭蕉', 'view': 6, 'like': 1}
+{'title': '【茄音乐】三 炮 齐 鸣 ！ 天 下 太 平 ！', 'url': 'https://www.bilibili.com/video/av67532565/', 'author': '幼稚小沫尘', 'view': 495, 'like': 78}
+{'title': '！！！', 'url': 'https://www.bilibili.com/video/av67524563/', 'author': '去给爷练吉他去', 'view': 1, 'like': 0}
+{'title': '我竟然用《五年高考，三年模拟》打出了一首Believer[沙雕向]', 'url': 'https://www.bilibili.com/video/av67500148/', 'author': '西贝_westshell', 'view': 61, 'like': 6}
+{'title': '【韩美娟】蝴蝶姑娘与烧鸡的故事', 'url': 'https://www.bilibili.com/video/av67532563/', 'author': '耀之君', 'view': 1288, 'like': 32}
+{'title': '【赵本山】白金大忽悠~你大爷永远是你大爷', 'url': 'https://www.bilibili.com/video/av67204635/', 'author': '树杈上的栗子', 'view': 36, 'like': 2}
+{'title': '震惊！居然和有锤子一样的月饼！！！！', 'url': 'https://www.bilibili.com/video/av67525846/', 'author': '北京仁爱医院妇科主任', 'view': 12, 'like': 1}
+{'title': '[98K]男子宿舍天团出道！', 'url': 'https://www.bilibili.com/video/av67476087/', 'author': '一心做混剪的小阳', 'view': 33, 'like': 10}
+{'title': '【JOJO的奇妙物语】DIO的恋爱循环', 'url': 'https://www.bilibili.com/video/av67530567/', 'author': '茶荼猹', 'view': 1481, 'like': 335}
+{'title': '【bo良ki影】上班族也要吸旺仔牛奶', 'url': 'https://www.bilibili.com/video/av67529725/', 'author': '嘤兵头目', 'view': 419, 'like': 40}
+{'title': '熊出没终极鬼畜', 'url': 'https://www.bilibili.com/video/av67529312/', 'author': 'Minecraft-橡树菌MOM', 'view': 109, 'like': 2}
+{'title': '【蔡徐坤】鸡刷刷（嘻唰唰）', 'url': 'https://www.bilibili.com/video/av67523507/', 'author': '睿智君弹皮筋', 'view': 5975, 'like': 765}
+{'title': '【泠鸢带盐】8848冷鸟手机', 'url': 'https://www.bilibili.com/video/av67505165/', 'author': '硬原子核', 'view': 1371, 'like': 115}
+{'title': 'feigao', 'url': 'https://www.bilibili.com/video/av67528866/', 'author': 'IJSAFP', 'view': 68, 'like': 14}
+{'title': '【鬼畜番剧】蓝洞危机', 'url': 'https://www.bilibili.com/video/av67528567/', 'author': '脑洞咚咚大', 'view': 33, 'like': 3}
+{'title': '【领头羊专辑】- Angela so happy/你是逃不掉的', 'url': 'https://www.bilibili.com/video/av67501257/', 'author': '请叫我领头羊', 'view': 10, 'like': 1}
+{'title': '【炉石棋盘新彩蛋鬼畜】用脚丫子当乐器能弹成花儿来', 'url': 'https://www.bilibili.com/video/av67525796/', 'author': '教父Tamici', 'view': 6835, 'like': 833}
+{'title': '【枪声音乐】OVERDRIVE', 'url': 'https://www.bilibili.com/video/av67525939/', 'author': '素同光', 'view': 31, 'like': 1}
+{'title': '芒种-波澜不筋', 'url': 'https://www.bilibili.com/video/av67525110/', 'author': '雪蛤栗子', 'view': 127, 'like': 6}
+{'title': '【文艺♂复兴】Byte', 'url': 'https://www.bilibili.com/video/av67523955/', 'author': '希克君', 'view': 45, 'like': 9}
+{'title': '青花瓷--中国男篮', 'url': 'https://www.bilibili.com/video/av67522932/', 'author': 'c夕泽z', 'view': 32, 'like': 3}
+{'title': '【高一军训鬼畜】芒种', 'url': 'https://www.bilibili.com/video/av67520544/', 'author': '吳ちん', 'view': 3838, 'like': 113}
+{'title': '【鬼畜配音】8848“q歪”手机', 'url': 'https://www.bilibili.com/video/av67519826/', 'author': '汐虹清蓝梦', 'view': 30, 'like': 2}
+{'title': '【鬼畜】重拳出击的学弟？！不，这是讲文明的学弟', 'url': 'https://www.bilibili.com/video/av67520943/', 'author': '堆树莓', 'view': 86, 'like': 16}
+{'title': '【Giao哥】 一起大叫', 'url': 'https://www.bilibili.com/video/av67518349/', 'author': '朱朱侠1736', 'view': 80, 'like': 2}
+{'title': '【阿神】来给【丛林探险】系列做个鬼畜！！数数有多少个〈感叹句〉和〈哀嚎〉！', 'url': 'https://www.bilibili.com/video/av67519709/', 'author': '瑞耐kumy', 'view': 1715, 'like': 247}
+{'title': '芒种韭菜', 'url': 'https://www.bilibili.com/video/av67517133/', 'author': '一半三个核桃', 'view': 24, 'like': 0}
+{'title': '琴魔对决【诸葛孔明】VS【汤姆猫】一想到你我就...', 'url': 'https://www.bilibili.com/video/av67512973/', 'author': '阿肖姬', 'view': 52, 'like': 8}
+{'title': '【鬼畜剧】阿川正传，一代天皇的陨落，可悲的时代产物，孙笑川主演，五五开韩美娟坤坤pdd等客串', 'url': 'https://www.bilibili.com/video/av67510634/', 'author': '小小江_', 'view': 1785, 'like': 214}
+{'title': '中秋节嘻哈佛祖大妈许愿RAP （如何让佛祖学会佛了）', 'url': 'https://www.bilibili.com/video/av67516412/', 'author': '某孙-努力月更中-', 'view': 891, 'like': 63}
+{'title': '某科学的猛男日向', 'url': 'https://www.bilibili.com/video/av67472878/', 'author': '捌捌捌捌叁', 'view': 31, 'like': 9}
+{'title': '大宋提刑踩点.', 'url': 'https://www.bilibili.com/video/av67514758/', 'author': '小镇青年说电影', 'view': 19, 'like': 1}
+{'title': '【枪声音乐】On My Way 中秋节特别档', 'url': 'https://www.bilibili.com/video/av67514103/', 'author': '霾家の卧龙', 'view': 75, 'like': 13}
+{'title': '【朱广权：我用RAP说中秋】', 'url': 'https://www.bilibili.com/video/av67513533/', 'author': '中国新时代青年', 'view': 1416, 'like': 100}
+{'title': '枪声音乐——Culture Code _ Karra - Make Me Move (James Roche Remix)', 'url': 'https://www.bilibili.com/video/av67502558/', 'author': 'Xxx_孙4不1权9咯_xxX', 'view': 17, 'like': 1}
+{'title': '当耳光侠遇上抖音神曲时', 'url': 'https://www.bilibili.com/video/av67507774/', 'author': '生化专家1119', 'view': 68, 'like': 5}
+{'title': '试水 China-X枪声音乐', 'url': 'https://www.bilibili.com/video/av67499744/', 'author': '一位下落不明的高考生', 'view': 50, 'like': 6}
+{'title': '我把我家猫鬼畜了！橘猫翻唱《鬼灭之刃》主题曲《红蓮華》', 'url': 'https://www.bilibili.com/video/av67490713/', 'author': 'Double吸', 'view': 396, 'like': 79}
+{'title': '复读机之电音RAP《你干嘛》', 'url': 'https://www.bilibili.com/video/av67498131/', 'author': '杨须尽欢', 'view': 44, 'like': 1}
+{'title': '【CF枪乐合集】进来♂感受一下CF的魅力吧！', 'url': 'https://www.bilibili.com/video/av67507513/', 'author': 'へいぼん_', 'view': 2096, 'like': 315}
+{'title': '我竟然鬼畜了我们班主任----复数与向量', 'url': 'https://www.bilibili.com/video/av67509093/', 'author': '杨啃羊的小号哈哈哈', 'view': 61, 'like': 4}
+{'title': '【枪声音乐】See You Again', 'url': 'https://www.bilibili.com/video/av67507209/', 'author': '眷恋的白山茶', 'view': 69, 'like': 7}
+{'title': '复♂苏', 'url': 'https://www.bilibili.com/video/av67504138/', 'author': 'Harry_Corleone', 'view': 36, 'like': 7}
+{'title': '小学生做出来的See you again（废）', 'url': 'https://www.bilibili.com/video/av67497685/', 'author': '淡年华孤空城彡', 'view': 38, 'like': 5}
+{'title': '抗鸡者联盟，预告片。', 'url': 'https://www.bilibili.com/video/av67503669/', 'author': '轻盈白', 'view': 106, 'like': 2}
+{'title': '【giao哥】8848giaogiao手机', 'url': 'https://www.bilibili.com/video/av67501967/', 'author': '鬼畜达人香蕉君', 'view': 43, 'like': 0}
+{'title': '[未变异者]Creeper aww man', 'url': 'https://www.bilibili.com/video/av67496523/', 'author': 'MUG1', 'view': 733, 'like': 33}
+{'title': 'ko~no~da~yo~手机', 'url': 'https://www.bilibili.com/video/av67501246/', 'author': '茗茈Tsanity', 'view': 22, 'like': 0}
+{'title': '8848 AIPC', 'url': 'https://www.bilibili.com/video/av67497909/', 'author': '蛋黄派刺杀酱', 'view': 45, 'like': 5}
+{'title': '【电脑】系统错误', 'url': 'https://www.bilibili.com/video/av67495935/', 'author': '极致像素', 'view': 101, 'like': 8}
+{'title': '【开学福利】赵本山教你如何变帅', 'url': 'https://www.bilibili.com/video/av67362267/', 'author': '推背兔の', 'view': 12452, 'like': 1356}
+{'title': '【全明星】only my railgun', 'url': 'https://www.bilibili.com/video/av67492579/', 'author': '清丰君qfj', 'view': 461, 'like': 65}
+{'title': '【孙笑川出面解释】天皇伏法', 'url': 'https://www.bilibili.com/video/av67490654/', 'author': '叫我迪诺就好啦', 'view': 53, 'like': 1}
+{'title': '刘海柱亲情代言8848手机，刘法师全程高能。完整广告视频，不笑算我输', 'url': 'https://www.bilibili.com/video/av67491653/', 'author': '夕阳红biubiubiu', 'view': 469, 'like': 28}
+{'title': '【8848】小b手机，孙亚龙代言', 'url': 'https://www.bilibili.com/video/av67491572/', 'author': '渡边坨坨', 'view': 46, 'like': 1}
+{'title': '我鬼畜了整个班', 'url': 'https://www.bilibili.com/video/av67491540/', 'author': '-鯨落_', 'view': 61, 'like': 0}
+{'title': '8848逮虾户手机', 'url': 'https://www.bilibili.com/video/av67489773/', 'author': '一点也不肥宅的宅熊', 'view': 75, 'like': 11}
+{'title': '三国杀诸葛篇', 'url': 'https://www.bilibili.com/video/av67489080/', 'author': '天涯云水', 'view': 75, 'like': 1}
+{'title': '神医大鳝人乌仁吉终极对决老干部熊凤山', 'url': 'https://www.bilibili.com/video/av67488073/', 'author': '不会剪辑的熊猫', 'view': 83, 'like': 7}
+{'title': '籽岷拍桌鬼畜 新片头', 'url': 'https://www.bilibili.com/video/av67484353/', 'author': '籽岷', 'view': 110122, 'like': 14051}
+{'title': '【地铁弟rap】我受过文化教育吗？', 'url': 'https://www.bilibili.com/video/av67486596/', 'author': '什么时候才能开学啊', 'view': 111, 'like': 4}
+{'title': '众英雄带感合唱火影 GO!', 'url': 'https://www.bilibili.com/video/av67485514/', 'author': '暴怒骑士气球', 'view': 35, 'like': 1}
+{'title': '【互动视频】制作自己的鬼畜0.2', 'url': 'https://www.bilibili.com/video/av67474842/', 'author': '官方晓林解说', 'view': 15, 'like': 1}
+{'title': '【爱情公寓三兄弟】张大仙ppd卢本伟CS枪战1', 'url': 'https://www.bilibili.com/video/av67460216/', 'author': '书衣君', 'view': 237, 'like': 11}
+{'title': '星座？王座？', 'url': 'https://www.bilibili.com/video/av67485004/', 'author': '磅礴方正', 'view': 13, 'like': 0}
+{'title': '我已经没什么可说的了【枪声音乐】', 'url': 'https://www.bilibili.com/video/av67483514/', 'author': '霾家の卧龙', 'view': 59, 'like': 10}
+{'title': '玛丽罗斯加入鬼畜全明星?!洗脑rap"八嘎之歌"全程口吐芬芳！', 'url': 'https://www.bilibili.com/video/av67483547/', 'author': 'ACES棒读天王', 'view': 696, 'like': 46}
+{'title': '三国杀王朗篇', 'url': 'https://www.bilibili.com/video/av67483140/', 'author': '天涯云水', 'view': 48, 'like': 1}
+{'title': 'GIAO特曼大战头皮屑怪兽', 'url': 'https://www.bilibili.com/video/av67407599/', 'author': '飞机君', 'view': 1680, 'like': 153}
+{'title': '【特效向】乔碧萝之搞死了谁', 'url': 'https://www.bilibili.com/video/av67371806/', 'author': '江户川肥喵酱', 'view': 386, 'like': 52}
+{'title': '龙鸣四兄弟之求生之路', 'url': 'https://www.bilibili.com/video/av67482065/', 'author': '不就二十元吗', 'view': 5327, 'like': 295}
+{'title': '【枪声音乐】what+i+like+about+u', 'url': 'https://www.bilibili.com/video/av67480328/', 'author': '心渡Yume', 'view': 118, 'like': 23}
+{'title': '神医rap，噶孩子，救百姓', 'url': 'https://www.bilibili.com/video/av67480514/', 'author': '六枚硬币能重新做人', 'view': 1070, 'like': 64}
+{'title': '【互动视频】体验一下鬼畜明星的生活吧！', 'url': 'https://www.bilibili.com/video/av67477167/', 'author': '黑い羽毛', 'view': 116, 'like': 6}
+{'title': '【马云单曲】大佬很忙', 'url': 'https://www.bilibili.com/video/av67332628/', 'author': '龙大人不喷火', 'view': 6121, 'like': 1066}
+{'title': '【哲学】植物dark战僵尸(白天屋顶与坤坤的对决)', 'url': 'https://www.bilibili.com/video/av67473874/', 'author': 'Guomua', 'view': 70, 'like': 16}
+{'title': '【哲学】野狼♂disco', 'url': 'https://www.bilibili.com/video/av67476745/', 'author': '瞑浔Sabri', 'view': 442, 'like': 97}
+{'title': '【惊吓岛】第一集 PDD和LBW遇上乔莱莱', 'url': 'https://www.bilibili.com/video/av67454169/', 'author': '有了梦想的咸鱼', 'view': 77, 'like': 2}
+{'title': '当窝窝头遇上假面骑士', 'url': 'https://www.bilibili.com/video/av67477652/', 'author': '奇妙螺旋', 'view': 58, 'like': 6}
+{'title': '【白给大片】《白给敢死队》（燃向）', 'url': 'https://www.bilibili.com/video/av67475314/', 'author': 'D琴魔', 'view': 11305, 'like': 1344}
+{'title': '【全明星】老婆可以拿走，笔给我留下!', 'url': 'https://www.bilibili.com/video/av67379762/', 'author': '可靠de伏特加', 'view': 20449, 'like': 1935}
+{'title': '【三国】谁是最美的男人？', 'url': 'https://www.bilibili.com/video/av67337067/', 'author': '裸奔的爱毛', 'view': 5806, 'like': 746}
+{'title': '王vs猪：司徒竟能用亮泽秀发轻盈地上天攻击', 'url': 'https://www.bilibili.com/video/av67330257/', 'author': '橙某', 'view': 5485, 'like': 687}
+{'title': 'dancer in the dark(重制版)', 'url': 'https://www.bilibili.com/video/av67474932/', 'author': '陈奔金', 'view': 12, 'like': 3}
+{'title': '[Elsword]快乐踩贝壳', 'url': 'https://www.bilibili.com/video/av67474202/', 'author': '督导', 'view': 751, 'like': 57}
+{'title': '闹太套的真正版本！', 'url': 'https://www.bilibili.com/video/av67432049/', 'author': 'OELoop', 'view': 354397, 'like': 44697}
+{'title': '用崩坏3打开的Shelter你听过嘛？', 'url': 'https://www.bilibili.com/video/av67471452/', 'author': 'LZX凌子虚', 'view': 128, 'like': 19}
+{'title': '【吃素的狮子】0+7带帅比完整版，洗脑循环', 'url': 'https://www.bilibili.com/video/av67372362/', 'author': 'AKAtople', 'view': 95, 'like': 11}
+{'title': '【周九良】那天为他唱《月圆花好》的人真的是我/中秋节快乐安康！', 'url': 'https://www.bilibili.com/video/av67437824/', 'author': '像素水母Haku', 'view': 6067, 'like': 354}
+{'title': '【二度开花】文艺复兴 邮递vtuber', 'url': 'https://www.bilibili.com/video/av67471197/', 'author': '节操大大', 'view': 102, 'like': 4}
+{'title': '【哲学】月亮警♂察', 'url': 'https://www.bilibili.com/video/av67447872/', 'author': '王思妇丶', 'view': 47809, 'like': 9465}
+{'title': '【韩美娟Rap】一首BB赖赖送给大家', 'url': 'https://www.bilibili.com/video/av67470934/', 'author': '羽关关bilbil', 'view': 111, 'like': 1}
+{'title': '喵帕斯Disco（野狼disco）', 'url': 'https://www.bilibili.com/video/av67372341/', 'author': 'Passkou', 'view': 662, 'like': 89}
+{'title': 'shelter 枪乐', 'url': 'https://www.bilibili.com/video/av67468275/', 'author': 'l姬坂小乃爱l', 'view': 27, 'like': 4}
+{'title': '芒种遇上爱情买卖 听起来竟有些悲哀', 'url': 'https://www.bilibili.com/video/av67468434/', 'author': '改名要六枚硬币', 'view': 29, 'like': 0}
+{'title': '当猫和老鼠我的世界化会发生什么？第二集', 'url': 'https://www.bilibili.com/video/av67408718/', 'author': '孤影过客', 'view': 8501, 'like': 657}
+{'title': '【8848】曾小贤代言8848贤哥手机！', 'url': 'https://www.bilibili.com/video/av67403285/', 'author': '风云熊', 'view': 24506, 'like': 2331}
+{'title': '《复仇者联盟三：无限战争》鬼畜明星的集结。国产版最燃。张大仙/旭旭宝宝/lbw/pdd/李云龙/韩红/乔碧罗/周淑怡/杨超越等倾情出演', 'url': 'https://www.bilibili.com/video/av67465600/', 'author': '扫地僧fz', 'view': 423, 'like': 36}
+{'title': '【全明星】野狼disco', 'url': 'https://www.bilibili.com/video/av67437580/', 'author': '痒局长', 'view': 190567, 'like': 23541}
+{'title': '【鬼畜罗小黑】 或许这才是原版的主题曲？', 'url': 'https://www.bilibili.com/video/av67459803/', 'author': '马上就Skr了', 'view': 1867, 'like': 142}
+{'title': '【赌怪单曲】来一波番茄连招！', 'url': 'https://www.bilibili.com/video/av67403858/', 'author': '冰绎', 'view': 91416, 'like': 11934}
+{'title': '【经典老番】坤蛛侠大战赌怪博士', 'url': 'https://www.bilibili.com/video/av67414628/', 'author': '修2', 'view': 5597, 'like': 1135}
+{'title': '【JOJO/BOKI之歌】我BOKI了，你呢？', 'url': 'https://www.bilibili.com/video/av67243115/', 'author': '砂糖笕', 'view': 8871, 'like': 1058}
+{'title': '【全明星】千里邀月', 'url': 'https://www.bilibili.com/video/av67057195/', 'author': '雨宫B大雷', 'view': 187, 'like': 42}
+{'title': '【赵本山】要啥自行车', 'url': 'https://www.bilibili.com/video/av67456079/', 'author': 'KLIV', 'view': 1090, 'like': 25}
+{'title': '[枪乐Horizon]进来看看新人的作品吧，又不要你硬币', 'url': 'https://www.bilibili.com/video/av67458128/', 'author': '白-嫖-使我快乐', 'view': 13, 'like': 5}
+{'title': '【拼多多广告】窝窝头', 'url': 'https://www.bilibili.com/video/av67452959/', 'author': '没钱买天津辣条', 'view': 1234, 'like': 167}
+{'title': '【Hanser鬼畜】滴滴～奶粉味婴儿车发车啦！', 'url': 'https://www.bilibili.com/video/av67456359/', 'author': '布偶Seph', 'view': 30440, 'like': 4119}
+{'title': '【BND男团】实现梦想的哆啦♂A梦', 'url': 'https://www.bilibili.com/video/av67453076/', 'author': 'notAhuman', 'view': 477, 'like': 153}
+{'title': '唐伯虎点秋香鬼畜', 'url': 'https://www.bilibili.com/video/av67452799/', 'author': '熊猫鸟哥646147', 'view': 522, 'like': 11}
+{'title': '马云唱《怒放的生命》，调音师忽然掉线？', 'url': 'https://www.bilibili.com/video/av67452813/', 'author': '珊小糊', 'view': 1304, 'like': 21}
+{'title': '【哲学】君主·埃尔梅罗二世事件簿op', 'url': 'https://www.bilibili.com/video/av67407776/', 'author': '无洺浅歌', 'view': 58, 'like': 20}
+{'title': '一起来听听章鱼哥的美妙音乐吧', 'url': 'https://www.bilibili.com/video/av67450596/', 'author': '纳谁是谁', 'view': 79, 'like': 6}
+{'title': '【卢本伟主演】--死侍', 'url': 'https://www.bilibili.com/video/av67449255/', 'author': '刘泽秀V', 'view': 64807, 'like': 4664}
+{'title': '【余小C】领先10个版本的男人！上路偶遇一生之敌提莫队长！', 'url': 'https://www.bilibili.com/video/av67446114/', 'author': '提着刀的胖虎', 'view': 1164, 'like': 69}
+{'title': '神医PK，哪个才是天下第一奇毒', 'url': 'https://www.bilibili.com/video/av67444527/', 'author': '白鹿酒吧的大桃子', 'view': 8917, 'like': 740}
+{'title': '来♂', 'url': 'https://www.bilibili.com/video/av67447727/', 'author': '窃r格瓦拉', 'view': 65, 'like': 1}
+{'title': '【芦苇五五开】卢本伟玩滑板作死集锦', 'url': 'https://www.bilibili.com/video/av67445538/', 'author': '蛇皮王Maste', 'view': 8965, 'like': 819}
+{'title': '鬼畜不起来系列之豪哥吃技术：豪哥羡慕0杀吃鸡但无奈总被神仙安排', 'url': 'https://www.bilibili.com/video/av67442991/', 'author': '猎小明', 'view': 351, 'like': 68}
+{'title': '【百岁山】药水和周淑怡因为一瓶水而展开的爱情故事其一', 'url': 'https://www.bilibili.com/video/av67443451/', 'author': '我是个大奇葩', 'view': 1616, 'like': 101}
+{'title': '《再见了妈妈》', 'url': 'https://www.bilibili.com/video/av67424452/', 'author': 'YesHumpy', 'view': 18304, 'like': 596}
+{'title': '猫和老鼠鬼畜配音20', 'url': 'https://www.bilibili.com/video/av67555874/', 'author': '韬哥zZ', 'view': 8, 'like': 1}
+{'title': '【川普】Believer', 'url': 'https://www.bilibili.com/video/av67562016/', 'author': 'Dark__Fox', 'view': 2, 'like': 0}
+{'title': '新 片 头', 'url': 'https://www.bilibili.com/video/av67562038/', 'author': '林小蝶', 'view': 20, 'like': 6}
+{'title': '【8848】贤哥手机', 'url': 'https://www.bilibili.com/video/av67561019/', 'author': '伽v看蟹黄堡秘方', 'view': 20, 'like': 4}
+{'title': '【枪声音乐】中秋无敌，来个电音，嗨翻天', 'url': 'https://www.bilibili.com/video/av67556347/', 'author': 'YrptN', 'view': 21, 'like': 7}
+{'title': '波你太美，baby啊♂～', 'url': 'https://www.bilibili.com/video/av67558969/', 'author': '林夕小伙', 'view': 17, 'like': 1}
+{'title': '野♂狼Disco', 'url': 'https://www.bilibili.com/video/av67527001/', 'author': '爱穹妹的小浪浪', 'view': 1517, 'like': 308}
+{'title': '【神楽めあ】天狗disco', 'url': 'https://www.bilibili.com/video/av67556714/', 'author': '学渣只能说一句花Q', 'view': 235, 'like': 87}
+{'title': '【枪声音乐】Alone；我并非孤单一人，感谢有你陪伴', 'url': 'https://www.bilibili.com/video/av67551514/', 'author': 'LovelyR拾弎酱', 'view': 485, 'like': 156}
+{'title': '【LOLX电音】信号踩点，萌新UP尝试驾驭电音', 'url': 'https://www.bilibili.com/video/av67552761/', 'author': '白凤梨梨', 'view': 9, 'like': 1}
+{'title': '【古诗Rap】70位鬼畜明星带你一口气背完长恨歌', 'url': 'https://www.bilibili.com/video/av67521049/', 'author': '壹号旋转木马', 'view': 42, 'like': 3}
+{'title': '【让子弹飞】孙笑川:我真的只吃了一碗窝窝头！', 'url': 'https://www.bilibili.com/video/av67554728/', 'author': '萝卜史塔克RadishStark', 'view': 27, 'like': 4}
+{'title': '【韩美娟鬼畜】你帮了我我还扎你【一人饮酒醉】', 'url': 'https://www.bilibili.com/video/av67555001/', 'author': '小素群', 'view': 14, 'like': 0}
+{'title': '巴啦啦小猪仙——佩奇魔仙', 'url': 'https://www.bilibili.com/video/av67549862/', 'author': '你梦见你梦见你', 'view': 21, 'like': 1}
+{'title': '纳尔巴德雷克赛祝各位中秋节快乐！唱的太感动了我枯了你们呢', 'url': 'https://www.bilibili.com/video/av67555122/', 'author': '运气很好的小焦', 'view': 146, 'like': 39}
+{'title': '【枪声音乐】听枪声带你漂洋过海（误）', 'url': 'https://www.bilibili.com/video/av67552903/', 'author': '风之子o影男', 'view': 343, 'like': 83}
+{'title': '【刘醒 梁非凡】芒种', 'url': 'https://www.bilibili.com/video/av67552924/', 'author': '向往的啊榮', 'view': 30, 'like': 4}
+{'title': '【RAP】中秋节到了 也 佛 了', 'url': 'https://www.bilibili.com/video/av67553722/', 'author': '某某栗_', 'view': 95, 'like': 16}
+{'title': '用绝对赛车打开BAD GUY 会发生什么', 'url': 'https://www.bilibili.com/video/av67553811/', 'author': 'musikaaaa', 'view': 8, 'like': 0}
+{'title': '曲曲曲曲曲奇☆', 'url': 'https://www.bilibili.com/video/av67554655/', 'author': '天法蛮法天', 'view': 6, 'like': 0}
+{'title': '猫和老鼠鬼畜配音20', 'url': 'https://www.bilibili.com/video/av67555874/', 'author': '韬哥zZ', 'view': 8, 'like': 1}
+{'title': '【川普】Believer', 'url': 'https://www.bilibili.com/video/av67562016/', 'author': 'Dark__Fox', 'view': 2, 'like': 0}
+{'title': '新 片 头', 'url': 'https://www.bilibili.com/video/av67562038/', 'author': '林小蝶', 'view': 20, 'like': 6}
+{'title': '【8848】贤哥手机', 'url': 'https://www.bilibili.com/video/av67561019/', 'author': '伽v看蟹黄堡秘方', 'view': 20, 'like': 4}
+{'title': '【枪声音乐】中秋无敌，来个电音，嗨翻天', 'url': 'https://www.bilibili.com/video/av67556347/', 'author': 'YrptN', 'view': 21, 'like': 7}
+{'title': '波你太美，baby啊♂～', 'url': 'https://www.bilibili.com/video/av67558969/', 'author': '林夕小伙', 'view': 17, 'like': 1}
+{'title': '野♂狼Disco', 'url': 'https://www.bilibili.com/video/av67527001/', 'author': '爱穹妹的小浪浪', 'view': 1517, 'like': 308}
+{'title': '【神楽めあ】天狗disco', 'url': 'https://www.bilibili.com/video/av67556714/', 'author': '学渣只能说一句花Q', 'view': 235, 'like': 87}
+{'title': '【枪声音乐】Alone；我并非孤单一人，感谢有你陪伴', 'url': 'https://www.bilibili.com/video/av67551514/', 'author': 'LovelyR拾弎酱', 'view': 485, 'like': 156}
+{'title': '【LOLX电音】信号踩点，萌新UP尝试驾驭电音', 'url': 'https://www.bilibili.com/video/av67552761/', 'author': '白凤梨梨', 'view': 9, 'like': 1}
+{'title': '【古诗Rap】70位鬼畜明星带你一口气背完长恨歌', 'url': 'https://www.bilibili.com/video/av67521049/', 'author': '壹号旋转木马', 'view': 42, 'like': 3}
+{'title': '【让子弹飞】孙笑川:我真的只吃了一碗窝窝头！', 'url': 'https://www.bilibili.com/video/av67554728/', 'author': '萝卜史塔克RadishStark', 'view': 27, 'like': 4}
+{'title': '【韩美娟鬼畜】你帮了我我还扎你【一人饮酒醉】', 'url': 'https://www.bilibili.com/video/av67555001/', 'author': '小素群', 'view': 14, 'like': 0}
+{'title': '巴啦啦小猪仙——佩奇魔仙', 'url': 'https://www.bilibili.com/video/av67549862/', 'author': '你梦见你梦见你', 'view': 21, 'like': 1}
+{'title': '纳尔巴德雷克赛祝各位中秋节快乐！唱的太感动了我枯了你们呢', 'url': 'https://www.bilibili.com/video/av67555122/', 'author': '运气很好的小焦', 'view': 146, 'like': 39}
+{'title': '【枪声音乐】听枪声带你漂洋过海（误）', 'url': 'https://www.bilibili.com/video/av67552903/', 'author': '风之子o影男', 'view': 343, 'like': 83}
+{'title': '【刘醒 梁非凡】芒种', 'url': 'https://www.bilibili.com/video/av67552924/', 'author': '向往的啊榮', 'view': 30, 'like': 4}
+{'title': '【RAP】中秋节到了 也 佛 了', 'url': 'https://www.bilibili.com/video/av67553722/', 'author': '某某栗_', 'view': 95, 'like': 16}
+{'title': '用绝对赛车打开BAD GUY 会发生什么', 'url': 'https://www.bilibili.com/video/av67553811/', 'author': 'musikaaaa', 'view': 8, 'like': 0}
+{'title': '曲曲曲曲曲奇☆', 'url': 'https://www.bilibili.com/video/av67554655/', 'author': '天法蛮法天', 'view': 6, 'like': 0}
+{'title': '【枪声音乐】Come And Get It', 'url': 'https://www.bilibili.com/video/av67553787/', 'author': 'EnsommeWanderer', 'view': 16, 'like': 5}
+{'title': 'shelter 枪乐 手机制作', 'url': 'https://www.bilibili.com/video/av67547735/', 'author': 'l姬坂小乃爱l', 'view': 7, 'like': 2}
+{'title': '晓明哥不要啊', 'url': 'https://www.bilibili.com/video/av67542858/', 'author': '笔名叫做周树人', 'view': 16, 'like': 3}
+{'title': '【卢本伟主演】头号玩家！第二集：卢本伟身陷九九八十一难，能否通关？', 'url': 'https://www.bilibili.com/video/av67530671/', 'author': '哦呼w', 'view': 45765, 'like': 12295}
+{'title': '【全明星芒种】狗你太美……', 'url': 'https://www.bilibili.com/video/av67514179/', 'author': '倒悬的橘子', 'view': 10690, 'like': 1494}
+{'title': '掌握明学的点读机，竟然点出了窝窝头？？', 'url': 'https://www.bilibili.com/video/av67503120/', 'author': '祈如斯', 'view': 27, 'like': 5}
+{'title': '【枪声音乐】愿我如星君如月，夜夜流光相皎洁。战地3 - Silverio ♫', 'url': 'https://www.bilibili.com/video/av67551021/', 'author': '兔淘米', 'view': 17, 'like': 6}
+{'title': '【律师函警告】:美国油管疯传的特朗普鬼畜！！', 'url': 'https://www.bilibili.com/video/av67550662/', 'author': '学弟孤墨', 'view': 12, 'like': 1}
+{'title': '[白泽]啊啊啊啊妈！！！有怪物要吃了你儿子啊妈啊啊啊啊啊啊', 'url': 'https://www.bilibili.com/video/av67549798/', 'author': '白泽今天又咕了', 'view': 7, 'like': 0}
+{'title': '【全明星rap】超极限踩点！带感highscore！', 'url': 'https://www.bilibili.com/video/av67548481/', 'author': '通宵了嘛Ori', 'view': 20, 'like': 0}
+{'title': '【大型互动鬼畜剧】隐形科学家第一集', 'url': 'https://www.bilibili.com/video/av67542602/', 'author': 'EX萌新', 'view': 185, 'like': 45}
+{'title': '【双倍快乐】轮到三笠和炮姐给你洗脑了', 'url': 'https://www.bilibili.com/video/av67549551/', 'author': 'Gerba', 'view': 12, 'like': 2}
+{'title': '【马云】野狼disco，感受金融大佬退休前的狂欢。', 'url': 'https://www.bilibili.com/video/av67549269/', 'author': '清溪鬼咕子', 'view': 93, 'like': 6}
+{'title': '[明日方舟】彩 虹 罗 德 岛', 'url': 'https://www.bilibili.com/video/av67547780/', 'author': '-假装有个名字-', 'view': 7, 'like': 0}
+{'title': '[8848颜值手机]你离成功就差一部这样的手机', 'url': 'https://www.bilibili.com/video/av67548956/', 'author': 'o螨虫o', 'view': 25, 'like': 3}
+{'title': '耳光王用匈牙利圆舞曲的方式把他们都扇了一遍', 'url': 'https://www.bilibili.com/video/av67548626/', 'author': '锅巴-果干七', 'view': 12, 'like': 2}
+{'title': '【哲学】胜利时刻', 'url': 'https://www.bilibili.com/video/av67548228/', 'author': '八鳥未琉Clay', 'view': 9, 'like': 1}
+{'title': '电人一时爽，一直电人一直爽！', 'url': 'https://www.bilibili.com/video/av67545782/', 'author': '电鸡小子杨永信', 'view': 68, 'like': 4}
+{'title': '【元首RAP】野狼DISCO', 'url': 'https://www.bilibili.com/video/av67546922/', 'author': '冠希204', 'view': 303, 'like': 102}
+{'title': '【泠鸢rap】野鸟disco——我左开车，右抱烤箱（野狼disco）', 'url': 'https://www.bilibili.com/video/av67545051/', 'author': '晨曦-_-落日', 'view': 49, 'like': 9}
+{'title': '某新星rap手要与书记同台献唱！', 'url': 'https://www.bilibili.com/video/av67545699/', 'author': 'イ浅梦-', 'view': 13, 'like': 2}
+{'title': '【韩美娟】哔哔赖赖扎就完了', 'url': 'https://www.bilibili.com/video/av67512114/', 'author': '薤薤薤白', 'view': 59, 'like': 2}
+{'title': '【面筋哥&吟游诗人】芒种', 'url': 'https://www.bilibili.com/video/av67544863/', 'author': '怡香love', 'view': 21, 'like': 3}
+{'title': 'Ｄｒ．ＳH I T 屎纪元', 'url': 'https://www.bilibili.com/video/av67464819/', 'author': '瞬间爆炸型LowSing', 'view': 24698, 'like': 3425}
+{'title': '十几个五五开VS旭旭宝宝！游乐王子！', 'url': 'https://www.bilibili.com/video/av67542891/', 'author': '居然是个凡人', 'view': 129, 'like': 16}
+{'title': '【神医RAP】跟着这个节奏噶韭菜', 'url': 'https://www.bilibili.com/video/av67542701/', 'author': '在下魔术羊', 'view': 417, 'like': 104}
+{'title': '【枪声音乐/中秋特辑】不知道起什么标题反正中秋节快乐就完事了', 'url': 'https://www.bilibili.com/video/av67542003/', 'author': 'sha7ma', 'view': 36, 'like': 7}
+{'title': '【鬼畜配音】熊出没：强哥要当小姨子了', 'url': 'https://www.bilibili.com/video/av67539669/', 'author': '幻灭君丶', 'view': 352, 'like': 51}
+{'title': '【知名美女主播深夜渴望男人】毛肚组合-侠客行（武林外传）', 'url': 'https://www.bilibili.com/video/av67539958/', 'author': '我想锄大地', 'view': 91, 'like': 8}
+{'title': '熊凤山教你背古诗--第2弹', 'url': 'https://www.bilibili.com/video/av67535851/', 'author': '坠落吃货天堂的小猪', 'view': 287, 'like': 21}
+{'title': '【华农兄弟】夜曲  竹鼠：弱小 无助 又可怜', 'url': 'https://www.bilibili.com/video/av67537129/', 'author': '一吱小麋鹿', 'view': 37, 'like': 2}
+{'title': '【五五开】头号玩家', 'url': 'https://www.bilibili.com/video/av67536713/', 'author': '行为艺术者', 'view': 95, 'like': 6}
+{'title': '最炫♂民族风', 'url': 'https://www.bilibili.com/video/av67538150/', 'author': '要个BUFF真难', 'view': 23, 'like': 7}
+{'title': '【华农兄弟】华农金洋兄弟领衔主演——特效向华农王朝·第一集·华农篡位', 'url': 'https://www.bilibili.com/video/av67412287/', 'author': '妖山的包子铺official', 'view': 78, 'like': 7}
+{'title': '【滴歪艾斯】￥张九龄￥土味trap版小娟 feat. 王九龙&劣质快板', 'url': 'https://www.bilibili.com/video/av67538045/', 'author': '打着灯笼都找不到', 'view': 208, 'like': 31}
+{'title': '【Giao哥】Giao语说唱教学', 'url': 'https://www.bilibili.com/video/av67534562/', 'author': 'hululu大魔王321', 'view': 121, 'like': 5}
+{'title': '【8848】小 韭 篮 手 机', 'url': 'https://www.bilibili.com/video/av67533949/', 'author': '崆佰丶', 'view': 36, 'like': 3}
+{'title': '【枪声音乐】建议中秋节边吃月饼边看枪乐', 'url': 'https://www.bilibili.com/video/av67510513/', 'author': '六条腿の章鱼', 'view': 104, 'like': 25}
+{'title': '【哲学】弥♂撒', 'url': 'https://www.bilibili.com/video/av67532632/', 'author': '青鸟笙', 'view': 42, 'like': 1}
+{'title': '♂VAN乱代表我的心♂（月亮代表我的心）', 'url': 'https://www.bilibili.com/video/av67514267/', 'author': '雨打烂芭蕉', 'view': 6, 'like': 1}
+{'title': '【茄音乐】三 炮 齐 鸣 ！ 天 下 太 平 ！', 'url': 'https://www.bilibili.com/video/av67532565/', 'author': '幼稚小沫尘', 'view': 495, 'like': 78}
+{'title': '！！！', 'url': 'https://www.bilibili.com/video/av67524563/', 'author': '去给爷练吉他去', 'view': 1, 'like': 0}
+{'title': '我竟然用《五年高考，三年模拟》打出了一首Believer[沙雕向]', 'url': 'https://www.bilibili.com/video/av67500148/', 'author': '西贝_westshell', 'view': 61, 'like': 6}
+{'title': '【韩美娟】蝴蝶姑娘与烧鸡的故事', 'url': 'https://www.bilibili.com/video/av67532563/', 'author': '耀之君', 'view': 1288, 'like': 33}
+{'title': '【赵本山】白金大忽悠~你大爷永远是你大爷', 'url': 'https://www.bilibili.com/video/av67204635/', 'author': '树杈上的栗子', 'view': 36, 'like': 2}
+{'title': '震惊！居然和有锤子一样的月饼！！！！', 'url': 'https://www.bilibili.com/video/av67525846/', 'author': '北京仁爱医院妇科主任', 'view': 12, 'like': 1}
+{'title': '[98K]男子宿舍天团出道！', 'url': 'https://www.bilibili.com/video/av67476087/', 'author': '一心做混剪的小阳', 'view': 33, 'like': 10}
+{'title': '【JOJO的奇妙物语】DIO的恋爱循环', 'url': 'https://www.bilibili.com/video/av67530567/', 'author': '茶荼猹', 'view': 1521, 'like': 338}
+{'title': '【bo良ki影】上班族也要吸旺仔牛奶', 'url': 'https://www.bilibili.com/video/av67529725/', 'author': '嘤兵头目', 'view': 419, 'like': 40}
+{'title': '熊出没终极鬼畜', 'url': 'https://www.bilibili.com/video/av67529312/', 'author': 'Minecraft-橡树菌MOM', 'view': 109, 'like': 2}
+{'title': '【蔡徐坤】鸡刷刷（嘻唰唰）', 'url': 'https://www.bilibili.com/video/av67523507/', 'author': '睿智君弹皮筋', 'view': 5975, 'like': 769}
+{'title': '【泠鸢带盐】8848冷鸟手机', 'url': 'https://www.bilibili.com/video/av67505165/', 'author': '硬原子核', 'view': 1387, 'like': 116}
+{'title': 'feigao', 'url': 'https://www.bilibili.com/video/av67528866/', 'author': 'IJSAFP', 'view': 68, 'like': 14}
+{'title': '【鬼畜番剧】蓝洞危机', 'url': 'https://www.bilibili.com/video/av67528567/', 'author': '脑洞咚咚大', 'view': 33, 'like': 3}
+{'title': '【领头羊专辑】- Angela so happy/你是逃不掉的', 'url': 'https://www.bilibili.com/video/av67501257/', 'author': '请叫我领头羊', 'view': 10, 'like': 1}
+{'title': '【炉石棋盘新彩蛋鬼畜】用脚丫子当乐器能弹成花儿来', 'url': 'https://www.bilibili.com/video/av67525796/', 'author': '教父Tamici', 'view': 6868, 'like': 836}
+{'title': '【枪声音乐】OVERDRIVE', 'url': 'https://www.bilibili.com/video/av67525939/', 'author': '素同光', 'view': 31, 'like': 1}
+{'title': '芒种-波澜不筋', 'url': 'https://www.bilibili.com/video/av67525110/', 'author': '雪蛤栗子', 'view': 127, 'like': 6}
+{'title': '【文艺♂复兴】Byte', 'url': 'https://www.bilibili.com/video/av67523955/', 'author': '希克君', 'view': 46, 'like': 9}
+{'title': '青花瓷--中国男篮', 'url': 'https://www.bilibili.com/video/av67522932/', 'author': 'c夕泽z', 'view': 32, 'like': 3}
+{'title': '【高一军训鬼畜】芒种', 'url': 'https://www.bilibili.com/video/av67520544/', 'author': '吳ちん', 'view': 3863, 'like': 113}
+{'title': '【鬼畜配音】8848“q歪”手机', 'url': 'https://www.bilibili.com/video/av67519826/', 'author': '汐虹清蓝梦', 'view': 30, 'like': 2}
+{'title': '【鬼畜】重拳出击的学弟？！不，这是讲文明的学弟', 'url': 'https://www.bilibili.com/video/av67520943/', 'author': '堆树莓', 'view': 86, 'like': 16}
+{'title': '【Giao哥】 一起大叫', 'url': 'https://www.bilibili.com/video/av67518349/', 'author': '朱朱侠1736', 'view': 80, 'like': 2}
+{'title': '【阿神】来给【丛林探险】系列做个鬼畜！！数数有多少个〈感叹句〉和〈哀嚎〉！', 'url': 'https://www.bilibili.com/video/av67519709/', 'author': '瑞耐kumy', 'view': 1715, 'like': 247}
+{'title': '芒种韭菜', 'url': 'https://www.bilibili.com/video/av67517133/', 'author': '一半三个核桃', 'view': 24, 'like': 0}
+{'title': '琴魔对决【诸葛孔明】VS【汤姆猫】一想到你我就...', 'url': 'https://www.bilibili.com/video/av67512973/', 'author': '阿肖姬', 'view': 52, 'like': 8}
+{'title': '【鬼畜剧】阿川正传，一代天皇的陨落，可悲的时代产物，孙笑川主演，五五开韩美娟坤坤pdd等客串', 'url': 'https://www.bilibili.com/video/av67510634/', 'author': '小小江_', 'view': 1790, 'like': 214}
+{'title': '中秋节嘻哈佛祖大妈许愿RAP （如何让佛祖学会佛了）', 'url': 'https://www.bilibili.com/video/av67516412/', 'author': '某孙-努力月更中-', 'view': 899, 'like': 63}
+{'title': '某科学的猛男日向', 'url': 'https://www.bilibili.com/video/av67472878/', 'author': '捌捌捌捌叁', 'view': 31, 'like': 9}
+{'title': '大宋提刑踩点.', 'url': 'https://www.bilibili.com/video/av67514758/', 'author': '小镇青年说电影', 'view': 19, 'like': 1}
+{'title': '【枪声音乐】On My Way 中秋节特别档', 'url': 'https://www.bilibili.com/video/av67514103/', 'author': '霾家の卧龙', 'view': 75, 'like': 13}
+{'title': '【朱广权：我用RAP说中秋】', 'url': 'https://www.bilibili.com/video/av67513533/', 'author': '中国新时代青年', 'view': 1416, 'like': 101}
+{'title': '枪声音乐——Culture Code _ Karra - Make Me Move (James Roche Remix)', 'url': 'https://www.bilibili.com/video/av67502558/', 'author': 'Xxx_孙4不1权9咯_xxX', 'view': 17, 'like': 1}
+{'title': '当耳光侠遇上抖音神曲时', 'url': 'https://www.bilibili.com/video/av67507774/', 'author': '生化专家1119', 'view': 68, 'like': 5}
+{'title': '试水 China-X枪声音乐', 'url': 'https://www.bilibili.com/video/av67499744/', 'author': '一位下落不明的高考生', 'view': 50, 'like': 6}
+{'title': '我把我家猫鬼畜了！橘猫翻唱《鬼灭之刃》主题曲《红蓮華》', 'url': 'https://www.bilibili.com/video/av67490713/', 'author': 'Double吸', 'view': 396, 'like': 79}
+{'title': '复读机之电音RAP《你干嘛》', 'url': 'https://www.bilibili.com/video/av67498131/', 'author': '杨须尽欢', 'view': 44, 'like': 1}
+{'title': '【CF枪乐合集】进来♂感受一下CF的魅力吧！', 'url': 'https://www.bilibili.com/video/av67507513/', 'author': 'へいぼん_', 'view': 2096, 'like': 316}
+{'title': '我竟然鬼畜了我们班主任----复数与向量', 'url': 'https://www.bilibili.com/video/av67509093/', 'author': '杨啃羊的小号哈哈哈', 'view': 61, 'like': 4}
+{'title': '【枪声音乐】See You Again', 'url': 'https://www.bilibili.com/video/av67507209/', 'author': '眷恋的白山茶', 'view': 69, 'like': 7}
+{'title': '复♂苏', 'url': 'https://www.bilibili.com/video/av67504138/', 'author': 'Harry_Corleone', 'view': 36, 'like': 7}
+{'title': '小学生做出来的See you again（废）', 'url': 'https://www.bilibili.com/video/av67497685/', 'author': '淡年华孤空城彡', 'view': 38, 'like': 5}
+{'title': '抗鸡者联盟，预告片。', 'url': 'https://www.bilibili.com/video/av67503669/', 'author': '轻盈白', 'view': 106, 'like': 2}
+{'title': '【giao哥】8848giaogiao手机', 'url': 'https://www.bilibili.com/video/av67501967/', 'author': '鬼畜达人香蕉君', 'view': 43, 'like': 0}
+{'title': '[未变异者]Creeper aww man', 'url': 'https://www.bilibili.com/video/av67496523/', 'author': 'MUG1', 'view': 733, 'like': 33}
+{'title': 'ko~no~da~yo~手机', 'url': 'https://www.bilibili.com/video/av67501246/', 'author': '茗茈Tsanity', 'view': 22, 'like': 0}
+{'title': '8848 AIPC', 'url': 'https://www.bilibili.com/video/av67497909/', 'author': '蛋黄派刺杀酱', 'view': 45, 'like': 5}
+{'title': '【电脑】系统错误', 'url': 'https://www.bilibili.com/video/av67495935/', 'author': '极致像素', 'view': 102, 'like': 8}
+{'title': '【开学福利】赵本山教你如何变帅', 'url': 'https://www.bilibili.com/video/av67362267/', 'author': '推背兔の', 'view': 12452, 'like': 1357}
+{'title': '【全明星】only my railgun', 'url': 'https://www.bilibili.com/video/av67492579/', 'author': '清丰君qfj', 'view': 461, 'like': 65}
+{'title': '【孙笑川出面解释】天皇伏法', 'url': 'https://www.bilibili.com/video/av67490654/', 'author': '叫我迪诺就好啦', 'view': 53, 'like': 1}
+{'title': '刘海柱亲情代言8848手机，刘法师全程高能。完整广告视频，不笑算我输', 'url': 'https://www.bilibili.com/video/av67491653/', 'author': '夕阳红biubiubiu', 'view': 471, 'like': 28}
+{'title': '【8848】小b手机，孙亚龙代言', 'url': 'https://www.bilibili.com/video/av67491572/', 'author': '渡边坨坨', 'view': 46, 'like': 1}
+{'title': '我鬼畜了整个班', 'url': 'https://www.bilibili.com/video/av67491540/', 'author': '-鯨落_', 'view': 61, 'like': 0}
+{'title': '8848逮虾户手机', 'url': 'https://www.bilibili.com/video/av67489773/', 'author': '一点也不肥宅的宅熊', 'view': 75, 'like': 11}
+{'title': '三国杀诸葛篇', 'url': 'https://www.bilibili.com/video/av67489080/', 'author': '天涯云水', 'view': 75, 'like': 1}
+{'title': '神医大鳝人乌仁吉终极对决老干部熊凤山', 'url': 'https://www.bilibili.com/video/av67488073/', 'author': '不会剪辑的熊猫', 'view': 83, 'like': 7}
+{'title': '籽岷拍桌鬼畜 新片头', 'url': 'https://www.bilibili.com/video/av67484353/', 'author': '籽岷', 'view': 110122, 'like': 14057}
+{'title': '【地铁弟rap】我受过文化教育吗？', 'url': 'https://www.bilibili.com/video/av67486596/', 'author': '什么时候才能开学啊', 'view': 111, 'like': 4}
+{'title': '众英雄带感合唱火影 GO!', 'url': 'https://www.bilibili.com/video/av67485514/', 'author': '暴怒骑士气球', 'view': 35, 'like': 1}
+{'title': '【互动视频】制作自己的鬼畜0.2', 'url': 'https://www.bilibili.com/video/av67474842/', 'author': '官方晓林解说', 'view': 15, 'like': 1}
+{'title': '【爱情公寓三兄弟】张大仙ppd卢本伟CS枪战1', 'url': 'https://www.bilibili.com/video/av67460216/', 'author': '书衣君', 'view': 237, 'like': 11}
+{'title': '星座？王座？', 'url': 'https://www.bilibili.com/video/av67485004/', 'author': '磅礴方正', 'view': 13, 'like': 0}
+{'title': '我已经没什么可说的了【枪声音乐】', 'url': 'https://www.bilibili.com/video/av67483514/', 'author': '霾家の卧龙', 'view': 59, 'like': 10}
+{'title': '玛丽罗斯加入鬼畜全明星?!洗脑rap"八嘎之歌"全程口吐芬芳！', 'url': 'https://www.bilibili.com/video/av67483547/', 'author': 'ACES棒读天王', 'view': 696, 'like': 46}
+{'title': '三国杀王朗篇', 'url': 'https://www.bilibili.com/video/av67483140/', 'author': '天涯云水', 'view': 48, 'like': 1}
+{'title': 'GIAO特曼大战头皮屑怪兽', 'url': 'https://www.bilibili.com/video/av67407599/', 'author': '飞机君', 'view': 1680, 'like': 153}
+{'title': '【特效向】乔碧萝之搞死了谁', 'url': 'https://www.bilibili.com/video/av67371806/', 'author': '江户川肥喵酱', 'view': 387, 'like': 52}
+{'title': '龙鸣四兄弟之求生之路', 'url': 'https://www.bilibili.com/video/av67482065/', 'author': '不就二十元吗', 'view': 5341, 'like': 295}
+{'title': '【枪声音乐】what+i+like+about+u', 'url': 'https://www.bilibili.com/video/av67480328/', 'author': '心渡Yume', 'view': 118, 'like': 23}
+{'title': '神医rap，噶孩子，救百姓', 'url': 'https://www.bilibili.com/video/av67480514/', 'author': '六枚硬币能重新做人', 'view': 1070, 'like': 64}
+{'title': '【互动视频】体验一下鬼畜明星的生活吧！', 'url': 'https://www.bilibili.com/video/av67477167/', 'author': '黑い羽毛', 'view': 116, 'like': 6}
+{'title': '【马云单曲】大佬很忙', 'url': 'https://www.bilibili.com/video/av67332628/', 'author': '龙大人不喷火', 'view': 6123, 'like': 1066}
+{'title': '【哲学】植物dark战僵尸(白天屋顶与坤坤的对决)', 'url': 'https://www.bilibili.com/video/av67473874/', 'author': 'Guomua', 'view': 70, 'like': 16}
+{'title': '【哲学】野狼♂disco', 'url': 'https://www.bilibili.com/video/av67476745/', 'author': '瞑浔Sabri', 'view': 442, 'like': 97}
+{'title': '【惊吓岛】第一集 PDD和LBW遇上乔莱莱', 'url': 'https://www.bilibili.com/video/av67454169/', 'author': '有了梦想的咸鱼', 'view': 77, 'like': 2}
+{'title': '当窝窝头遇上假面骑士', 'url': 'https://www.bilibili.com/video/av67477652/', 'author': '奇妙螺旋', 'view': 58, 'like': 6}
+{'title': '【白给大片】《白给敢死队》（燃向）', 'url': 'https://www.bilibili.com/video/av67475314/', 'author': 'D琴魔', 'view': 11305, 'like': 1344}
+{'title': '【全明星】老婆可以拿走，笔给我留下!', 'url': 'https://www.bilibili.com/video/av67379762/', 'author': '可靠de伏特加', 'view': 20464, 'like': 1935}
+{'title': '【三国】谁是最美的男人？', 'url': 'https://www.bilibili.com/video/av67337067/', 'author': '裸奔的爱毛', 'view': 5806, 'like': 746}
+{'title': '王vs猪：司徒竟能用亮泽秀发轻盈地上天攻击', 'url': 'https://www.bilibili.com/video/av67330257/', 'author': '橙某', 'view': 5485, 'like': 687}
+{'title': 'dancer in the dark(重制版)', 'url': 'https://www.bilibili.com/video/av67474932/', 'author': '陈奔金', 'view': 12, 'like': 3}
+{'title': '[Elsword]快乐踩贝壳', 'url': 'https://www.bilibili.com/video/av67474202/', 'author': '督导', 'view': 753, 'like': 57}
+{'title': '闹太套的真正版本！', 'url': 'https://www.bilibili.com/video/av67432049/', 'author': 'OELoop', 'view': 354397, 'like': 44723}
+{'title': '用崩坏3打开的Shelter你听过嘛？', 'url': 'https://www.bilibili.com/video/av67471452/', 'author': 'LZX凌子虚', 'view': 128, 'like': 19}
+{'title': '【吃素的狮子】0+7带帅比完整版，洗脑循环', 'url': 'https://www.bilibili.com/video/av67372362/', 'author': 'AKAtople', 'view': 95, 'like': 11}
+{'title': '【周九良】那天为他唱《月圆花好》的人真的是我/中秋节快乐安康！', 'url': 'https://www.bilibili.com/video/av67437824/', 'author': '像素水母Haku', 'view': 6076, 'like': 354}
+{'title': '【二度开花】文艺复兴 邮递vtuber', 'url': 'https://www.bilibili.com/video/av67471197/', 'author': '节操大大', 'view': 102, 'like': 4}
+{'title': '【哲学】月亮警♂察', 'url': 'https://www.bilibili.com/video/av67447872/', 'author': '王思妇丶', 'view': 47809, 'like': 9466}
+{'title': '【韩美娟Rap】一首BB赖赖送给大家', 'url': 'https://www.bilibili.com/video/av67470934/', 'author': '羽关关bilbil', 'view': 111, 'like': 1}
+{'title': '喵帕斯Disco（野狼disco）', 'url': 'https://www.bilibili.com/video/av67372341/', 'author': 'Passkou', 'view': 662, 'like': 89}
+{'title': 'shelter 枪乐', 'url': 'https://www.bilibili.com/video/av67468275/', 'author': 'l姬坂小乃爱l', 'view': 27, 'like': 4}
+{'title': '芒种遇上爱情买卖 听起来竟有些悲哀', 'url': 'https://www.bilibili.com/video/av67468434/', 'author': '改名要六枚硬币', 'view': 29, 'like': 0}
+{'title': '当猫和老鼠我的世界化会发生什么？第二集', 'url': 'https://www.bilibili.com/video/av67408718/', 'author': '孤影过客', 'view': 8501, 'like': 657}
+{'title': '【8848】曾小贤代言8848贤哥手机！', 'url': 'https://www.bilibili.com/video/av67403285/', 'author': '风云熊', 'view': 24593, 'like': 2332}
+{'title': '《复仇者联盟三：无限战争》鬼畜明星的集结。国产版最燃。张大仙/旭旭宝宝/lbw/pdd/李云龙/韩红/乔碧罗/周淑怡/杨超越等倾情出演', 'url': 'https://www.bilibili.com/video/av67465600/', 'author': '扫地僧fz', 'view': 423, 'like': 36}
+{'title': '【全明星】野狼disco', 'url': 'https://www.bilibili.com/video/av67437580/', 'author': '痒局长', 'view': 190714, 'like': 23547}
+{'title': '【鬼畜罗小黑】 或许这才是原版的主题曲？', 'url': 'https://www.bilibili.com/video/av67459803/', 'author': '马上就Skr了', 'view': 1867, 'like': 143}
+{'title': '【赌怪单曲】来一波番茄连招！', 'url': 'https://www.bilibili.com/video/av67403858/', 'author': '冰绎', 'view': 91416, 'like': 11939}
+{'title': '【经典老番】坤蛛侠大战赌怪博士', 'url': 'https://www.bilibili.com/video/av67414628/', 'author': '修2', 'view': 5604, 'like': 1135}
+{'title': '【JOJO/BOKI之歌】我BOKI了，你呢？', 'url': 'https://www.bilibili.com/video/av67243115/', 'author': '砂糖笕', 'view': 8871, 'like': 1058}
+{'title': '【全明星】千里邀月', 'url': 'https://www.bilibili.com/video/av67057195/', 'author': '雨宫B大雷', 'view': 187, 'like': 42}
+{'title': '【赵本山】要啥自行车', 'url': 'https://www.bilibili.com/video/av67456079/', 'author': 'KLIV', 'view': 1090, 'like': 25}
+{'title': '[枪乐Horizon]进来看看新人的作品吧，又不要你硬币', 'url': 'https://www.bilibili.com/video/av67458128/', 'author': '白-嫖-使我快乐', 'view': 13, 'like': 5}
+{'title': '【拼多多广告】窝窝头', 'url': 'https://www.bilibili.com/video/av67452959/', 'author': '没钱买天津辣条', 'view': 1235, 'like': 167}
+{'title': '【Hanser鬼畜】滴滴～奶粉味婴儿车发车啦！', 'url': 'https://www.bilibili.com/video/av67456359/', 'author': '布偶Seph', 'view': 30471, 'like': 4122}
+{'title': '【BND男团】实现梦想的哆啦♂A梦', 'url': 'https://www.bilibili.com/video/av67453076/', 'author': 'notAhuman', 'view': 477, 'like': 154}
+{'title': '唐伯虎点秋香鬼畜', 'url': 'https://www.bilibili.com/video/av67452799/', 'author': '熊猫鸟哥646147', 'view': 522, 'like': 11}
+{'title': '马云唱《怒放的生命》，调音师忽然掉线？', 'url': 'https://www.bilibili.com/video/av67452813/', 'author': '珊小糊', 'view': 1304, 'like': 21}
+{'title': '【哲学】君主·埃尔梅罗二世事件簿op', 'url': 'https://www.bilibili.com/video/av67407776/', 'author': '无洺浅歌', 'view': 58, 'like': 20}
+{'title': '一起来听听章鱼哥的美妙音乐吧', 'url': 'https://www.bilibili.com/video/av67450596/', 'author': '纳谁是谁', 'view': 79, 'like': 6}
+{'title': '【卢本伟主演】--死侍', 'url': 'https://www.bilibili.com/video/av67449255/', 'author': '刘泽秀V', 'view': 64807, 'like': 4666}
+{'title': '【余小C】领先10个版本的男人！上路偶遇一生之敌提莫队长！', 'url': 'https://www.bilibili.com/video/av67446114/', 'author': '提着刀的胖虎', 'view': 1164, 'like': 69}
+{'title': '神医PK，哪个才是天下第一奇毒', 'url': 'https://www.bilibili.com/video/av67444527/', 'author': '白鹿酒吧的大桃子', 'view': 8917, 'like': 741}
+{'title': '来♂', 'url': 'https://www.bilibili.com/video/av67447727/', 'author': '窃r格瓦拉', 'view': 65, 'like': 1}
+{'title': '【芦苇五五开】卢本伟玩滑板作死集锦', 'url': 'https://www.bilibili.com/video/av67445538/', 'author': '蛇皮王Maste', 'view': 8969, 'like': 819}
+{'title': '鬼畜不起来系列之豪哥吃技术：豪哥羡慕0杀吃鸡但无奈总被神仙安排', 'url': 'https://www.bilibili.com/video/av67442991/', 'author': '猎小明', 'view': 351, 'like': 68}
+{'title': '【百岁山】药水和周淑怡因为一瓶水而展开的爱情故事其一', 'url': 'https://www.bilibili.com/video/av67443451/', 'author': '我是个大奇葩', 'view': 1620, 'like': 101}
+{'title': '《再见了妈妈》', 'url': 'https://www.bilibili.com/video/av67424452/', 'author': 'YesHumpy', 'view': 18304, 'like': 596}
