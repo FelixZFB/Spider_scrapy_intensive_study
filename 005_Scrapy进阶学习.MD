@@ -2,17 +2,17 @@
 
 # 1. Scrapy介绍
 - 通用爬虫流程
-![通用爬虫流程](099_爬虫相关图片解释/001_通用爬虫流程.png)
+- ![通用爬虫流程](099_爬虫相关图片解释/001_通用爬虫流程.png)
 
 - 类似scrapy爬虫流程
-![类似scrapy爬虫流程](099_爬虫相关图片解释/002_类似scrapy爬虫流程.png)
+- ![类似scrapy爬虫流程](099_爬虫相关图片解释/002_类似scrapy爬虫流程.png)
 
 - scrapy爬虫流程
-![scrapy爬虫流程](099_爬虫相关图片解释/003_scrapy爬虫流程_实际和002是一样的_只是各部分名称改变了一下.png)
+- ![scrapy爬虫流程](099_爬虫相关图片解释/003_scrapy爬虫流程_实际和002是一样的_只是各部分名称改变了一下.png)
 - 以上两图，整个流程是相同的，只不过名称有所不同，但是功能都是相似的
 
 ## 1.1 scrapy各组件的作用
-![scrapy各组件作用](099_爬虫相关图片解释/004_scrapy爬虫各组件作用.png)
+- ![scrapy各组件作用](099_爬虫相关图片解释/004_scrapy爬虫各组件作用.png)
 - Scrapy主要有5大部件和2个中间件
 - 爬虫流程图说明：
     - Scrapy Engine引擎分别连接四个部件：Spider、ItemPipeline、Downloader、Scheduler
@@ -51,13 +51,9 @@
         - items虽然也经过爬虫中间件，但是有专门的Item Pipeline(管道)对齐进行处理
         
 ## 1.2 scrapy爬取一个网站的流程
-- Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：
-1) 引擎打开一个网站，找到处理该网站的spider（里面写有start_url），并向该Spider请求第一个要爬取的url
-2) 引擎从Spider中获取到第一个要爬取的URL，并通过调度器以Request对象进行调度
-3) 引擎向调度器请求下一个要爬取的URL
-4) 调度器返回下一个要爬取的URL给引擎，引擎将URL通过下载中间件(request方向)转发给下载器
-5) 一旦页面下载完毕，下载器就生成一个该页面的Response,并将其通过下载中间件发送给引擎
-6) 引擎从下载器中接收到Response,并通过Spider中间件发送给Spider处理
-7) Spider处理Response并返回爬取到的Item及新的Request给引擎
-8) 引擎将Spider返回的，爬取到的Item给Item Pipeline，将Request交给调度器
-9) 从第二步开始重复，直到调度器中没有更多的Request(等待爬取的URL),引擎关闭该网站     
+- Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
+    - 1. 首先Spiders（爬虫里面写有start_url）将需要发送请求的url(requests)经ScrapyEngine（引擎）交给Scheduler（调度器）。
+    - 2. Scheduler（排序，入队）处理后，经ScrapyEngine，DownloaderMiddlewares(可选，主要有User_Agent, Proxy代理)交给Downloader。
+    - 3. Downloader向互联网发送请求，并接收下载响应（response）。将响应（response）经ScrapyEngine，SpiderMiddlewares(可选)交给Spiders。　　　　　
+    - 4. Spiders处理response，提取数据并将数据经ScrapyEngine交给ItemPipeline保存（可以是本地，可以是数据库）。
+    - 5. response中提取的url即新的Request经ScrapyEngine交给Scheduler进行下一个循环。直到无Url请求程序停止结束。
