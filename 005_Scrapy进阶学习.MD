@@ -64,9 +64,9 @@
     - scrapy startproject xxx
 - 创建爬虫
     - cd 项目目录下
-    - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接自定义）
+    - scrapy genspider xxx "allowed_domains"（该步命令也可以直接进入spider的py文件直接自定义）
         - 例如：
-        - scrapy genspider first_spider jpdd.com
+        - scrapy genspider first_spider "jpdd.com"
             - first_spider   爬虫名字
             - jpdd.com       限制爬取数据的范围
 - 完善：spider
