@@ -86,3 +86,31 @@
     - scrapy shell http://www.scrapyd.cn（调试网址为http://www.scrapyd.cn的网站）
     - scrapy version 查看版本信息
     - scrapy list  查看爬虫信息，显示目录所有的爬虫
+    
+    
+    
+    
+
+Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
+第1种：手动字符串相加
+第2种：urllib.parse.urljoin(baseurl,url)  后面的url会根据baseurl进行url地址的拼接
+第3种：response.follow(url ,callback)  能够根据response的地址把url拼接完整，构造成Request对象，
+第4种(推荐)：response.urljoin(next_url)    更简洁、好用
+第5种：scrapy.Request(url,callback,meta,dont_filter)
+
+scrapy.Request() ===>相当于构造了一个requests对象
+scrapy.Request(url[,callback,method="GET",headers,body,cookies,meta,dont_filter=False])
+参数说明：
+括号中的参数为可选参数
+callback：表示当前的url的响应交给哪个函数去处理
+meta：实现数据在不同的解析函数中传递，meta默认带有部分数据，比如下载延迟，请求深度等
+dont_filter:默认会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为Ture，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
+
+
+为什么要单独定义item？
+定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，通过item.py能够让别人清楚自己的爬虫是在抓取什么数据；
+同时来提示哪些字段是需要抓取的，没有定义的字段不能使用，防止手误；
+item不能直接存入mongodb中，需要转化为字典后再存储。
+Item使用之前需要先导入并且实例化，之后的使用方法和使用字典相同
+from yanguan.items import YanguanItem
+item = YanguanItem() #实例化
