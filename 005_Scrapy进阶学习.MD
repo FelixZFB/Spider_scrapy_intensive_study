@@ -52,8 +52,37 @@
         
 ## 1.2 scrapy爬取一个网站的流程
 - Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
-    - 1. 首先Spiders（爬虫里面写有start_url）将需要发送请求的url(requests)经ScrapyEngine（引擎）交给Scheduler（调度器）。
-    - 2. Scheduler（排序，入队）处理后，经ScrapyEngine，DownloaderMiddlewares(可选，主要有User_Agent, Proxy代理)交给Downloader。
-    - 3. Downloader向互联网发送请求，并接收下载响应（response）。将响应（response）经ScrapyEngine，SpiderMiddlewares(可选)交给Spiders。　　　　　
-    - 4. Spiders处理response，提取数据并将数据经ScrapyEngine交给ItemPipeline保存（可以是本地，可以是数据库）。
-    - 5. response中提取的url即新的Request经ScrapyEngine交给Scheduler进行下一个循环。直到无Url请求程序停止结束。
+    - 1.首先Spiders（爬虫里面写有start_url）将需要发送请求的url(requests)经ScrapyEngine（引擎）交给Scheduler（调度器）。
+    - 2.Scheduler（排序，入队）处理后，经ScrapyEngine，DownloaderMiddlewares(可选，主要有User_Agent, Proxy代理)交给Downloader。
+    - 3.Downloader向互联网发送请求，并接收下载响应（response）。将响应（response）经ScrapyEngine，SpiderMiddlewares(可选)交给Spiders。　　　　　
+    - 4.Spiders处理response，提取数据并将数据经ScrapyEngine交给ItemPipeline保存（可以是本地，可以是数据库）。
+    - 5.response中提取的url即新的Request经ScrapyEngine交给Scheduler进行下一个循环。直到无Url请求程序停止结束。
+    ![scrapy爬虫流程及数据传递流程](099_爬虫相关图片解释/005_scrapy爬虫流程及数据传递流程详解.png)
+
+## 1.3 scrapy项目流程
+- 创建项目
+    - scrapy startproject xxx
+- 创建爬虫
+    - cd 项目目录下
+    - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接自定义）
+        - 例如：
+        - scrapy genspider first_spider jpdd.com
+            - first_spider   爬虫名字
+            - jpdd.com       限制爬取数据的范围
+- 完善：spider
+    - 提取item所需的数据，提取url地址构成request对象      
+- 完善管道：items pipelines
+- 完善设置：settings 
+- 运行爬虫
+    - cd项目目录   
+    - scrapy crawl first_spider
+ 
+- 注意：避免爬虫名和项目名重复 ；
+    - 不管在终端还是pycharm 都要切换到当前目录下 cd myspider
+    - allowed_domains : 限定爬取的范围
+- 常用的命令：
+    - scrapy startproject（创建项目）
+    - scrapy crawl XX（运行XXX爬虫）
+    - scrapy shell http://www.scrapyd.cn（调试网址为http://www.scrapyd.cn的网站）
+    - scrapy version 查看版本信息
+    - scrapy list  查看爬虫信息，显示目录所有的爬虫
