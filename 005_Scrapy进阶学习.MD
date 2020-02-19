@@ -49,6 +49,36 @@
         - 爬虫中间件位于引擎和爬虫之间，它们传输的数据就是responses、requests、items
         - 主要自定扩展和操作引擎和Spider中间通信的功能组件（比如进入Spider的Responses;和从Spider出去的Requests）
         - items虽然也经过爬虫中间件，但是有专门的Item Pipeline(管道)对齐进行处理
+
+- 需要手写的两个部件说明：
+- Item Pipeline 管件
+    - 爬虫提取出数据存入item后，item中保存的数据需要进一步的处理，比如清洗，去重，存储等
+    - pipeline需要处理process_item函数，必须实现的函数
+        - process_item:
+            - spider提取出的item作为参数传入，同时传入的还有spider
+            - 此方法必须实现
+            - 必须返回一个item对象，被丢弃之后的item不会被之后的pipeline处理
+    - __init__: 构造函数
+        - 进行一些必要的参数初始化
+    - open_spider(spider):
+        - spider对象被开启时调用
+    - close_spider(spider):
+        - spider对象被关闭时调用  
+        
+- Spider 爬虫
+    - 对应的是文件夹spiders下的py文件
+    - __init__: 初始化爬虫名称，可传入start_urls列表，该方法一般不写，爬虫名称、初始URL、允许域名直接放在类下面当做全局变量
+    - start_requests: 生成Requests对象交给Scrapy下载并返回response，该方法启动爬虫自动实现
+    - parse：根据返回的response解析出相应的item，item自动进入pipeline：如果需要，
+    - 解析出url,url自动交给requests模块，一直循环下去
+    - parse_body：进入第二层解析网页详细信息
+        - start_request: 此方法仅能被调用一次，读取start_urls内容并启动循环过程
+        - name；设置爬虫名称
+        - start_urls: 设置开始第一批爬取的url
+        - allow_domains: spider允许爬取的域名列表
+        - log: 日志记录
+    - Item Pipeline spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
+     
         
 ## 1.2 scrapy爬取一个网站的流程
 - Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
@@ -64,11 +94,14 @@
     - scrapy startproject xxx
 - 创建爬虫
     - cd 项目目录下
-    - scrapy genspider xxx "allowed_domains"（该步命令也可以直接进入spider的py文件直接自定义）
+    - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接自定义）
         - 例如：
-        - scrapy genspider first_spider "jpdd.com"
+        - scrapy genspider first_spider jpdd.com
             - first_spider   爬虫名字
             - jpdd.com       限制爬取数据的范围
+        - 爬虫py文件都是在spiders文件夹下面，上面命令可以创建多个爬虫
+        - 爬虫都是位于spiders文件夹下面
+        
 - 完善：spider
     - 提取item所需的数据，提取url地址构成request对象      
 - 完善管道：items pipelines
@@ -76,6 +109,11 @@
 - 运行爬虫
     - cd项目目录   
     - scrapy crawl first_spider
+
+- 爬虫的项目结构
+![爬虫项目结构](099_爬虫相关图片解释/007_scrapy爬虫项目结构.png)
+- 完善爬虫
+![完善爬虫](099_爬虫相关图片解释/008_完善spider爬虫.png)
  
 - 注意：避免爬虫名和项目名重复 ；
     - 不管在终端还是pycharm 都要切换到当前目录下 cd myspider
@@ -88,29 +126,66 @@
     - scrapy list  查看爬虫信息，显示目录所有的爬虫
     
     
+## 1.4 Scrapy中数据提取的机制？
+- Scrapy提供了自己提取数据的机制，它们被称作选择器（Selector，下面用英文表示），它支持xpath，css和正则表达式三种规则
+- Scrapy的Selector建立在lxml库上，这意味它们在解析速度和精度上都非常相似
+- Selector机制下有两个重要的数据类型：SelectorList和Selector，其中前者是后者的集合，前者也是一个列表对象。
+- scrapy提供了extract和extract_first这两种方法提取SelectorList和Selector的字符串内容。
+- 在提取列表中的首个元素内容时，建议使用extract_first方法而非采用列表索引方式extract()[0] 
+- extract()没有值的时候返回是一个空列表，extract_first没有值返回是none，推荐使用extract_first，已经帮我判断了是否为none
+    - response.xpath()返回的结果就是SelectorList，里面每一个元素就是一个Selector：
+    [<Selector xpath='descendant-or-self::a' data='<a href="image1.html">Name: My image 1 <'>, 
+    <Selector xpath='descendant-or-self::a' data='<a href="image2.html">Name: My image 2 <'>, 
+    <Selector xpath='descendant-or-self::a' data='<a href="image3.html">Name: My image 3 <'>, 
+    <Selector xpath='descendant-or-self::a' data='<a href="image4.html">Name: My image 4 <'>, 
+    <Selector xpath='descendant-or-self::a' data='<a href="image5.html">Name: My image 5 <'>]
+    - 实际上我们需要的内容是data里面的数据，extract提取所有的data和extract_first提取第一个data
+
+- scrapy中选择器返回结果是Selector对象(特殊的列表)，返回的对象实际是一个列表对象：SelectorList(里面有一个或多个Selector)和Selector。
+    - 官方推荐 ：
+    - .extract_first()：提取SelectorList对象中第一个元素的内容。即返回列表中的第一个元素的字符串内容。
+    - .extract()：如果是SelectorList对象使用，则返回包含所有Selector中字符串内容的列表；如果是Selector使用，则返回该Selector的所有内容。
+    - extract()没有值的时候返回是一个空列表，extract_first没有值返回是none，推荐使用extract_first，已经帮我判断了是否为none
+    - 参考Python_advanced_learning中的04文件夹中的XPATH部分有详细总结
+    - SelectorList对象虽然是个列表，但是是一个特殊的列表，不能直接使用列表切片取出内容
+    - requests中可以返回解析的对象，可以直接切片取出，参考TZKT项目中的P02和P03中数据提取区别
+    - 取出title具体的文字内容，可以使用下面两种方式：
+        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract()[0]     内容列表的第一个元素
+        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first()  SelectorList列表中的第一个Selector对象的内容元素
     
-    
+## 1.5 scrapy中url地址拼接的多种方式
+- Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
+    - 方法1(常用)：手动字符串相加
+    - 方法2(常用)：urllib.parse.urljoin(baseurl,url)  后面的url会根据baseurl进行url地址的拼接，sht项目就是用的方法1或者方法2
+    - 方法3：response.follow(url ,callback)  能够根据response的地址把url拼接完整，构造成Request对象，
+    - 方法4(推荐)：response.urljoin(next_url)    更简洁、好用
+    - 方法5：scrapy.Request(url,callback,meta,dont_filter)
 
-Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
-第1种：手动字符串相加
-第2种：urllib.parse.urljoin(baseurl,url)  后面的url会根据baseurl进行url地址的拼接
-第3种：response.follow(url ,callback)  能够根据response的地址把url拼接完整，构造成Request对象，
-第4种(推荐)：response.urljoin(next_url)    更简洁、好用
-第5种：scrapy.Request(url,callback,meta,dont_filter)
+## 1.6 scrapy.Request()方法中的参数说明？
+- scrapy.Request() ===>相当于构造了一个requests对象
+- scrapy.Request(url[,callback,method="GET",headers,body,cookies,meta,dont_filter=False])
+    - 参数说明：
+    - request = scrapy.Request(url=url, meta={'item': item}, callback=self.parse_body)
+    - 括号中的参数为可选参数
+    - url：接下来要请求处理的url地址
+    - callback：回调函数，表示当前的url的响应交给哪个函数去处理
+    - meta：实现数据在不同的解析函数中传递，meta默认带有部分数据，比如下载延迟，请求深度等
+    - dont_filter:默认会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为Ture，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
 
-scrapy.Request() ===>相当于构造了一个requests对象
-scrapy.Request(url[,callback,method="GET",headers,body,cookies,meta,dont_filter=False])
-参数说明：
-括号中的参数为可选参数
-callback：表示当前的url的响应交给哪个函数去处理
-meta：实现数据在不同的解析函数中传递，meta默认带有部分数据，比如下载延迟，请求深度等
-dont_filter:默认会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为Ture，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
+## 1.7 为什么要单独定义item？
+- 定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，
+    - 通过item.py能够让别人清楚自己的爬虫是在抓取什么数据；
+    - 同时来提示哪些字段是需要抓取的，没有定义的字段不能使用，防止手误；
+    - item不能直接存入mongodb中，需要转化为字典后再存储。
+    - Item使用之前需要先导入并且实例化，之后的使用方法和使用字典相同
+        - from yanguan.items import YanguanItem
+        - item = YanguanItem() #实例化
 
-
-为什么要单独定义item？
-定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，通过item.py能够让别人清楚自己的爬虫是在抓取什么数据；
-同时来提示哪些字段是需要抓取的，没有定义的字段不能使用，防止手误；
-item不能直接存入mongodb中，需要转化为字典后再存储。
-Item使用之前需要先导入并且实例化，之后的使用方法和使用字典相同
-from yanguan.items import YanguanItem
-item = YanguanItem() #实例化
+## 1.8 pipeline的使用
+- pipeline里面可以写多个管道分别用于处理不同爬虫的item，
+    - 也可以在一个管道中使用if else进行判断，然后分别处理来自不同爬虫的item
+        - 方法1：item里面只需要加一个键come_from来自哪个网站，然后进行判断即可
+        - 方法2：传递item到pipeline时候，同时也传递了spider爬虫，spider.name可以判断是哪个爬虫传过来的item
+    - pipeline里面默认的process_item(self, item, spider)方法尽量不要重新命名
+        - item就是spider中yield item 传来的参数
+        - spider就是爬虫，spider.name属性就是定义的爬虫名称
