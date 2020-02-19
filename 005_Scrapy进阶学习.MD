@@ -192,6 +192,29 @@
         ![pipeline使用](099_爬虫相关图片解释/009_pipeline的使用1.png)
         ![pipeline使用](099_爬虫相关图片解释/009_pipeline的使用2.png)
         
+- pipeline的管道下面有两个特殊方法：
+    - open_spider：爬虫开启时候执行该函数，仅执行一次，一般用于连接数据库
+    - close_spider：爬虫关闭时候执行该函数，仅执行一次，一般用于关闭数据库连接
+    
+```python 
+# 爬虫开启时候执行该函数，仅执行一次，连接数据库
+def open_spider(self, spider):
+    self.client = pymongo.MongoClient(self.mongo_uri, replicaset=self.replicaset)
+    self.db = self.client[self.mongo_db]
+
+# 爬虫关闭时候执行该函数，仅执行一次，关闭数据库连接
+def close_spider(self, spider):
+    self.client.close()
+
+def process_item(self, item, spider):
+    # 判断item是否属于YunqiBookListItem，属于它，就将item数据存入数据库
+    if isinstance(item, YunqiBookListItem):
+        self._process_booklist_item(item)
+    else:
+        self._process_bookeDetail_item(item)
+    return item
+```
+        
 ## 1.9 scrapy中logging模块的使用
 - 第一步：settings中设置LOG_LEVEL="WARNING" 级别可以自定义
 - 第二步：settings中设置LOG_FILE=""./xxx.log" 设置log文件的保存位置，
