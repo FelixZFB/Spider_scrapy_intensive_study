@@ -119,7 +119,7 @@
     - 不管在终端还是pycharm 都要切换到当前目录下 cd myspider
     - allowed_domains : 限定爬取的范围
 - 常用的命令：
-    - scrapy startproject（创建项目）
+    - scrapy startproject xxx（创建项目）
     - scrapy crawl XX（运行XXX爬虫）
     - scrapy shell http://www.scrapyd.cn（调试网址为http://www.scrapyd.cn的网站）
     - scrapy version 查看版本信息
@@ -169,8 +169,8 @@
     - 括号中的参数为可选参数
     - url：接下来要请求处理的url地址
     - callback：回调函数，表示当前的url的响应交给哪个函数去处理
-    - meta：实现数据在不同的解析函数中传递，meta默认带有部分数据，比如下载延迟，请求深度等
-    - dont_filter:默认会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为Ture，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
+    - meta：实现数据在不同的解析函数(parse parse_body等函数)中传递，meta默认带有部分数据，比如下载延迟，请求深度等
+    - dont_filter:默认是False会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为True，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
 
 ## 1.7 为什么要单独定义item？
 - 定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，
@@ -189,3 +189,30 @@
     - pipeline里面默认的process_item(self, item, spider)方法尽量不要重新命名
         - item就是spider中yield item 传来的参数
         - spider就是爬虫，spider.name属性就是定义的爬虫名称
+        ![pipeline使用](099_爬虫相关图片解释/009_pipeline的使用1.png)
+        ![pipeline使用](099_爬虫相关图片解释/009_pipeline的使用2.png)
+        
+## 1.9 scrapy中logging模块的使用
+- 第一步：settings中设置LOG_LEVEL="WARNING" 级别可以自定义
+- 第二步：settings中设置LOG_FILE=""./xxx.log" 设置log文件的保存位置，
+        设置后终端不会输出显示日志内容，不设置，日志内容会终端直接输入
+- 第三步：在需要输出日志的py文件里面，scrapy中日志有固定的格式，也可以自定义格式
+        import logging 然后实例化logger，然后设置logger输出
+        ![logging日志使用](099_爬虫相关图片解释/010_logging日志模块在scrapy中的使用1.png)
+        ![logging日志使用](099_爬虫相关图片解释/010_logging日志模块在scrapy中的使用2.png)
+        
+## 1.10 scrapy爬虫启动后的debug信息
+- 爬虫启动运行后，CMD窗口会显示一系列信息，常见信息具体含义参考下图
+- 主要展示启动爬虫，爬取过程的一系列信息，日志信息，爬取的页面，爬取结果等等
+- 我们一般只关注里面出现的警告错误信息
+![终端窗口的debug信息](099_爬虫相关图片解释/011_spider爬虫启动后的终端窗口的debug信息.png)
+ 
+## 1.11 scrapy shell终端调试窗口
+- scrapy调试工具
+- CMD窗口切换到项目文件下执行命令：scrapy shell 网址
+    - scrapy shell http://lab.scrapyd.cn
+    - scrapy shell http://www.baidu.com
+    - 窗口里面会弹出一些信息，根据窗口提示我们可以查看一些具体信息，比如使用response查看响应的一些信息
+    - 使用response.xpath(),查看是否可以返回我们需要的结果
+    ![scrapy shell调试](099_爬虫相关图片解释/012_终端scrapy%20shell调试.png)
+- 退出调试执行命令：exit
