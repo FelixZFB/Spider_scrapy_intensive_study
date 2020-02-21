@@ -95,6 +95,8 @@
 - 创建爬虫
     - cd 项目目录下
     - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接自定义）
+    - scrapy genspider –t crawl xxx allowed_domains  
+        - 上面默认继承的是scrapy.Spider类，此处生成scrapy.spiders.CrawlSpider规则爬虫
         - 例如：
         - scrapy genspider first_spider jpdd.com
             - first_spider   爬虫名字
@@ -239,3 +241,49 @@ def process_item(self, item, spider):
     - 使用response.xpath(),查看是否可以返回我们需要的结果
     ![scrapy shell调试](099_爬虫相关图片解释/012_终端scrapy%20shell调试.png)
 - 退出调试执行命令：exit
+
+## 1.12 下一页网址寻找
+- 情况1：下一页的URL地址直接在响应中，直接正则查找即可
+- 情况2：下一页的URL地址在响应中没有，是JS动态生成的
+    - 响应中一般都会有 var pagecount=()  var currentPage=() 两个字段
+    - 一个代表总页数，一个代表当前页
+    - 下一页的网址就是使用当前页面加1后进行构造
+- 情况3：第一层的清单页都具有相同的规律，可以直接使用CrawlSpider,传入规则，这样爬虫会自动爬取所有符合规则的页面
+    - CrawlSpider可以接收多个规则，符合规则的网页都会去请求。规则爬虫就免去的每次都去查找下一页网址。
+    - 参考Spider_devlopment_study_note项目中ch17中的云起书院爬虫
+
+## 2 CrawlSpider和RedisSpider   
+## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
+- Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
+    - 它提供了start\_requests()的默认实现，
+    - 读取并请求spider属性中的start\_urls，
+    - 并根据返回的response调用spider中的parse方法
+- CrawlSpider: scrapy.spiders.CrawlSpider,规则爬虫，
+    - 提供了一个新的属性rules,该属性是一个包含一个或多个Rule对象的集合，
+    - 每个Rule对爬取网站的动作定义了特定的规则，传入要爬取网站的规则，
+    - 相当于本来要寻找下一页的地址，但是传入规律，会自动爬取符合该规律的所有网址。
+- XMLFeedSpider: scrapy.spiders.XMLFeedSpider设计用于通过迭代各个节点来分析XML源。
+- RedisSpider：scrapy_redis.spiders.RedisSpider,
+    - scrapy-redis是scrapy框架基于redis数据库的组件，
+    - 用于scrapy项目的分布式开发和部署，可以方便的进行分布式爬取和数据处理。
+    
+## 2.2 CrawlSpider使用详解
+- 规则爬虫，传入一个规则或者多个规则
+    - 规则爬虫默认创建的parse_item方法，没有parse方法，也不能自己定义，会覆盖掉默认的parse方法
+    - （parse方法有特殊用途，用于底部提取基础URL，即规则中允许的URL地址是由parse函数去发动请求）
+    - 规则网址的response可以使用一个parse_xxx方法进行解析
+    - 也可以不同的规则网址的response分别定义不同的解析方法，不传方法参数，默认调用的是parse_item方法
+    - 参考下图：
+    ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置2.png)
+    ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置1.png)
+- Rule和LinkExtractor参数说明：
+    ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置3.png)
+
+### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
+- 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
+    - scrapy startproject cric 创建爬虫项目
+    - cd cric 切换到爬虫项目文件夹
+    - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
+    ![circ爬虫创建](099_爬虫相关图片解释/014_circ保监会CrawlSpider创建.png)
+    
+    
