@@ -3,6 +3,9 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from cric.items import CricItem
+import re
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
 
 
 class CfSpider(CrawlSpider):
@@ -24,8 +27,20 @@ class CfSpider(CrawlSpider):
 
     #
     def parse_item(self, response):
-        item = {}
+        #item = {}
         #item['domain_id'] = response.xpath('//input[@id="sid"]/@value').get()
         #item['name'] = response.xpath('//div[@id="name"]').get()
         #item['description'] = response.xpath('//div[@id="description"]').get()
-        return item
+        #return item
+        title = re.findall("<!--TitleStart-->(.*?)<!--TitleEnd-->", response.text)[0]
+        print(title)
+
+
+        item = CricItem(title=title)
+
+
+# 命令行可以启动爬虫，我们也可以添加爬虫启动程序process，使用以下三行代码启动爬虫
+if __name__ == '__main__':
+    process = CrawlerProcess(get_project_settings())
+    process.crawl('cf')
+    process.start()
