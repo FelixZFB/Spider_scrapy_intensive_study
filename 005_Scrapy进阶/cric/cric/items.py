@@ -13,3 +13,4 @@ class CricItem(scrapy.Item):
     # name = scrapy.Field()
     # pass
     title = scrapy.Field()
+    publish_date = scrapy.Field()

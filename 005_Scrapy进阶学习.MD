@@ -72,12 +72,16 @@
     - parse：根据返回的response解析出相应的item，item自动进入pipeline：如果需要，
     - 解析出url,url自动交给requests模块，一直循环下去
     - parse_body：进入第二层解析网页详细信息
-        - start_request: 此方法仅能被调用一次，读取start_urls内容并启动循环过程
-        - name；设置爬虫名称
-        - start_urls: 设置开始第一批爬取的url
-        - allow_domains: spider允许爬取的域名列表
-        - log: 日志记录
+
     - Item Pipeline spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
+
+- 注意：
+    - start_request: 此方法仅能被调用一次，读取start_urls内容并启动循环过程
+        - start_request是用来处理start_urls的方法，可以scrapy.Spider的源码查看
+    - name；设置爬虫名称
+    - start_urls: 设置开始第一批爬取的url
+    - allow_domains: spider允许爬取的域名列表
+    - log: 日志记录
      
         
 ## 1.2 scrapy爬取一个网站的流程
@@ -173,6 +177,8 @@
     - callback：回调函数，表示当前的url的响应交给哪个函数去处理
     - meta：实现数据在不同的解析函数(parse parse_body等函数)中传递，meta默认带有部分数据，比如下载延迟，请求深度等
     - dont_filter:默认是False会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为True，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
+    - 重点注意：cookies参数，必须单独作为一个参数，不能像之前requests库一样，将cookies放在headers内部
+        - 并且传入的cookies是一个字典，键值的形式，参考## 2.6 scrapy携带cookies登录
 
 ## 1.7 为什么要单独定义item？
 - 定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，
@@ -271,13 +277,19 @@ def process_item(self, item, spider):
 - 规则爬虫，传入一个规则或者多个规则
     - 规则爬虫默认创建的parse_item方法，没有parse方法，也不能自己定义，会覆盖掉默认的parse方法
     - （parse方法有特殊用途，用于底部提取基础URL，即规则中允许的URL地址是由parse函数去发动请求）
-    - 规则网址的response可以使用一个parse_xxx方法进行解析
-    - 也可以不同的规则网址的response分别定义不同的解析方法，不传方法参数，默认调用的是parse_item方法
+    - 规则网址的response可以使用一个parse_xxx方法进行解析，每个规则都写上方法
+    - 也可以不同的规则网址的response分别定义不同的解析方法
     - 参考下图：
     ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置2.png)
     ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置1.png)
 - Rule和LinkExtractor参数说明：
     ![013_CrawlSpider基本设置1](099_爬虫相关图片解释/013_CrawlSpider基本设置3.png)
+
+- CrawlSpider爬虫注意点：
+    - Rule里面的定义规则的网址，url地址不完整，规则爬虫会自动进行补充完整然后请求
+    - parse函数用于基础请求，不能自己定义
+    - callback:LinkExtractor根据规则提取的url对应的响应交给callback指定的方法处理
+    - follow：LinkExtractor根据规则提取的url对应的响应是否继续使用rules里面的规则来继续过滤提取
 
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
 - 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
@@ -286,4 +298,82 @@ def process_item(self, item, spider):
     - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
     ![circ爬虫创建](099_爬虫相关图片解释/014_circ保监会CrawlSpider创建.png)
     
+## 2.3 scrapy模拟登陆携带cookies
+- start_urls默认是调用的库里面的start_requests方法解析
+- 对于需要携带cookies登陆的网页，直接start_requests方法请求是请求不到的
+- 此时就需要重写start_requests方法，请求的时候传入已有的cookies值
+- 参考下面的图片：
+![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies1.png)
+![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies2.png)
+
+## 2.4 自定义中间件middlewares
+- 中间件自定义和管道一样，先去自定义，然后settings里面启用，
+- 设置中间件级别，默认中间件是543，数字越小离引擎越近，越先调用
+    - scrapy中传输的spider参数，就是传的当前的爬虫
+    - 可以使用句点法取出一些属性直接使用，比如
+    - 从settings中取出USER_AGENTS_LIST，下面结果就是代理列表
+    - spider.settings.get("USER_AGENTS_LIST")
+- middlewares.py自定义中间件后，settings中对应要设置启动
+- 最常用的是下载器中间件：
+    - 自定义的下载器中间件里面至少要定义一个process_request方法或者process_response方法
+    - 不同的方法的返回值不同，参考下面代码
+    - process_request(self, request, spider)是一个默认方法，当每一个request通过该中间件时候都会启动该方法
+    - process_response(self, request, response, spider)是一个默认方法，当每一个response通过该中间件时候都会启动该方法
+    - 两种方法必须有返回值：
+```python 
+    def process_request(self, request, spider):
+        # Called for each request that goes through the downloader
+        # middleware.
+
+        # Must either:
+        # - return None: continue processing this request  如果返回None值，就是没有return值，该request还未继续被其它的中间件去处理
+        # - or return a Response object              下载中间件的response对象交给引擎去处理
+        # - or return a Request object                下载中间件的request对象交给下载器去处理
+        # - or raise IgnoreRequest: process_exception() methods of
+        #   installed downloader middleware will be called
+        return None
+
+    def process_response(self, request, response, spider):
+        # Called with the response returned from the downloader.
+
+        # Must either;
+        # - return a Response object
+        # - return a Request object
+        # - or raise IgnoreRequest
+        return response
+
+```
+
+- 注意：
+    - 中间件是在爬虫或者下载器和引擎之间的联系，
+    - 自定义中间件要不是处理request要不就是处理response，即上面的两个默认方法至少要实现一个
+- 具体参考下图及circ爬虫中的middlewares和settings中的代码
+![自定义下载中间件](099_爬虫相关图片解释/016_自定义下载器中间件.png)
+
+## 2.5 scrapy发送post登录请求
+- scrapy中的Request默认就是使用的get方法
+- 登录需要传递FormData数据，使用的是post请求
+- 此时就需要使用scrapy.FormRequest()进行请求，并且需要传入formdata参数
+- 具体参考以下GitHub登录案例
+    - formdata中的数据需要先登陆后，然后查看请求里面的FormData数据
+    ![GITHUB网站post登录请求](099_爬虫相关图片解释/017_scrapy发送post登录请求.png)
+    - 上面的登录请求需要先手动去寻找登陆地址，填写一些formdata信息
+    - scrapy可以自动从初始url寻找登陆的action网址和formdata信息，只需要传入用户名和密码，form其它信息会自动帮我填写
+    - 参考下面自动登录案例
     
+- scrapy模拟登陆之自动登录案例
+    - 模拟自动登录人人网，只需要传入用户名和密码
+    - 创建login爬虫项目，创建renren爬虫
+        - scrapy startproject login
+        - cd login
+        - scrapy genspider renren renren.com
+    -  scrapy.FormRequest.from_response方法会自动从初始url中寻找登陆地址，登陆表单，只需要传入用户名和密码就可以自动登录
+    - 具体参考login爬虫项目中的renren.py爬虫文件及下面图片
+    ![scrapy模拟登陆之自动登录](099_爬虫相关图片解释/018_scrapy模拟登陆之自动登录.png)
+    
+## 2.6 scrapy携带cookies登录
+- cookies参数，必须单独作为一个参数，不能像之前requests库一样，将cookies放在headers内部
+- 并且传入的cookies是一个字典，使用分割加字典推导式生成所需的字典形式的cookies
+- 查看下图，scrapy会去cookies参数里面找，不会去headers里面找cookies
+- 下图中注释掉的部分，就是错误的写法
+![scrapy携带cookies登陆注意](099_爬虫相关图片解释/019_scrapy携带cookies登陆注意.png)

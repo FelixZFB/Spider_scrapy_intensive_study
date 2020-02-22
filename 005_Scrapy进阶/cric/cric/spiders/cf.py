@@ -19,10 +19,11 @@ class CfSpider(CrawlSpider):
         # LinkExtractor 连接提取器，提取url地址，提取方法是正则
         # callback 提取出来url地址的response会交给callback的方法处理
         # follow 当前的url地址的response继续进rules里面的规则继续提取url地址
-        # 每个详情页的网址就是info后面的数字不同，直接传入\d+，匹配多个数字，\.就代表.
-        Rule(LinkExtractor(allow=r'/web/site0/tab5240/info\d+\.htm'), callback='parse_item', follow=True),
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        # 每个详情页的网址就是info后面的数字不同，直接传入\d+，匹配多个数字，\.就代表.,详情页不需要向下继续提取url，follow不需要
+        Rule(LinkExtractor(allow=r'/web/site0/tab5240/info\d+\.htm'), callback='parse_item'),
+        # 寻找下一页的规则，请求start_urls后，自动根据规则寻找下一页的地址并去请求,不断从新的一页继续寻找下一页，但是不需要callback
+        # 每一页里面的response里面的内容列表满足上面rule规则，就会自动请求进去提取内容
+        Rule(LinkExtractor(allow=r'/web/site0/tab5240/module14430/page\d+\.htm'), follow=True),
     )
 
     #
@@ -33,10 +34,10 @@ class CfSpider(CrawlSpider):
         #item['description'] = response.xpath('//div[@id="description"]').get()
         #return item
         title = re.findall("<!--TitleStart-->(.*?)<!--TitleEnd-->", response.text)[0]
-        print(title)
+        publish_date = re.findall("发布时间：20\d{2}-\d{2}-\d{2}", response.text)[0]
 
-
-        item = CricItem(title=title)
+        item = CricItem(title=title, publish_date=publish_date)
+        yield item
 
 
 # 命令行可以启动爬虫，我们也可以添加爬虫启动程序process，使用以下三行代码启动爬虫
