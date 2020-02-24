@@ -17,8 +17,9 @@ class TbSpider(scrapy.Spider):
 
     def parse(self, response):
         # 先取出所有帖子所在的li标签列表
+        tieba_name = response.xpath('.//a[@class=" card_title_fname"]/text()').extract_first().strip()
         li_list = response.xpath('.//ul[@id="thread_list"]/li')
-        #
+        # 第一页有置顶的帖子，由于不满足下面规则，会自动过滤掉
         for li in li_list:
             title = li.xpath('./div/div[2]/div[1]/div[1]/a/text()').extract_first()
             author = li.xpath('./div/div[2]/div[1]/div[2]/span[1]/span[1]/a/text()').extract_first()
@@ -29,7 +30,7 @@ class TbSpider(scrapy.Spider):
                 href = urljoin(response.url, href)
                 # href = response.urljoin(href)
 
-                item = TiebaItem(title=title, author=author, href=href)
+                item = TiebaItem(tieba_name=tieba_name, title=title, author=author, href=href)
                 print(item)
 
                 yield scrapy.Request(

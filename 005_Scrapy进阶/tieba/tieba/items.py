@@ -12,6 +12,7 @@ class TiebaItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     # pass
+    tieba_name = scrapy.Field()
     title = scrapy.Field()
     href = scrapy.Field()
     author = scrapy.Field()

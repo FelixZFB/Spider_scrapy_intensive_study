@@ -1,4 +1,9 @@
 # Scrapy 入门基础参考 Spider_devlopment_study_note中的md笔记和相关项目
+# Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note中
+# ch12 cnblog爬虫(基础爬虫)、sht爬虫(redis爬虫，redis过滤)  
+# ch17：yunqi爬取(crawl规则爬虫)
+# TZKT_Study_Note项目中多有个requests和scrapy爬虫实例
+# P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
 
 # 1. Scrapy介绍
 - 通用爬虫流程
@@ -170,9 +175,11 @@
     - requests中可以返回解析的对象，可以直接切片取出，参考TZKT项目中的P02和P03中数据提取区别
     - 取出title具体的文字内容，可以使用下面两种方式：
         - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract()[0]     内容列表的第一个元素
-        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first()  SelectorList列表中的第一个Selector对象的内容元素
+        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first().strip()  SelectorList列表中的第一个Selector对象的内容元素
         
 - 特别注意：是extract_first不是extrast_first()
+- Python strip() 方法用于移除字符串头尾指定的字符（默认参数为空格和换行符）或字符序列(传入的参数)。
+- 该方法只能删除开头或是结尾的字符，不能删除中间部分的字符。
     
 ## 1.5 scrapy中url地址拼接的多种方式
 - Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
