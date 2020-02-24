@@ -168,6 +168,7 @@
         - 后面的url会根据baseurl就是爬虫响应的url，可以直接填写response.url或者主域名
         - 进行url地址的拼接，sht项目就是用的方法1或者方法2
         - 使用前先导入：from urllib.parse import urljoin
+        - 直接import urllib  然后使用：urllib.parse.urljoin() 识别不了parse，原因未知
     - 方法3：response.follow(url ,callback)  能够根据response的地址把url拼接完整，构造成Request对象，
     - 方法4(推荐)：response.urljoin(url)    更简洁、好用
         - scrapy里面自带的url拼接，只需要传入url即可，默认已经有一个response.url参数了
