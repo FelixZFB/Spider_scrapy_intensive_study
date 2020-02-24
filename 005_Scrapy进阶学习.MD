@@ -78,9 +78,22 @@
 - 注意：
     - start_request: 此方法仅能被调用一次，读取start_urls内容并启动循环过程
         - start_request是用来处理start_urls的方法，可以scrapy.Spider的源码查看
-    - name；设置爬虫名称
-    - start_urls: 设置开始第一批爬取的url
+        - 返回最初始的response交给parse函数处理
+    - name；设置爬虫名称，爬虫名称不能和爬虫项目文件夹名称重复
+    - start_urls: 设置开始第一批爬取的url,
+        - 该url默认会调用start_request方法，返回response交给parse方法
+        - 我们可以在parse之前重写该方法，会覆盖默认的方法
     - allow_domains: spider允许爬取的域名列表
+        - 特别注意，allow_domains只会对start_urls以后的域名进行过滤
+        - start_urls不会受allow_domains的影响
+        - 此处的allow_domains一定不要写错了，如果写错了，爬虫只会爬取start_urls，然后下一页由于被错误的域名过滤掉了，就爬虫直接结束了
+            - 入坑记录：
+            - 运行爬虫的时候，就会出现第一次请求和解析都正常，后面的请求都被过滤掉了。
+            - 原来scrapy框架下的allowed_domains默认只会对第二次以后的请求域名是否符合进行校验，
+            - 而对于start_requests的url是不会做限制的，因此第一次的请求是可以正常请求和解析的
+            - tieba爬虫项目：allowed_domains = ['tieba.baidu.com']写错成'tieba.com'
+            - 导致只爬取了第一页，下一页不爬取，检查了多遍终于才发现问题，有些常用的思维非常容易入坑，teiba.com多好的域名啊！！！
+            - 注意：在爬取搜狗的网站的时候，搜狗的主域名是sogou.com，别写成了错误的“sougou.com”
     - log: 日志记录
      
         
@@ -184,7 +197,9 @@
     - url：接下来要请求处理的url地址
     - callback：回调函数，表示当前的url的响应交给哪个函数去处理
     - meta：实现数据在不同的解析函数(parse parse_body等函数)中传递，meta默认带有部分数据，比如下载延迟，请求深度等
-    - dont_filter:默认是False会过滤请求的url地址，即请求过的url地址不会继续被请求，对需要重复请求的url地址可以把它设置为True，比如贴吧的翻页请求，页面的数据总是在变化;start_urls中的地址会被反复请求，否则程序不会启动
+    - dont_filter:默认是False，默认会过滤请求的url地址，即请求过的url地址不会继续被请求，
+        - 对需要重复请求的url地址可以把它设置为True，强制重复请求
+        - 比如贴吧的翻页请求，页面的数据随着吧友随时发帖会产生变化，需要重复请求，也可以不重复请求，就会漏掉一些内容;
     - 重点注意：cookies参数，必须单独作为一个参数，不能像之前requests库一样，将cookies放在headers内部
         - 并且传入的cookies是一个字典，键值的形式，参考## 2.6 scrapy携带cookies登录
 

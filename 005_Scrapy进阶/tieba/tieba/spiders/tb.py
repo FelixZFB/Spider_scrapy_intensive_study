@@ -3,8 +3,6 @@ import scrapy
 from tieba.items import TiebaItem
 from urllib.parse import urljoin
 
-
-
 # 用于py里面直接启动爬虫
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -12,13 +10,16 @@ from scrapy.utils.project import get_project_settings
 
 class TbSpider(scrapy.Spider):
     name = 'tb'
-    allowed_domains = ['tieba.com']
+    # 主域名不是tieba.com，写错了，只会爬取start_urls即贴吧第一页，第二页开始就被过滤了，就不会向下爬取了，
+    # 当时就写错掉坑了，检查半天才发现，allowed_domains详细解释查看005_Scrapy进阶学习.MD中的笔记
+    allowed_domains = ['tieba.baidu.com']
     start_urls = ['https://tieba.baidu.com/f?kw=akg&ie=utf-8']
 
     def parse(self, response):
         # 先取出所有帖子所在的li标签列表
         li_list = response.xpath('.//ul[@id="thread_list"]/li')
-        for li in li_list[1:]:
+        #
+        for li in li_list:
             title = li.xpath('./div/div[2]/div[1]/div[1]/a/text()').extract_first()
             author = li.xpath('./div/div[2]/div[1]/div[2]/span[1]/span[1]/a/text()').extract_first()
             href = li.xpath('./div/div[2]/div[1]/div[1]/a/@href').extract_first()
@@ -29,32 +30,30 @@ class TbSpider(scrapy.Spider):
                 # href = response.urljoin(href)
 
                 item = TiebaItem(title=title, author=author, href=href)
+                print(item)
 
                 yield scrapy.Request(
-                    href,
+                    url=href,
                     callback=self.parse_detail,
                     meta={"item": item}
                 )
 
-                print(item)
-
 
         # 爬取下一页,调用的还是parse方法
         next_url = response.xpath('.//a[@class="next pagination-item "]/@href').extract_first()
-        try:
-            if next_url is not None:
-                next_url = urljoin(response.url, next_url)
-                print(next_url)
-                yield scrapy.Request(url=next_url, callback=self.parse)
-        except Exception:
-            print("所有主页面爬取结束！")
+        print(next_url)
+        if next_url is not None:
+            next_url = urljoin(response.url, next_url)
+            print(next_url)
+            yield scrapy.Request(url=next_url, callback=self.parse)
+        else:
+            print("数据提取完成!")
+
 
     def parse_detail(self, response):
         item = response.meta['item']
-
-
-
-
+        item['content'] = "content"
+        yield item
 
 
 # 命令行scrapy crawl tb可以启动爬虫，
