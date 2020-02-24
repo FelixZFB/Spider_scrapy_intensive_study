@@ -158,13 +158,20 @@
     - 取出title具体的文字内容，可以使用下面两种方式：
         - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract()[0]     内容列表的第一个元素
         - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first()  SelectorList列表中的第一个Selector对象的内容元素
+        
+- 特别注意：是extract_first不是extrast_first()
     
 ## 1.5 scrapy中url地址拼接的多种方式
 - Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
     - 方法1(常用)：手动字符串相加
-    - 方法2(常用)：urllib.parse.urljoin(baseurl,url)  后面的url会根据baseurl进行url地址的拼接，sht项目就是用的方法1或者方法2
+    - 方法2(推荐)：urllib.parse.urljoin(baseurl,url)  
+        - 后面的url会根据baseurl就是爬虫响应的url，可以直接填写response.url或者主域名
+        - 进行url地址的拼接，sht项目就是用的方法1或者方法2
+        - 使用前先导入：from urllib.parse import urljoin
     - 方法3：response.follow(url ,callback)  能够根据response的地址把url拼接完整，构造成Request对象，
-    - 方法4(推荐)：response.urljoin(next_url)    更简洁、好用
+    - 方法4(推荐)：response.urljoin(url)    更简洁、好用
+        - scrapy里面自带的url拼接，只需要传入url即可，默认已经有一个response.url参数了
+        - 参考tieba爬虫项目
     - 方法5：scrapy.Request(url,callback,meta,dont_filter)
 
 ## 1.6 scrapy.Request()方法中的参数说明？
@@ -305,6 +312,7 @@ def process_item(self, item, spider):
 - 参考下面的图片：
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies1.png)
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies2.png)
+
 
 ## 2.4 自定义中间件middlewares
 - 中间件自定义和管道一样，先去自定义，然后settings里面启用，
