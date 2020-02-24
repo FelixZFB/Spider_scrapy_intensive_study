@@ -248,9 +248,9 @@ def process_item(self, item, spider):
     ![scrapy shell调试](099_爬虫相关图片解释/012_终端scrapy%20shell调试.png)
 - 退出调试执行命令：exit
 
-## 1.12 下一页网址寻找
+## 1.12 下一页网址寻找，url地址JS动态生成的如何解决？
 - 情况1：下一页的URL地址直接在响应中，直接正则查找即可
-- 情况2：下一页的URL地址在响应中没有，是JS动态生成的
+- 情况2：下一页的URL地址在响应中没有，是JS动态生成的，去寻找网页生成的规律
     - 响应中一般都会有 var pagecount=()  var currentPage=() 两个字段
     - 一个代表总页数，一个代表当前页
     - 下一页的网址就是使用当前页面加1后进行构造
@@ -317,11 +317,12 @@ def process_item(self, item, spider):
 - 最常用的是下载器中间件：
     - 自定义的下载器中间件里面至少要定义一个process_request方法或者process_response方法
     - 不同的方法的返回值不同，参考下面代码
-    - process_request(self, request, spider)是一个默认方法，当每一个request通过该中间件时候都会启动该方法
-    - process_response(self, request, response, spider)是一个默认方法，当每一个response通过该中间件时候都会启动该方法
-    - 两种方法必须有返回值：
+    - process_request(self, request, spider)是一个默认方法，当每一个request通过该中间件时候都会启动该方法，不需要return
+        - 用于添加IP代理和添加User-Agent
+    - process_response(self, request, response, spider)是一个默认方法，当每一个response通过该中间件时候都会启动该方法，需要return response或者request
+    - 第一种不一定有返回值，第二种方法必须有返回值：
 ```python 
-    def process_request(self, request, spider):
+    def process_request(self, request, spider):  # 不第一定需要return
         # Called for each request that goes through the downloader
         # middleware.
 
@@ -333,7 +334,7 @@ def process_item(self, item, spider):
         #   installed downloader middleware will be called
         return None
 
-    def process_response(self, request, response, spider):
+    def process_response(self, request, response, spider):  # 一定有return值
         # Called with the response returned from the downloader.
 
         # Must either;

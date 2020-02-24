@@ -14,6 +14,7 @@ class RenrenSpider(scrapy.Spider):
     start_urls = ['http://renren.com/']
 
     def parse(self, response):
+        # 请求人人网首页后进行自动寻找登陆也然后自动登录
         yield scrapy.FormRequest.from_response(
             response, # 自动从start_urls中寻找登陆form表单进行登陆
             # 实际真正的登录url是：http://www.renren.com/PLogin.do
