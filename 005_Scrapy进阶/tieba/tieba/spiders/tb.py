@@ -53,7 +53,8 @@ class TbSpider(scrapy.Spider):
 
     def parse_detail(self, response):
         item = response.meta['item']
-        item['content'] = "content"
+        # 取出帖子回复数，回复数帖子开头和末尾都出现了，样式是唯一的，取出第一个即可，可以使用extract_first()，下面使用列表取出
+        item['reply_num'] = response.xpath('.//span[@style="margin-right:3px"]/text()').extract()[0]
         yield item
 
 

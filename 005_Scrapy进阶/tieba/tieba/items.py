@@ -16,7 +16,7 @@ class TiebaItem(scrapy.Item):
     title = scrapy.Field()
     href = scrapy.Field()
     author = scrapy.Field()
-    content = scrapy.Field()
+    reply_num = scrapy.Field()
 
 
 
