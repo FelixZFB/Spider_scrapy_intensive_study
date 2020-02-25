@@ -288,7 +288,7 @@ def process_item(self, item, spider):
     - CrawlSpider可以接收多个规则，符合规则的网页都会去请求。规则爬虫就免去的每次都去查找下一页网址。
     - 参考Spider_devlopment_study_note项目中ch17中的云起书院爬虫
 
-## 2 CrawlSpider和RedisSpider   
+# 2 CrawlSpider   
 ## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
 - Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
     - 它提供了start\_requests()的默认实现，
@@ -327,6 +327,7 @@ def process_item(self, item, spider):
     - cd cric 切换到爬虫项目文件夹
     - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
     ![circ爬虫创建](099_爬虫相关图片解释/014_circ保监会CrawlSpider创建.png)
+    - 该爬虫需要使用代理访问，会封IP一段时间
     
 ## 2.3 scrapy模拟登陆携带cookies
 - start_urls默认是调用的库里面的start_requests方法解析
@@ -335,7 +336,6 @@ def process_item(self, item, spider):
 - 参考下面的图片：
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies1.png)
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies2.png)
-
 
 ## 2.4 自定义中间件middlewares
 - 中间件自定义和管道一样，先去自定义，然后settings里面启用，
@@ -409,3 +409,11 @@ def process_item(self, item, spider):
 - 查看下图，scrapy会去cookies参数里面找，不会去headers里面找cookies
 - 下图中注释掉的部分，就是错误的写法
 ![scrapy携带cookies登陆注意](099_爬虫相关图片解释/019_scrapy携带cookies登陆注意.png)
+
+## 2.7 爬虫实例
+- tieba爬虫是scrapy.Spider爬虫   该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了
+- tencent爬虫是CrawlSpider
+
+
+# 3 Scrapy-redis爬虫
+## 3.1 

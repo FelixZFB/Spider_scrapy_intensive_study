@@ -13,6 +13,7 @@ class TiebaPipeline(object):
     # def process_item(self, item, spider):
     #     return item
 
+    # 重写管道，用于下载存储数据到本地json文件
     def __init__(self):
         self.file = open('papers.json', 'w', encoding='utf-8')
 
