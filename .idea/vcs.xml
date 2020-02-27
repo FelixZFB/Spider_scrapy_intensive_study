@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/006_scrapy_redis爬虫/scrapy-redis" vcs="Git" />
   </component>
 </project>

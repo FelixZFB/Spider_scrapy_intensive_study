@@ -411,9 +411,22 @@ def process_item(self, item, spider):
 ![scrapy携带cookies登陆注意](099_爬虫相关图片解释/019_scrapy携带cookies登陆注意.png)
 
 ## 2.7 爬虫实例
-- tieba爬虫是scrapy.Spider爬虫   该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了
-- tencent爬虫是CrawlSpider
+- tieba爬虫是scrapy.Spider爬虫   该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了，参考代码
+- tencent爬虫是CrawlSpider 网址是动态生成的爬取失败，待研究
 
 
 # 3 Scrapy-redis爬虫
-## 3.1 
+- scrapy-redis项目官网：https://github.com/rolando/scrapy-redis.git
+- 下载项目到本地，进入虚拟环境，切换到到放置项目的文件夹
+- 执行以下命令，自动下载项目文件到本地：
+    - git clone https://github.com/rolando/scrapy-redis.git
+    - 自带三个爬虫项目示例，位于example-project里面
+## 3.1 scrapy-redis爬虫流程
+- 相对于scrapy爬虫，数据都是存储在项目本地
+- scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
+- redis数据库可以本地持久化，里面可以存储数据
+- 本来是一台电脑一个爬虫，现在通过将requests和items存储在redis数据库，多台电脑通过从redis数据库
+- 中取出requests然后去爬取，爬取结果又存储到redis数据库中，可以轻松实现分布式爬虫
+- 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
+- 可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
+- 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
