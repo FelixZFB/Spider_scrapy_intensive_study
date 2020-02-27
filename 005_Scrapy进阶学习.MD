@@ -452,6 +452,12 @@ rules = [
 - 执行以下命令，自动下载项目文件到本地：
     - git clone https://github.com/rolando/scrapy-redis.git
     - 自带三个爬虫项目示例，位于example-project里面
+- 参考官方案例
+- Spider_development项目中的ch12 sht爬虫(redis爬虫，redis过滤)  
+- TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
+- 里面都有每步设置详细说明解释，settings里面重点设置
+
+
 ## 3.1 scrapy-redis爬虫流程
 - 相对于scrapy爬虫，数据都是存储在项目本地
 - scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
