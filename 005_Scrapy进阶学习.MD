@@ -288,7 +288,7 @@ def process_item(self, item, spider):
     - CrawlSpider可以接收多个规则，符合规则的网页都会去请求。规则爬虫就免去的每次都去查找下一页网址。
     - 参考Spider_devlopment_study_note项目中ch17中的云起书院爬虫
 
-# 2 CrawlSpider   
+# 2 CrawlSpider规则爬虫   
 ## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
 - Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
     - 它提供了start\_requests()的默认实现，
@@ -317,9 +317,40 @@ def process_item(self, item, spider):
 
 - CrawlSpider爬虫注意点：
     - Rule里面的定义规则的网址，url地址不完整，规则爬虫会自动进行补充完整然后请求
-    - parse函数用于基础请求，不能自己定义
+    - parse函数用于基础请求，不能自己定义该函数
     - callback:LinkExtractor根据规则提取的url对应的响应交给callback指定的方法处理
     - follow：LinkExtractor根据规则提取的url对应的响应是否继续使用rules里面的规则来继续过滤提取
+
+- LinkExtractor地址提取
+    - 三种常用方式：正则、css、xpath
+    - allow=()              里面写正则表达式
+    - restrict_xpaths=()    里面写xpath表达式
+    - restrict_css=()       里面写css选择器表达式
+
+```python
+# 使用正则表达式
+# 定义提取url地址规则，Rule一个规则集合
+    rules = (
+        # LinkExtractor 连接提取器，提取url地址，提取方法是正则
+        # callback 提取出来url地址的response会交给callback的方法处理
+        # follow 当前的url地址的response继续进rules里面的规则继续提取url地址
+        # 每个详情页的网址就是info后面的数字不同，直接传入\d+，匹配多个数字，\.就代表.,详情页不需要向下继续提取url，follow不需要
+        Rule(LinkExtractor(allow=r'/web/site0/tab5240/info\d+\.htm'), callback='parse_item'),
+        # 寻找下一页的规则，请求start_urls后，自动根据规则寻找下一页的地址并去请求,不断从新的一页继续寻找下一页，但是不需要callback
+        # 每一页里面的response里面的内容列表满足上面rule规则，就会自动请求进去提取内容
+        Rule(LinkExtractor(allow=r'/web/site0/tab5240/module14430/page\d+\.htm'), follow=True),
+    )
+    
+# css表达式
+rules = [
+        Rule(LinkExtractor(
+            # 使用css提取网址，只需要定位到网址所在标签的class属性即可
+            restrict_css=('.top-cat', '.sub-cat', '.cat-item')
+        ), callback='parse_directory', follow=True),
+    ]
+```   
+    
+    
 
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
 - 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
@@ -424,7 +455,7 @@ def process_item(self, item, spider):
 ## 3.1 scrapy-redis爬虫流程
 - 相对于scrapy爬虫，数据都是存储在项目本地
 - scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
-- redis数据库可以本地持久化，里面可以存储数据
+- redis数据库可以本地持久化，里面可以存储数据(但是实际应用中数据持久化一般存储在MongoDB或者MySQL中，redis只是用来分布式爬取和去重)
 - 本来是一台电脑一个爬虫，现在通过将requests和items存储在redis数据库，多台电脑通过从redis数据库
 - 中取出requests然后去爬取，爬取结果又存储到redis数据库中，可以轻松实现分布式爬虫
 - 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
