@@ -466,3 +466,22 @@ rules = [
 - 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
 - 可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
 - 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
+
+## 3.2 scrapy-redis爬虫实例各功能介绍
+- 参考以下官方项目下的爬虫实例，以dmoz.py爬虫为例
+- 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
+- dmoz.py爬虫主程序可以继承Spider\CrawlSpider\RedisSpider都可以
+- 重点是要settings里面加入scrapy-redis的相关设置
+- 启动爬虫前先启动redis服务器和客户端
+![scrapy-redis爬虫dmoz.py爬虫](099_爬虫相关图片解释/021-scrapy-redis-爬虫-domz爬虫.png)
+![scrapy-redis爬虫dmoz.py爬虫settings设置重点](099_爬虫相关图片解释/022-scrapy-redis-爬虫-domz爬虫settings设置重点.png)
+
+- 从上图可以看出，只需要在settings中增加5行代码，就可以将普通爬虫变成redis增量式爬虫
+
+- scrapy-redis中的管道：
+    - redispipeline中仅仅实现了item数据存储到redis的过程，
+    - 我们可以新建一个pipeline（或者修改默认的ExamplePipeline），让数据存储到任意地方
+
+- 爬虫执行后，redis里面会增加三个key，可以使用keys * 查看
+- 分别是：待爬取的request对象、已爬取过的request对象的指纹信息、爬取的item信息
+![scrapy-redis爬虫dmoz.py爬虫运行后redis中结果](099_爬虫相关图片解释/023-scrapy-redis-爬虫-domz爬虫运行后结果.png)
