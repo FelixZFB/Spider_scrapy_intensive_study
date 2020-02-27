@@ -455,8 +455,7 @@ rules = [
 - 参考官方案例
 - Spider_development项目中的ch12 sht爬虫(redis爬虫，redis过滤)  
 - TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
-- 里面都有每步设置详细说明解释，settings里面重点设置
-
+- 里面都有每步设置详细说明解释，settings里面重点设置scrapy-redis
 
 ## 3.1 scrapy-redis爬虫流程
 - 相对于scrapy爬虫，数据都是存储在项目本地
