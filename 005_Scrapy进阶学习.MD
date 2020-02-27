@@ -485,3 +485,63 @@ rules = [
 - 爬虫执行后，redis里面会增加三个key，可以使用keys * 查看
 - 分别是：待爬取的request对象、已爬取过的request对象的指纹信息、爬取的item信息
 ![scrapy-redis爬虫dmoz.py爬虫运行后redis中结果](099_爬虫相关图片解释/023-scrapy-redis-爬虫-domz爬虫运行后结果.png)
+
+- scrapy-redis如何生成指纹：
+    - 使用的是以下方法：
+    - fp = hashlib.sha1() # sha1生成一个160bit的结果，通常用40位的16进制字符串表示
+    - fp.update(to_bytes(request.method))
+    - fp.update(to_bytes(canonicalize_url(request.url)))
+    - fp.hexdigest() 取出加密后的指纹信息
+    
+## 3.3 scrapy-redis重点
+### 3.3.1 request对象什么时候入队
+- dont_filter = True ,构造请求的时候，把dont_filter置为True，该url会被反复抓取（url地址对应的内容会更新的情况）
+- 一个全新的url地址被抓到的时候，构造request请求
+- url地址在start_urls中的时候，会入队，不管之前是否请求过
+    - 构造start_url地址的请求时候，dont_filter = True
+
+```python
+def enqueue_request(self, request):
+    if not request.dont_filter and self.df.request_seen(request):
+        # dont_filter=False True  True request指纹已经存在  #不会入队
+        # dont_filter=False True  False  request指纹已经存在 全新的url  #会入队
+        # dont_filter=True False  #会入队
+        self.df.log(request, self.spider)
+        return False
+    self.queue.push(request) #入队
+    return True
+```
+
+### 3.3.2 scrapy_redis去重方法
+- 使用sha1加密request得到指纹
+- 把指纹存在redis的集合中
+- 下一次新来一个request，同样的方式生成指纹，判断指纹是否存在reids的集合中
+
+- 生成指纹具体源码方法
+```python
+fp = hashlib.sha1()
+fp.update(to_bytes(request.method))  #请求方法
+fp.update(to_bytes(canonicalize_url(request.url))) #url
+fp.update(request.body or b'')  #请求体
+return fp.hexdigest()
+```
+- 然后根据指纹判断数据是否存在redis的集合中，不存在插入
+```python
+added = self.server.sadd(self.key, fp)
+return added != 0
+```
+
+## 3.4 scrapy-redis源码核心部分解读
+- RedisPipeline处理Items
+![024](099_爬虫相关图片解释/024-scrapy-redis-源码RedisPipeline处理Items.png)
+- RFPDupeFilter指纹加密request对象
+![025](099_爬虫相关图片解释/025-scrapy-redis-源码RFPDupeFilter指纹加密.png)
+- Scheduler调度器处理request对象
+![026](099_爬虫相关图片解释/026-scrapy-redis-源码Scheduler调度器处理request对象.png)
+
+## 3.5 京东图书爬虫
+- 京东图书scrapy-redis增量式爬虫
+    - 需求：抓取京东图书的信息
+    - 目标：抓取京东图书包含图书的名字、封面图片地址、图书url地址、作者、出版社、出版时间、价格、图书所属大分类、图书所属小的分类、分类的url地址
+    - 京东图书主页：https://book.jd.com/                        主页左边分类 栏目底部就有 全部图书分类，进去就是下面网址
+    - 京东图书全部分类url：https://book.jd.com/booksort.html     该网址作为起始网址，已经有了大类小类，清晰明了作为爬取起始地址

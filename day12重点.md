@@ -1,0 +1,72 @@
+### 爬虫项目
+
+- 项目名字
+  - request+selenium爬虫
+- 项目周期
+- 项目介绍
+  - 爬了XXXXX，XXX，XXX，等网站，获取网站上的XXX，XXX，XXX，数据，每个月定时抓取XXX数据，使用该数据实现了XXX，XXX，XX，
+- 开发环境
+  - linux+pycharm+requests+mongodb+redis+crontab+scrapy_redis+ scarpy + mysql+gevent+celery+threading
+- 使用技术
+  - 使用requests...把数据存储在mongodb中
+  - 使用crontab实现程序的定时启动抓取
+  - url地址的去重
+    - 使用redis的集合，把request对象的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现基于url地址的增量式爬虫
+    - 布隆过滤
+  - 对数据的去重
+    - 把数据的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现增量式爬虫
+  - 反扒
+    - 代理ip
+      - 购买了第三的代理ip，组成代理ip池，其中的ip没两天更新一次，同时使用单独的程序来检查代理ip的可用
+    - cookie
+      - 准备了XX个账号，使用requests获取账号的对应的cookie，存储在redis中，后续发送请求的时候随机选择cookie
+      - 使用selenium来进行模拟登陆，获取cookie，保存在Redis中
+    - 数据通过js生成
+      - 分析js，通过chrome浏览器定位js的位置，寻找js生成数据的方式
+      - 通过selenium来模拟页面的加载内容，获取页面动态加载后的数据
+  - 提高爬虫效率
+    - 使用多线，线程池，协程，celery来完成爬虫
+    - 使用scrapy框架来实现爬虫，
+      - 不能断点续爬，请求过的url地址不能持久化
+        - 使用scrapy_redis
+      - 不能对数据进行去重
+        - 把数据的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现增量式爬虫
+    - scrapy_redis
+      - domz实现增量式，持久化的爬虫
+      - 实现分布式爬虫
+
+
+- 项目名字
+  - scarpy爬虫
+- 项目周期
+- 项目介绍
+  - 爬了XXXXX，XXX，XXX，等网站，获取网站上的XXX，XXX，XXX，数据，每个月定时抓取XXX数据，使用该数据实现了XXX，XXX，XX，
+- 开发环境
+  - linux+pycharm+requests+mongodb+redis+crontab+scrapy_redis+ scarpy + mysql+gevent+celery+threading
+- 使用技术
+  - 使用requests...把数据存储在mongodb中
+  - 使用crontab实现程序的定时启动抓取
+  - url地址的去重
+    - 使用redis的集合，把request对象的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现基于url地址的增量式爬虫
+    - 布隆过滤
+  - 对数据的去重
+    - 把数据的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现增量式爬虫
+  - 反扒
+    - 代理ip
+      - 购买了第三的代理ip，组成代理ip池，其中的ip没两天更新一次，同时使用单独的程序来检查代理ip的可用
+    - cookie
+      - 准备了XX个账号，使用requests获取账号的对应的cookie，存储在redis中，后续发送请求的时候随机选择cookie
+      - 使用selenium来进行模拟登陆，获取cookie，保存在Redis中
+    - 数据通过js生成
+      - 分析js，通过chrome浏览器定位js的位置，寻找js生成数据的方式
+      - 通过selenium来模拟页面的加载内容，获取页面动态加载后的数据
+  - 提高爬虫效率
+    - 使用多线，线程池，协程，celery来完成爬虫
+    - 使用scrapy框架来实现爬虫，
+      - 不能断点续爬，请求过的url地址不能持久化
+        - 使用scrapy_redis
+      - 不能对数据进行去重
+        - 把数据的XXX字段通过sha1生成指纹，放入redis的集合中进行去重，实现增量式爬虫
+    - scrapy_redis
+      - domz实现增量式，持久化的爬虫
+      - 实现分布式爬虫
