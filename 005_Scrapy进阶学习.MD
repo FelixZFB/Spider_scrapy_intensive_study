@@ -49,7 +49,10 @@
         - 主要是对requests和responses进行设置，主要是自定义扩展下载功能的组件。
         - Scrapy的官方文档中的解释：下载器中间件是介于Scrapy的request/response处理的钩子框架，是用于全局修改Scrapy request和response的一个轻量、底层的系统。
         - 容易理解的话表述就是：更换代理IP，更换Cookies，更换User-Agent，自动重试等
-        - 上述具体的手写设置在项目文件的settings.py里面，具体设置参考Spider_devlopment_study_note中的ch17
+        - 上述具体的自定义设置在项目文件的settings.py里面，
+        - 具体设置参考Spider_devlopment_study_note中的ch17
+        - 设置请求头，更会随机的User-Agent:本项目005文件中的cric项目中的settings和middlewares设置
+        - 使用post发送账号密码登陆请求：本项目文件夹中login项目
     - **Spider Middlewares（爬虫中间件）**：
         - 爬虫中间件位于引擎和爬虫之间，它们传输的数据就是responses、requests、items
         - 主要自定扩展和操作引擎和Spider中间通信的功能组件（比如进入Spider的Responses;和从Spider出去的Requests）
@@ -353,6 +356,7 @@ rules = [
     
 
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
+- 最近更换User-Agent参考项目中的settings和middlewares中的设置
 - 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
     - scrapy startproject cric 创建爬虫项目
     - cd cric 切换到爬虫项目文件夹
@@ -476,7 +480,7 @@ rules = [
 ![scrapy-redis爬虫dmoz.py爬虫](099_爬虫相关图片解释/021-scrapy-redis-爬虫-domz爬虫.png)
 ![scrapy-redis爬虫dmoz.py爬虫settings设置重点](099_爬虫相关图片解释/022-scrapy-redis-爬虫-domz爬虫settings设置重点.png)
 
-- 从上图可以看出，只需要在settings中增加5行代码，就可以将普通爬虫变成redis增量式爬虫
+- 从上图可以看出，只需要在settings中增加5行代码(图中红色字体代码)，就可以将普通爬虫变成redis增量式爬虫
 
 - scrapy-redis中的管道：
     - redispipeline中仅仅实现了item数据存储到redis的过程，
@@ -540,6 +544,7 @@ return added != 0
 ![026](099_爬虫相关图片解释/026-scrapy-redis-源码Scheduler调度器处理request对象.png)
 
 ## 3.5 京东图书爬虫
+- 006文件下面的book项目中的jdbook京东图书爬虫
 - 京东图书scrapy-redis增量式爬虫
     - 需求：抓取京东图书的信息
     - 目标：抓取京东图书包含图书的名字、封面图片地址、图书url地址、作者、出版社、出版时间、价格、图书所属大分类、图书所属小的分类、分类的url地址
@@ -557,7 +562,7 @@ return added != 0
     - 然后再response里面搜索一个价格，发现并没有价格，说明该网址的请求返回的response并没有价格
     ![图书价格查看](006_scrapy_redis爬虫/book爬虫网页分析/002-图书列表响应页面价格查找.png)
     - 打开开发者全局搜索工具，右上角关闭的旁边，搜索一个图书的价格，查看结果
-        - 结果里面有图书的id，原价，现价，会员价
+        - 结果里面有图书的id，原价，现价，会员价,其中op就是当前价格
         ![图书价格位置搜索](006_scrapy_redis爬虫/book爬虫网页分析/003-价格全局搜索.png)
     
     - 请求列表里面搜索网页特征值，上图箭头所指位置就是网页地址，然后查看请求头和响应
