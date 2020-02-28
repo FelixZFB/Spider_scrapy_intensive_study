@@ -26,7 +26,7 @@ class JdbookSpider(scrapy.Spider):
         # 图书大分类里面取出图书每一个大分类
         for dt in dt_list:
             item = dict()
-            item['b_cate'] = response.xpath('./a/text()').extract() # 大分类名称
+            item['b_cate'] = dt.xpath('./a/text()').extract() # 大分类名称，注意，是从dt下面开始取不是response，当时写成response肯定就找不到了
             # ./表示选定当前标签，following-sibling::dd[1]表示向后取兄弟标签，取第一个dd标签
             # 大分类下的小分类列表，一个大分类紧邻的兄弟标签就是小分类列表
             em_list = dt.xpath('./following-sibling::dd[1]/em')
@@ -50,8 +50,8 @@ class JdbookSpider(scrapy.Spider):
         # 进入小分类后，先获取一页的图书列表
         li_list = response.xpath('//div[@id="plist"]/ul/li')
         for li in li_list:
-            # 图片的连接需要拼接完整
-            item['book_img'] = li.xpath('.//div[@class="p-img"]/a/img/@src').extract_first() # 获取图书封面连接，.//当前标签下的任意位置，都用属性在li标签下面查找
+            # 图片的连接需要拼接完整,图片地址有些书籍有问题有些没有
+            item['book_img'] = "https:" + li.xpath('.//div[@class="p-img"]/a/img/@src').extract_first() # 获取图书封面连接，.//当前标签下的任意位置，都用属性在li标签下面查找
             item['book_name'] = li.xpath('.//div[@class="p-name"]//em/text()').extract_first().strip() # name的文字放在em标签下面多个font标签，em/text()表示取出em标签下所有的文字内容，两端的空格去除
             item['book_href'] = response.urljoin(li.xpath('.//div[@class="p-name"]/a/@href').extract_first()) # 去除文字两端的空格
             item['book_author'] = li.xpath('.//span[@class="author_type_1"]/a/text()').extract() # 注意有些作者有多个，所以取出a标签的所有文字内容
@@ -77,7 +77,6 @@ class JdbookSpider(scrapy.Spider):
                 # 此处的item还是在上面新建一个item = dict()的内部，一个item还没有循环结束，需要内部继续传递
                 meta = {'item': item}  # 此处需要传递item，不然会报48行的KEYERROR错误
             )
-
 
     # 获取图书的价格信息
     def parse_book_price(self, response):
