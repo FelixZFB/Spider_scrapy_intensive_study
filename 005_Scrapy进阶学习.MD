@@ -352,8 +352,7 @@ rules = [
         ), callback='parse_directory', follow=True),
     ]
 ```   
-    
-    
+   
 
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
 - 最近更换User-Agent参考项目中的settings和middlewares中的设置
@@ -475,6 +474,8 @@ rules = [
 - 参考以下官方项目下的爬虫实例，以dmoz.py爬虫为例
 - 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
 - dmoz.py爬虫主程序可以继承Spider\CrawlSpider\RedisSpider都可以
+- 创建项目时候可以是普通爬虫或者规则爬虫都可以，也可以终端创建普通爬虫，爬虫继承时候修改为RedisSpider,
+- 但是，需要先安装scrapy_redis库，代码开头需要导入from scrapy_redis.spiders import RedisSpider
 - 重点是要settings里面加入scrapy-redis的相关设置
 - 启动爬虫前先启动redis服务器和客户端
 ![scrapy-redis爬虫dmoz.py爬虫](099_爬虫相关图片解释/021-scrapy-redis-爬虫-domz爬虫.png)
