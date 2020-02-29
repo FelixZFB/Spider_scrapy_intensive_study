@@ -91,6 +91,11 @@
     - start_urls: 设置开始第一批爬取的url,
         - 该url默认会调用start_request方法，返回response交给parse方法
         - 我们可以在parse之前重写该方法，会覆盖默认的方法
+    - response注意：
+        - 起始url的response或者后面一些url的response，response里面是不是有我们在网页上查看元素里面看到的内容，一般大多数情况下是使用class属性定位
+        - 使用Chrome开发者工具，查看网址的response或者查看网页源码，然后查找是否有class属性值或者一些其它属性
+        - 如果查看元素能看见，但是response里面没有，就说明该内容是js动态请求生成的，就需要进行js逆向分析
+        - 参考4.1中京东图书爬虫，图书价格页面和查看元素里面都可以看到，但是response里面没有，就是js动态生成的
     - allow_domains: spider允许爬取的域名列表
         - 特别注意，allow_domains只会对start_urls以后的域名进行过滤
         - start_urls不会受allow_domains的影响
@@ -449,7 +454,7 @@ rules = [
 - tencent爬虫是CrawlSpider 网址是动态生成的爬取失败，待研究
 
 
-# 3 Scrapy-redis爬虫
+# 3 Scrapy_redis爬虫入门
 - scrapy-redis项目官网：https://github.com/rolando/scrapy-redis.git
 - 下载项目到本地，进入虚拟环境，切换到到放置项目的文件夹
 - 执行以下命令，自动下载项目文件到本地：
@@ -460,20 +465,27 @@ rules = [
 - TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
 - 里面都有每步设置详细说明解释，settings里面重点设置scrapy-redis
 
-## 3.1 scrapy-redis爬虫流程
+## 3.1 scrapy-redis爬虫流程及其优势
 - 相对于scrapy爬虫，数据都是存储在项目本地
 - scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
 - redis数据库可以本地持久化，里面可以存储数据(但是实际应用中数据持久化一般存储在MongoDB或者MySQL中，redis只是用来分布式爬取和去重)
 - 本来是一台电脑一个爬虫，现在通过将requests和items存储在redis数据库，多台电脑通过从redis数据库
 - 中取出requests然后去爬取，爬取结果又存储到redis数据库中，可以轻松实现分布式爬虫
 - 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
-- 可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
+- 由于redis中数据可以本地持久化，爬取过的对象本地已经有了，就不会在爬取了，
+- 可以断点爬取，这次爬虫关闭后，下次启动爬虫，只会爬取未爬过的request对象
+- redis的这种属性就可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
+- 而scrapy.Spider和CrawlSpider爬虫关闭后再次打开，会完全重新开始爬取
 - 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
 
 ## 3.2 scrapy-redis爬虫实例各功能介绍
 - 参考以下官方项目下的爬虫实例，以dmoz.py爬虫为例
 - 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
-- dmoz.py爬虫主程序可以继承Spider\CrawlSpider\RedisSpider都可以
+- dmoz.py爬虫主程序可以继承Spider\CrawlSpider（这两个可以实现增量式爬虫）或者RedisSpider都可以 
+- 如果继承RedisSpider(可以实现分布式爬虫)，不需要再爬虫里面写start_urls，但是需要传入一个键的名称redis_key = 'sht:start_urls'
+- 然后启动redis客户端，传入键名和键值（要爬取的起始URL地址），然后启动爬虫即可（也可以启动爬虫后再传入网址，redis会等待传入键值）
+- 该网址爬取结束后，爬虫会一直等于等待状态，然后我们可以继续传入新的网址，然后继续爬取，
+- 要结束爬取，直接停止爬虫主程序即可，参考ch12文件夹中的sht爬虫项目相关说明
 - 创建项目时候可以是普通爬虫或者规则爬虫都可以，也可以终端创建普通爬虫，爬虫继承时候修改为RedisSpider,
 - 但是，需要先安装scrapy_redis库，代码开头需要导入from scrapy_redis.spiders import RedisSpider
 - 重点是要settings里面加入scrapy-redis的相关设置
@@ -544,8 +556,12 @@ return added != 0
 - Scheduler调度器处理request对象
 ![026](099_爬虫相关图片解释/026-scrapy-redis-源码Scheduler调度器处理request对象.png)
 
-## 3.5 京东图书爬虫
-- 006文件下面的book项目中的jdbook京东图书爬虫
+# 4 scrapy_redis增量式爬虫实例
+- 普通的spider或者CrawlSpider只需要settings里面增加一些设置
+- 就可以变成scrapy_redis增量式爬虫，参考下面京东图书爬虫实例
+
+## 4.1 京东图书爬虫(scrapy_redis增量式爬虫)
+- 006文件下面的book项目中的jdbook京东图书增量式爬虫
 - 京东图书scrapy-redis增量式爬虫
     - 需求：抓取京东图书的信息
     - 目标：抓取京东图书包含图书的名字、封面图片地址、图书url地址、作者、出版社、出版时间、价格、图书所属大分类、图书所属小的分类、分类的url地址
@@ -559,8 +575,12 @@ return added != 0
     - 火狐打开打开一个小分类，中国当代小说：https://list.jd.com/list.html?cat=1713,3258,3297&tid=3297
     - 查看元素，元素页面是有价格的，看下图
     ![图书价格位置](006_scrapy_redis爬虫/book爬虫网页分析/001-图书价钱元素.png)
-    - 谷歌打开网页，左侧滚动响应网址，找到响应主网址，右边查看网页的响应response
-    - 然后再response里面搜索一个价格，发现并没有价格，说明该网址的请求返回的response并没有价格
+    - 判断response里面是否有图书价格：
+    - 方法1：查看response响应
+        - 谷歌打开网页，左侧滚动响应网址，找到响应主网址，右边查看网页的响应response
+        - 然后再response里面搜索一个价格，发现并没有价格，说明该网址的请求返回的response并没有价格
+    - 方法2：查看网页源码
+        - 或者直接查看网页源码，然后搜索一个图书价格，也是没有结果的
     ![图书价格查看](006_scrapy_redis爬虫/book爬虫网页分析/002-图书列表响应页面价格查找.png)
     - 打开开发者全局搜索工具，右上角关闭的旁边，搜索一个图书的价格，查看结果
         - 结果里面有图书的id，原价，现价，会员价,其中op就是当前价格
@@ -592,5 +612,28 @@ return added != 0
         ![图书skuID查找](006_scrapy_redis爬虫/book爬虫网页分析/007-图书skuID查找位置.png)
         - 我们只需要获取到data-sku值然后，和https://p.3.cn/prices/mgets?skuIds=J_进行拼接
         - 请求该网址就可以拿到图书的价格,查看jdbook爬虫中内容
-        
-        
+
+# 5 scrapy_redis分布式爬虫        
+## 5.1 scrapy_redis之RedisSpider爬虫       
+- 爬虫要直接继承RedisSpider，需要先安装scrapy_redis模块
+- 然后导入模块：from scrapy_redis.spiders import RedisSpider
+- RedisSpider爬虫的创建以及settings里面设置和上面3.5的爬虫都是一样的，
+- 就是爬虫创建完成后，以下两点不同：
+    - 1）爬虫类继承改成RedisSpider
+    - 2）然后不需要start_urls，但是设置一个redis_key用于向redis客户端传入起始URL
+- 通过RedisSpider和redis_key这两点区别就可以实现分布式爬虫
+- 参考下面图片及前面3.1和3.2中相关内容
+![RedisSpider分布式爬虫介绍](099_爬虫相关图片解释/027_RedisSpider分布式爬虫介绍.png)
+
+## 5.2 RedisSpider分布式爬虫实例
+- 当当图书爬虫，分布式爬虫
+- 起始URL: http://book.dangdang.com/
+
+- 爬虫创建：
+    - 该爬虫直接创建在5.1京东图书爬虫相同项目目录下
+    - 终端切换到book项目文件夹下，然后使用以下命令直接创建爬虫
+    - scrapy genspider dangdang dangdang.com  
+    (venv) D:\Hello World\python_work\Spider_scrapy_intensive_study\006_scrapy_redis爬虫\book>scrapy genspider dangdang dangdang.com
+    Created spider 'dangdang' using template 'basic' in module:
+    book.spiders.dangdang
+    - 查看命令，就是使用的基本爬虫创建的当当爬虫
