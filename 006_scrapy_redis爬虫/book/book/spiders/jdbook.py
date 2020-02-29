@@ -10,7 +10,7 @@ from scrapy.utils.project import get_project_settings
 # 打造分布式爬虫
 from scrapy_redis.spiders import RedisSpider
 
-# 开始项目时候创建的就是普通爬虫，settings中设置以下就可以变成scrapy-redis爬虫
+# 开始项目时候创建的就是普通爬虫，settings中设置以后就可以变成scrapy-redis爬虫增量式爬虫
 class JdbookSpider(scrapy.Spider):
     name = 'jdbook'
     allowed_domains = ['jd.com', 'p.3.cn']
