@@ -483,9 +483,14 @@ rules = [
 - 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
 - dmoz.py爬虫主程序可以继承Spider\CrawlSpider（这两个可以实现增量式爬虫）或者RedisSpider都可以 
 - 如果继承RedisSpider(可以实现分布式爬虫)，不需要再爬虫里面写start_urls，但是需要传入一个键的名称redis_key = 'sht:start_urls'
-- 然后启动redis客户端，传入键名和键值（要爬取的起始URL地址），然后启动爬虫即可（也可以启动爬虫后再传入网址，redis会等待传入键值）
-- 该网址爬取结束后，爬虫会一直等于等待状态，然后我们可以继续传入新的网址，然后继续爬取，
-- 要结束爬取，直接停止爬虫主程序即可，参考ch12文件夹中的sht爬虫项目相关说明
+- RedisSpider启动步骤：
+    - 启动redis客户端
+    - 启动爬虫，爬虫的自动监听传入的redis_key
+    - 传入键名和键值，lpush sht:start_urls http://www.sht.com
+    - 爬虫开始爬取，网址爬取结束后，爬虫会一直等于等待状态，然后我们可以继续传入新的网址，然后继续爬取
+    - 要结束爬取，直接停止爬虫主程序即可
+    - 补充：也可以先传入键值，然后启动爬虫，键值都是本地内存，爬虫根据键名可以读取
+    - 参考ch12文件夹中的sht爬虫项目相关说明以及下面5.2当当爬虫
 - 创建项目时候可以是普通爬虫或者规则爬虫都可以，也可以终端创建普通爬虫，爬虫继承时候修改为RedisSpider,
 - 但是，需要先安装scrapy_redis库，代码开头需要导入from scrapy_redis.spiders import RedisSpider
 - 重点是要settings里面加入scrapy-redis的相关设置
@@ -637,3 +642,32 @@ return added != 0
     Created spider 'dangdang' using template 'basic' in module:
     book.spiders.dangdang
     - 查看命令，就是使用的基本爬虫创建的当当爬虫
+    - 修改dangdang爬虫，导入RedisSpider模块，继承该模块，定义reids_key
+    
+- 网页图书分类分析：
+    - 图书分类分为三级
+    - 比如文艺大分类
+        - 文艺(一级)
+            -文学(二级)
+                - 文集(三级)
+                - 纪实(三级)
+                - ......
+            - 传记(二级)
+                - ......
+            - 艺术(二级)
+                - ......
+                
+- RedisSpider爬虫启动：
+    - 启动爬虫，命令行启动或者直接py启动
+        - INFO: Reading start URLs from redis key 'dangdang:start_url'
+        - INFO: Telnet console listening on 127.0.0.1:6023
+        - 爬虫处于监听状态等待传入redis_key及其值(起始URL)
+    - 传入redis_key，redis客户端使用以下命令(改命令可以一次传入多个URL值)：lpush dangdang:start_url http://book.dangdang.com/  
+        - DEBUG: Read 1 requests from 'dangdang:start_url'
+    - 爬取后，查看redis中的键，会产生以下两个键
+        - "dangdang:requests"     待爬取的request对象
+        - "dangdang:dupefilter"   已爬取过的request对象的指纹信息(用于去重)
+        - 如果设置了存储item信息 还会有一个键 "dangdang:items"
+    - 爬取结束后，redis会继续处于监听状态，可以传入新的网址，或者借书爬虫程序
+    - 补充：可以使用del "dangdang:dupefilter" 删除改键，然后由重新爬取
+    
