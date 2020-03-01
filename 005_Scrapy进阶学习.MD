@@ -678,7 +678,7 @@ return added != 0
     - 爬取后，查看redis中的键，会产生以下两个键
         - "dangdang:requests"     待爬取的request对象
         - "dangdang:dupefilter"   已爬取过的request对象的指纹信息(用于去重)
-        - 如果设置了存储item信息 还会有一个键 "dangdang:items"
+        - "dangdang:items"        已经爬取到的items内容(需要爬虫里面yield item后改键才会生成)
     - 爬取结束后，redis会继续处于监听状态，可以传入新的网址，或者借书爬虫程序
     - 补充：可以使用del "dangdang:dupefilter" 删除改键，然后由重新爬取
     
