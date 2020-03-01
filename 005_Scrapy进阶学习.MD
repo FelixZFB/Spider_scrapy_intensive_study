@@ -656,6 +656,14 @@ return added != 0
                 - ......
             - 艺术(二级)
                 - ......
+- 数据提取
+    - //text()取出标签下所有文字内容注意： 
+        - dt//text()  选取dt标签下面所有的文字内容，不管在什么位置 
+        - scrapy中使用//text()，后面要使用extract()取出所有的文字内容，结果是一个列表，如果用extract_first()只会取出第一个结果的内容
+        - 然后一般还需要取出每个文字内容两端的空白及换行符，需要使用列表循环去除
+        - item['b_cate'] = div.xpath('./dl/dt//text()').extract() # 注意：大分类文字查看元素是放在dt下面span标签下多个a标签里面，但是response实际是没有span标签的，此处直接使用//text()取出dt标签下的所有文字内容，结果是一个列表
+        - item['b_cate'] = [i.strip() for i in item['b_cate'] if len(i.strip()) > 0] # 取出文字内容两端的换行及空白内容，保留实际长度大于0的内容，去掉列表中的空元素
+    - 006中的dangdang爬虫                     
                 
 - RedisSpider爬虫启动：
     - 启动爬虫，命令行启动或者直接py启动
@@ -671,3 +679,4 @@ return added != 0
     - 爬取结束后，redis会继续处于监听状态，可以传入新的网址，或者借书爬虫程序
     - 补充：可以使用del "dangdang:dupefilter" 删除改键，然后由重新爬取
     
+ 
