@@ -663,7 +663,10 @@ return added != 0
         - 然后一般还需要取出每个文字内容两端的空白及换行符，需要使用列表循环去除
         - item['b_cate'] = div.xpath('./dl/dt//text()').extract() # 注意：大分类文字查看元素是放在dt下面span标签下多个a标签里面，但是response实际是没有span标签的，此处直接使用//text()取出dt标签下的所有文字内容，结果是一个列表
         - item['b_cate'] = [i.strip() for i in item['b_cate'] if len(i.strip()) > 0] # 取出文字内容两端的换行及空白内容，保留实际长度大于0的内容，去掉列表中的空元素
-    - 006中的dangdang爬虫                     
+    - 006中的dangdang爬虫
+    - 注意：
+        - 在爬取最后一级使用yield返回item内容，爬取窗口里面也会显示爬取结果
+        - 不yield或者print爬虫里面只会显示爬取过程，并不会显示items内容                     
                 
 - RedisSpider爬虫启动：
     - 启动爬虫，命令行启动或者直接py启动

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from copy import deepcopy
+from urllib import parse
 
 # 用于py里面直接启动爬虫
 from scrapy.crawler import CrawlerProcess
@@ -37,7 +38,7 @@ class DangdangSpider(RedisSpider): # 2 修改爬虫继承的类
                     if item['s_href'] is not None:
                         yield scrapy.Request(
                             url=item['s_href'],
-                            meta={'item': deepcopy(item)},
+                            meta={'item': deepcopy(item)}, # 注意此处传递的item是每次开始一个新的item循环后传递的，需要deepcopy
                             callback=self.parse_book_list
                         )
 
@@ -48,14 +49,26 @@ class DangdangSpider(RedisSpider): # 2 修改爬虫继承的类
         li_list = response.xpath('.//ul[@class="bigimg"]/li')
         for li in li_list: # 取出每一本图书，获取图书的具体信息
             item['book_href'] = li.xpath('./a/@href').extract_first()
-            item['book_img'] = li.xpath('./a/img/@src').extract_first()
+            item['book_img'] = li.xpath('./a[@class="pic"]/img/@data-original').extract_first() # 图片的src属性在response中并不是真实地址，<img data-original='http://img3m0.ddimg.cn/28/30/24198400-1_b_4.jpg' src='images/model/guan/url_none.png'
             item['book_name'] = li.xpath('./p[@class="name"]/a/@title').extract_first()
             item['book_desc'] = li.xpath('./p[@class="detail"]/text()').extract_first()
             item['book_price'] = li.xpath('.//span[@class="search_now_price"]/text()').extract_first() # 价格有多个，只要当前售价
             item['book_author'] = li.xpath('./p[@class="search_book_author"]/span[1]/a/text()').extract()  # 作者有多个放在span下多个a标签里面,全部取出结果是一个列表
             item['book_publish_date'] = li.xpath('./p[@class="search_book_author"]/span[2]/text()').extract_first()
             item['book_press'] = li.xpath('./p[@class="search_book_author"]/span[3]/a/text()').extract_first()
-        print(item)
+        # 在爬取最后一级使用yield返回item内容，爬取窗口里面也会显示爬取结果
+        # 不yield或者print爬虫里面只会显示爬取过程，并不会显示items内容
+        yield item
+
+        # 爬取下一页，进行翻页
+        next_url = response.xpath('//li[@class="next"]/a/@href').extract_first()
+        if next_url is not None:
+            next_url = parse.urljoin(response.url, next_url)
+            yield scrapy.Request(
+                url=next_url,
+                meta={'item': item}, # 此处还没有开始新的item循环，不用deepcopy
+                callback=self.parse_book_list
+            )
 
 
 # 命令行scrapy crawl dangdang可以启动爬虫，
