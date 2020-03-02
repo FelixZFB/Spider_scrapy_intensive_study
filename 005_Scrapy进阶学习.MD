@@ -296,6 +296,7 @@ def process_item(self, item, spider):
     - CrawlSpider可以接收多个规则，符合规则的网页都会去请求。规则爬虫就免去的每次都去查找下一页网址。
     - 参考Spider_devlopment_study_note项目中ch17中的云起书院爬虫
 
+
 # 2 CrawlSpider规则爬虫   
 ## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
 - Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
@@ -325,7 +326,7 @@ def process_item(self, item, spider):
 
 - CrawlSpider爬虫注意点：
     - Rule里面的定义规则的网址，url地址不完整，规则爬虫会自动进行补充完整然后请求
-    - parse函数用于基础请求，不能自己定义该函数
+    - parse函数用于基础请求，不能自己定义该函数，用来处理规则中的URL链接，然后从中寻找提取链接
     - callback:LinkExtractor根据规则提取的url对应的响应交给callback指定的方法处理
     - follow：LinkExtractor根据规则提取的url对应的响应是否继续使用rules里面的规则来继续过滤提取
 
@@ -450,8 +451,8 @@ rules = [
 ![scrapy携带cookies登陆注意](099_爬虫相关图片解释/019_scrapy携带cookies登陆注意.png)
 
 ## 2.7 爬虫实例
-- tieba爬虫是scrapy.Spider爬虫   该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了，参考代码
-- tencent爬虫是CrawlSpider 网址是动态生成的爬取失败，待研究
+- tieba爬虫是scrapy.Spider普通爬虫      该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了，参考代码
+- tencent爬虫是CrawlSpider规则爬虫      网址是动态生成的爬取失败，有反爬措施，待研究
 
 
 # 3 Scrapy_redis爬虫入门
@@ -561,8 +562,9 @@ return added != 0
 - Scheduler调度器处理request对象
 ![026](099_爬虫相关图片解释/026-scrapy-redis-源码Scheduler调度器处理request对象.png)
 
+
 # 4 scrapy_redis增量式爬虫实例
-- 普通的spider或者CrawlSpider只需要settings里面增加一些设置
+- 普通的scrapy.Spider或者CrawlSpider只需要settings里面增加一些设置，具体参考settings.py文件里面的设置
 - 就可以变成scrapy_redis增量式爬虫，参考下面京东图书爬虫实例
 
 ## 4.1 京东图书爬虫(scrapy_redis增量式爬虫)
@@ -618,14 +620,20 @@ return added != 0
         - 我们只需要获取到data-sku值然后，和https://p.3.cn/prices/mgets?skuIds=J_进行拼接
         - 请求该网址就可以拿到图书的价格,查看jdbook爬虫中内容
 
-# 5 scrapy_redis分布式爬虫        
+# 5 scrapy_redis分布式爬虫(RedisSpider)        
 ## 5.1 scrapy_redis之RedisSpider爬虫       
 - 爬虫要直接继承RedisSpider，需要先安装scrapy_redis模块
 - 然后导入模块：from scrapy_redis.spiders import RedisSpider
-- RedisSpider爬虫的创建以及settings里面设置和上面3.5的爬虫都是一样的，
+- RedisSpider爬虫的创建以及settings里面设置和上面4.1中的京东图书爬虫中都是一样的，
 - 就是爬虫创建完成后，以下两点不同：
     - 1）爬虫类继承改成RedisSpider
     - 2）然后不需要start_urls，但是设置一个redis_key用于向redis客户端传入起始URL
+    - 为什么不要start_urls：
+        - 因为RedisSpider爬虫是为了实现分布式爬虫，多台电脑使用同一个redis数据库
+        - 多个电脑同时从redis数据库拿去request对象请求，返回items和已爬取的request对象指纹信息
+        - 因此将要爬取的start_urls直接传入redis数据库，一个电脑已经爬取过起始url，其它电脑就不会再爬取了
+        - 其它电脑只会请求未爬取过的request对象了，如果每个电脑里面的爬虫都写上start_urls
+        - 并且是相同的，就会造成重复爬取，数据重复，就不是分布式爬虫了
 - 通过RedisSpider和redis_key这两点区别就可以实现分布式爬虫
 - 参考下面图片及前面3.1和3.2中相关内容
 ![RedisSpider分布式爬虫介绍](099_爬虫相关图片解释/027_RedisSpider分布式爬虫介绍.png)
@@ -683,3 +691,10 @@ return added != 0
     - 补充：可以使用del "dangdang:dupefilter" 删除改键，然后由重新爬取
     
  
+ # 6 scrapy_redis分布式规则爬虫(RedisCrawlSpider)
+ ## 6.1 RedisCrawlSpider介绍
+ - RedisCrawlSpider和RedisSpider几乎一样
+ - 两点区别：
+    - 继承类为RedisCrawlSpider
+    - 加上rules规则,规则使用和CrawlSpider一样
+ ![RedisCrawlSpider分布式规则爬虫](099_爬虫相关图片解释/028_RedisCrawlSpider分布式规则爬虫介绍.png)

@@ -56,6 +56,7 @@ class DangdangSpider(RedisSpider): # 2 修改爬虫继承的类
             item['book_author'] = li.xpath('./p[@class="search_book_author"]/span[1]/a/text()').extract()  # 作者有多个放在span下多个a标签里面,全部取出结果是一个列表
             item['book_publish_date'] = li.xpath('./p[@class="search_book_author"]/span[2]/text()').extract_first()
             item['book_press'] = li.xpath('./p[@class="search_book_author"]/span[3]/a/text()').extract_first()
+
         # 在爬取最后一级使用yield返回item内容，爬取窗口里面也会显示爬取结果
         # 不yield或者print爬虫里面只会显示爬取过程，并不会显示items内容
         yield item
