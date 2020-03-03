@@ -697,4 +697,14 @@ return added != 0
  - 两点区别：
     - 继承类为RedisCrawlSpider
     - 加上rules规则,规则使用和CrawlSpider一样
+ - 爬虫创建:
+    - 爬虫创建直接使用规则爬虫命令：scrapy genspider -t crawl xxx xxx.com
+    - 导入RedisCrawlSpider模块: from scrapy_redis.spiders import RedisCrawlSpider
+    - 加上redis_key，用于接收start_urls，注释掉自动生成的start_urls
+    - 修改爬虫父类为RedisCrawlSpider
+    - 参考下图
  ![RedisCrawlSpider分布式规则爬虫](099_爬虫相关图片解释/028_RedisCrawlSpider分布式规则爬虫介绍.png)
+ 
+ 
+ # 7 Pycharm发布代码
+ 
