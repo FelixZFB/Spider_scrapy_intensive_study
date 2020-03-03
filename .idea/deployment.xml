@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="book_spider">
+  <component name="PublishConfigData" serverName="my_spider_test">
     <serverData>
-      <paths name="book_spider">
+      <paths name="my_spider_test">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/pycharm_projects/Spider_scrapy_intensive_study" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
