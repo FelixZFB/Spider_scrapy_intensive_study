@@ -1,9 +1,9 @@
-# Scrapy 入门基础参考 Spider_devlopment_study_note中的md笔记和相关项目
-# Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note中
-# ch12 cnblog爬虫(基础爬虫)、sht爬虫(redis爬虫，redis过滤)  
-# ch17：yunqi爬取(crawl规则爬虫)
-# TZKT_Study_Note项目中多有个requests和scrapy爬虫实例
-# P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
+#### Scrapy 入门基础参考 Spider_devlopment_study_note中的md笔记和相关项目
+#### Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note中
+#### ch12 cnblog爬虫(基础爬虫)、sht爬虫(redis爬虫，redis过滤)  
+#### ch17：yunqi爬取(crawl规则爬虫)
+#### TZKT_Study_Note项目中多有个requests和scrapy爬虫实例
+#### P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
 
 # 1. Scrapy介绍
 - 通用爬虫流程
@@ -707,4 +707,62 @@ return added != 0
  
  
  # 7 Pycharm发布代码
+ - 发布到服务器直接设置发布即可
+ - 参考以下博文：
+[Pycharm 发布代码到远程服务器或本地Ubuntu虚拟机](https://blog.csdn.net/u011318077/article/details/104626682)
+[将本地Pycharm项目放到远程Ubuntu服务器上跑](https://blog.csdn.net/qq_28193019/article/details/103147649)
+[使用pycharm在本地开发，并实时同步到服务器](https://blog.csdn.net/zhangyu4863/article/details/80188207?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)
  
+ - 发布到本电脑Ubuntu虚拟机需要注意：
+    - 本地主机和虚拟机之间要相互可以网络访问才行
+    - 虚拟机上网使用桥接模式(双方才能相互Ping通)，NAT模式只能虚拟机Ping主机，反之则不行
+    - 虚拟机需要开启ssh
+    - 具体参考博文：
+    [Ubuntu18.04网络配置-NAT模式-桥接模式-主机虚拟机相互PING通](https://blog.csdn.net/u011318077/article/details/104633292)
+    [Ubunbu虚拟机配置NAT网络—开启SSH服务—远程连接测试(Putty)](https://blog.csdn.net/u011318077/article/details/104629228)
+
+# 8 Crontab定时爬虫
+- Crontab工具(Ubuntu下面才有，Windows系统没有)
+    ![Crontab定时爬虫-定时执行命令](099_爬虫相关图片解释/032_Crontab定时爬虫-定时执行命令.png)
+    ![Crontab定时爬虫-实现步骤](099_爬虫相关图片解释/032_Crontab定时爬虫-实现步骤.png)
+
+- Crontab实例：
+    - 案例演示定时执行一个py文件
+        - 爬虫执行也可以用python main.py，将爬虫执行写在main.py里面
+        - 爬虫执行也可以使用scrapy crawl xxx
+        - 爬虫也可以直接执行xxx_spider.py 主爬虫文件，py文件里面加入执行爬虫的代码
+    - 先安装emacs命令工具(用于创建编辑文件)
+        - sudo apt-get install emacs
+    - /home/felix下面先新建一个crontab_test文件夹，然后切换到该文件夹下、
+    
+- hello.py文件定时执行步骤：
+    - 1 创建hello.py文件，命令: emacs hello.py ，编写代码如下图
+        ![创建py文件](099_爬虫相关图片解释/033_Crontab定时执行py演示1.png)
+    - 2 创建test.sh 执行文件，执行命令具体如下图
+        - emacs test.sh        创建文件，编写命令
+        - chmod +x test.sh     sh脚本添加可执行权限，ls查看添加权限后颜色由白色变为橙色
+        ![创建sh脚本文件](099_爬虫相关图片解释/033_Crontab定时执行py演示2.png)
+    - 3 执行，test.sh，然后查看run.log中结果
+        - 执行一次查看一次，run.log中保存执行的结果
+        ![执行sh脚本文件](099_爬虫相关图片解释/033_Crontab定时执行py演示3.png) 
+        - rm        命令，移除文件
+        - clear     清空终端
+        - pwd       查看当前文件夹路径
+    - 4 添加crontab定时命令：
+        - crontab -e   查看定时器
+            - 第一次使用时候，需要选择编辑器，数字1-5，一般选择1(后面执行该命令直接进入编辑器)，然后确定
+            - 进入到定时器编辑器，然后再文件末尾开始编辑定时命令
+            - 一行就是一个定时命令，上面的文字都是说明文档，#注释了不用管它
+            - 每分钟执行一次test.sh脚本，路径都要写完整的绝对路径，执行结果输出在run.log中
+            - 输入完成后使用ctrl + X 离开，确认保存Y,此时定时器已经在后台开始执行了，起始\是去掉转义
+            \* * * * * /home/felix/crontab_test/test.sh >> /home/felix/crontab_test/run.log 2>&1
+            ![添加定时命令](099_爬虫相关图片解释/033_Crontab定时执行py演示4.png)
+        - crontab -l    查看当前的定时任务，就是将当前的定时器文件的内容展示出来，参考下图
+            - 每隔一段时间查看结果，cat run.log  查看run.log中执行的结果，内容越来越多
+            ![查看定时执行结果](099_爬虫相关图片解释/033_Crontab定时执行py演示5.png)
+            ![查看定时执行结果](099_爬虫相关图片解释/033_Crontab定时执行py演示6.png)
+        - 关闭定时器：crontab -e  进入编辑器，注释掉最后一行注释代码或者直接删除，退出保存。
+        
+            
+
+        
