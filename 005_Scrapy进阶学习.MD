@@ -50,9 +50,11 @@
         - Scrapy的官方文档中的解释：下载器中间件是介于Scrapy的request/response处理的钩子框架，是用于全局修改Scrapy request和response的一个轻量、底层的系统。
         - 容易理解的话表述就是：更换代理IP，更换Cookies，更换User-Agent，自动重试等
         - 上述具体的自定义设置在项目文件的settings.py里面，
+        
         - 具体设置参考Spider_devlopment_study_note中的ch17
         - 设置请求头，更会随机的User-Agent:本项目005文件中的cric项目中的settings和middlewares设置
         - 使用post发送账号密码登陆请求：本项目文件夹中login项目
+        
     - **Spider Middlewares（爬虫中间件）**：
         - 爬虫中间件位于引擎和爬虫之间，它们传输的数据就是responses、requests、items
         - 主要自定扩展和操作引擎和Spider中间通信的功能组件（比如进入Spider的Responses;和从Spider出去的Requests）
@@ -361,7 +363,8 @@ rules = [
    
 
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
-- 最近更换User-Agent参考项目中的settings和middlewares中的设置
+- 该项目重点是：自定义中间件，参考项目中间件及下面2.4 里面说明
+- 随机更换User-Agent参考项目中的settings和middlewares中的设置
 - 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
     - scrapy startproject cric 创建爬虫项目
     - cd cric 切换到爬虫项目文件夹
