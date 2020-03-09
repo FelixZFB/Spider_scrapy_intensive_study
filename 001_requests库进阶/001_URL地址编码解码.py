@@ -13,6 +13,7 @@ import requests
 from urllib import parse
 from urllib import request
 
+
 url = 'http://www.baidu.com/s?'
 dict1 ={'wd': '熊猫'}
 # 将字典参数进行URL编码
