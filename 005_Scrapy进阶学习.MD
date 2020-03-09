@@ -163,11 +163,11 @@
 ## 1.4 Scrapy中数据提取的机制？
 - Scrapy提供了自己提取数据的机制，它们被称作选择器（Selector，下面用英文表示），它支持xpath，css和正则表达式三种规则
 - Scrapy的Selector建立在lxml库上，这意味它们在解析速度和精度上都非常相似
-- Selector机制下有两个重要的数据类型：SelectorList和Selector，其中前者是后者的集合，前者也是一个列表对象。
+- Selector机制下有两个重要的数据类型：SelectorList(包含多个Selector对象的列表)和Selector(一个Selector对象)，其中前者是后者的集合，前者也是一个列表对象。
 - scrapy提供了extract和extract_first这两种方法提取SelectorList和Selector的字符串内容。
 - 在提取列表中的首个元素内容时，建议使用extract_first方法而非采用列表索引方式extract()[0] 
 - extract()没有值的时候返回是一个空列表，extract_first没有值返回是none，推荐使用extract_first，已经帮我判断了是否为none
-    - response.xpath()返回的结果就是SelectorList，里面每一个元素就是一个Selector：
+    - response.xpath()返回的结果就是SelectorList，里面每一个元素就是一个Selector对象：
     [<Selector xpath='descendant-or-self::a' data='<a href="image1.html">Name: My image 1 <'>, 
     <Selector xpath='descendant-or-self::a' data='<a href="image2.html">Name: My image 2 <'>, 
     <Selector xpath='descendant-or-self::a' data='<a href="image3.html">Name: My image 3 <'>, 
