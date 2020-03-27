@@ -160,7 +160,7 @@
     - scrapy list  查看爬虫信息，显示目录所有的爬虫
     
     
-## 1.4 Scrapy中数据提取的机制？
+## 1.4 Scrapy中数据提取的机制总结
 - Scrapy提供了自己提取数据的机制，它们被称作选择器（Selector，下面用英文表示），它支持xpath，css和正则表达式三种规则
 - Scrapy的Selector建立在lxml库上，这意味它们在解析速度和精度上都非常相似
 - Selector机制下有两个重要的数据类型：SelectorList(包含多个Selector对象的列表)和Selector(一个Selector对象)，其中前者是后者的集合，前者也是一个列表对象。
@@ -190,7 +190,40 @@
 - 特别注意：是extract_first不是extrast_first()
 - Python strip() 方法用于移除字符串头尾指定的字符（默认参数为空格和换行符）或字符序列(传入的参数)。
 - 该方法只能删除开头或是结尾的字符，不能删除中间部分的字符。
+
+- 补充1：普通请求里面也可以使用Selector选择器
+    - 需要使用parsel的Selector模块(用法和scrapy中一样)
+    - from parsel import Selector
+    - html = Selector(response.text)    生成一个选择器对象，类似于上面的etree解析
+    - title = html.xpath("xxx").extract_first()
+    - 或者css选择器也可以
+    - title = html.css("xxx").extract_first()
     
+- 补充2：
+    - scrapy中初始网址的响应直接使用response.xpath()即可
+    - response查找结果，比如li标签继续查找，也是直接li.xpath()    
+    
+- 补充3：
+    - Python中requests模块或者普通请求的response中使用Xpath
+    # 1 导入模块
+    import requests
+    from lxml import etree
+    # 2 获取文本，r.text类型是字符串文本内容，
+        如果使用r.content则是bytes字节，还需要解码r.content.decode()
+        解码会自动推测编码格式
+    r = requests.get(url, headers=headers)
+    text = r.text
+    # 3 text解析为xml格式，就可以使用xpath查找了
+    html = etree.HTML(text,etree.HTMLParser())
+    # 4 查找标签，返回值是列表
+    jobs = html.xpath(".//div[@id='resultList']//div[@class='el']")
+    
+- 补充4：
+    - scrapy中使用正则表达式re解析数据
+    - 直接就是通用的正则用法，参考005中的cric案例
+    - title = re.findall("<!--TitleStart-->(.*?)<!--TitleEnd-->", response.text)[0]
+    - publish_date = re.findall("发布时间：20\d{2}-\d{2}-\d{2}", response.text)[0]
+
 ## 1.5 scrapy中url地址拼接的多种方式
 - Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式
     - 方法1(常用)：手动字符串相加
@@ -302,7 +335,7 @@ def process_item(self, item, spider):
 # 2 CrawlSpider规则爬虫   
 ## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
 - Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
-    - 它提供了start\_requests()的默认实现，
+    - 它提供了start\_requests()方法的默认实现，
     - 读取并请求spider属性中的start\_urls，
     - 并根据返回的response调用spider中的parse方法
 - CrawlSpider: scrapy.spiders.CrawlSpider,规则爬虫，
@@ -334,7 +367,7 @@ def process_item(self, item, spider):
 
 - LinkExtractor地址提取
     - 三种常用方式：正则、css、xpath
-    - allow=()              里面写正则表达式
+    - allow=()              里面写正则表达式，最常用
     - restrict_xpaths=()    里面写xpath表达式
     - restrict_css=()       里面写css选择器表达式
 
@@ -345,7 +378,7 @@ def process_item(self, item, spider):
         # LinkExtractor 连接提取器，提取url地址，提取方法是正则
         # callback 提取出来url地址的response会交给callback的方法处理
         # follow 当前的url地址的response继续进rules里面的规则继续提取url地址
-        # 每个详情页的网址就是info后面的数字不同，直接传入\d+，匹配多个数字，\.就代表.,详情页不需要向下继续提取url，follow不需要
+        # 每个详情页的网址就是info后面的数字不同，直接传入\d+，匹配多个数字，\.就代表.,详情页不需要向下继续提取url，follow不需要，不写默认false
         Rule(LinkExtractor(allow=r'/web/site0/tab5240/info\d+\.htm'), callback='parse_item'),
         # 寻找下一页的规则，请求start_urls后，自动根据规则寻找下一页的地址并去请求,不断从新的一页继续寻找下一页，但是不需要callback
         # 每一页里面的response里面的内容列表满足上面rule规则，就会自动请求进去提取内容
@@ -355,7 +388,7 @@ def process_item(self, item, spider):
 # css表达式
 rules = [
         Rule(LinkExtractor(
-            # 使用css提取网址，只需要定位到网址所在标签的class属性即可
+            # 使用css提取网址，只需要定位到网址url所在标签的class属性即可
             restrict_css=('.top-cat', '.sub-cat', '.cat-item')
         ), callback='parse_directory', follow=True),
     ]
@@ -370,7 +403,7 @@ rules = [
     - cd cric 切换到爬虫项目文件夹
     - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
     ![circ爬虫创建](099_爬虫相关图片解释/014_circ保监会CrawlSpider创建.png)
-    - 该爬虫需要使用代理访问，会封IP一段时间
+    - 该爬虫需要使用代理访问，直接启动爬取会封IP一段时间
     
 ## 2.3 scrapy模拟登陆携带cookies
 - start_urls默认是调用的库里面的start_requests方法解析
@@ -483,7 +516,7 @@ rules = [
 - 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
 
 ## 3.2 scrapy-redis爬虫实例各功能介绍
-- 参考以下官方项目下的爬虫实例，以dmoz.py爬虫为例
+- 参考以下官方项目下的爬虫示例，以dmoz.py爬虫为例
 - 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
 - dmoz.py爬虫主程序可以继承Spider\CrawlSpider（这两个可以实现增量式爬虫）或者RedisSpider都可以 
 - 如果继承RedisSpider(可以实现分布式爬虫)，不需要再爬虫里面写start_urls，但是需要传入一个键的名称redis_key = 'sht:start_urls'
@@ -521,7 +554,7 @@ rules = [
     
 ## 3.3 scrapy-redis重点
 ### 3.3.1 request对象什么时候入队
-- dont_filter = True ,构造请求的时候，把dont_filter置为True，该url会被反复抓取（url地址对应的内容会更新的情况）
+- dont_filter = True ,构造请求的时候，把dont_filter置为True，该url会被反复抓取（url地址对应的内容会更新的情况设置为True）
 - 一个全新的url地址被抓到的时候，构造request请求
 - url地址在start_urls中的时候，会入队，不管之前是否请求过
     - 构造start_url地址的请求时候，dont_filter = True
@@ -567,8 +600,13 @@ return added != 0
 
 
 # 4 scrapy_redis增量式爬虫实例
+- 增量式爬虫：redis数据库可以指纹去重，爬取过的不再爬取，只会爬取新的request对象，就是增量式爬虫
+- 分布式爬虫：redis数据库中request对象，连接该数据库的电脑端爬虫都可以拿去request爬取，然后返回数据到redis数据库，就可以实现分布式部署爬取
+
 - 普通的scrapy.Spider或者CrawlSpider只需要settings里面增加一些设置，具体参考settings.py文件里面的设置
-- 就可以变成scrapy_redis增量式爬虫，参考下面京东图书爬虫实例
+- 就可以将普通的Spider或者CrawlSpider变成scrapy_redis增量式爬虫，参考下面京东图书爬虫实例
+- scrapy_redis增量式爬虫的爬虫基类还是scrapy库里面的爬虫，只需要设置settings里面即可，还是有start_urls
+- scrapy_redis分布式爬虫继承的scrapy_redis库里面的爬虫，不需要设置start_urls，需要设置一个键，settings里面设置相同
 
 ## 4.1 京东图书爬虫(scrapy_redis增量式爬虫)
 - 006文件下面的book项目中的jdbook京东图书增量式爬虫
@@ -700,11 +738,12 @@ return added != 0
  - 两点区别：
     - 继承类为RedisCrawlSpider
     - 加上rules规则,规则使用和CrawlSpider一样
+    - 一般传入两个规则：寻找下一页地址的规则(一般无回调方法)，寻找列表中详情页URL地址的规则(回调方法，parse_page解析网页具体内容)
  - 爬虫创建:
     - 爬虫创建直接使用规则爬虫命令：scrapy genspider -t crawl xxx xxx.com
     - 导入RedisCrawlSpider模块: from scrapy_redis.spiders import RedisCrawlSpider
     - 加上redis_key，用于接收start_urls，注释掉自动生成的start_urls
-    - 修改爬虫父类为RedisCrawlSpider
+    - 修改爬虫父类的CrawlSpider为RedisCrawlSpider
     - 参考下图
  ![RedisCrawlSpider分布式规则爬虫](099_爬虫相关图片解释/028_RedisCrawlSpider分布式规则爬虫介绍.png)
  
@@ -712,17 +751,18 @@ return added != 0
  # 7 Pycharm发布代码
  - 发布到服务器直接设置发布即可
  - 参考以下博文：
-[Pycharm 发布代码到远程服务器或本地Ubuntu虚拟机](https://blog.csdn.net/u011318077/article/details/104626682)
-[将本地Pycharm项目放到远程Ubuntu服务器上跑](https://blog.csdn.net/qq_28193019/article/details/103147649)
-[使用pycharm在本地开发，并实时同步到服务器](https://blog.csdn.net/zhangyu4863/article/details/80188207?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)
+    - [Pycharm 发布代码到远程服务器或本地Ubuntu虚拟机](https://blog.csdn.net/u011318077/article/details/104626682)
+    - [将本地Pycharm项目放到远程Ubuntu服务器上跑](https://blog.csdn.net/qq_28193019/article/details/103147649)
+    - [使用pycharm在本地开发，并实时同步到服务器](https://blog.csdn.net/zhangyu4863/article/details/80188207?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)
  
  - 发布到本电脑Ubuntu虚拟机需要注意：
     - 本地主机和虚拟机之间要相互可以网络访问才行
-    - 虚拟机上网使用桥接模式(双方才能相互Ping通)，NAT模式只能虚拟机Ping主机，反之则不行
+    - 虚拟机的上网要使用桥接模式(双方才能相互Ping通)，NAT模式只能虚拟机Ping主机，反之则不行
+    - ping用于相互网络是否连通测试
     - 虚拟机需要开启ssh
     - 具体参考博文：
-    [Ubuntu18.04网络配置-NAT模式-桥接模式-主机虚拟机相互PING通](https://blog.csdn.net/u011318077/article/details/104633292)
-    [Ubunbu虚拟机配置NAT网络—开启SSH服务—远程连接测试(Putty)](https://blog.csdn.net/u011318077/article/details/104629228)
+        - [Ubuntu18.04网络配置-NAT模式-桥接模式-主机虚拟机相互PING通](https://blog.csdn.net/u011318077/article/details/104633292)
+        - [Ubunbu虚拟机配置NAT网络—开启SSH服务—远程连接测试(Putty)](https://blog.csdn.net/u011318077/article/details/104629228)
 
 # 8 Crontab定时爬虫
 - Crontab工具(Ubuntu下面才有，Windows系统没有)

@@ -30,7 +30,7 @@ def douban_login():
     driver.find_element_by_xpath("/html/body/div[1]/div[1]/ul[1]/li[2]").click()
     time.sleep(5)
 
-    # 发送用户名和密码
+    # 发送用户名和密码，需要更改为自己的用户名和密码
     driver.find_element_by_id("username").send_keys("用户名")
     driver.find_element_by_id("password").send_keys("密码")
     time.sleep(3)

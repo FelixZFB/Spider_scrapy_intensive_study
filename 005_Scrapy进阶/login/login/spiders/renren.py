@@ -14,12 +14,12 @@ class RenrenSpider(scrapy.Spider):
     start_urls = ['http://renren.com/']
 
     def parse(self, response):
-        # 请求人人网首页后进行自动寻找登陆也然后自动登录
+        # 请求人人网首页后进行自动寻找登陆地址然后传入用户名和密码后自动登录
         yield scrapy.FormRequest.from_response(
             response, # 自动从start_urls中寻找登陆form表单进行登陆
             # 实际真正的登录url是：http://www.renren.com/PLogin.do
-            # scrapy会通过start_urls去寻找真正的登录地址
-            # 运行结果可以看见先请求'http://renren.com/'，然后里面找到http://www.renren.com/PLogin.do
+            # scrapy会通过start_urls去主动寻找真正的登录地址
+            # 运行调试结果可以看见先请求'http://renren.com/'，然后里面找到http://www.renren.com/PLogin.do
             formdata={
                 "email": "908851835@qq.com",
                 "password": "zfb123456zfb"
@@ -31,7 +31,7 @@ class RenrenSpider(scrapy.Spider):
         # 我的个人主页就是：http://www.renren.com/574862780
         print(response.url, "\n", response.status)
         print("*" * 100)
-        # 查看响应里面是否有我的用户名
+        # 查看响应里面是否有我的用户名，找出所有用户名并打印出来，一共出现4处
         print(re.findall(r"夏树柏", response.text))
 
 
