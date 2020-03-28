@@ -1,5 +1,7 @@
 #### Docker使用教程
 - [Docker中文文档-从入门到实践](https://yeasy.gitbooks.io/docker_practice/image/pull.html)
+- [Docker菜鸟教程](https://www.runoob.com/docker/docker-tutorial.html)
+- [Docker 命令大全](https://www.runoob.com/docker/docker-command-manual.html)
 
 # 1 Docker原理
 - 对 Docker 最简单并且带有一定错误的认知就是 “Docker 是一种性能非常好的虚拟机”。
@@ -202,4 +204,63 @@
 # 4 容器（Container）
 - 容器是独立运行的一个或一组应用，以及它们的运行态环境，类似一个虚拟机。
 - 对应的，虚拟机可以理解为模拟运行的一整套操作系统（提供了运行态环境和其他系统环境）和跑在上面的应用。
-## 4.1 创建启动容器      
+
+## 4.1 创建启动容器
+- 启动容器有两种方式，一种是基于镜像新建一个容器并启动，另外一个是将在终止状态（stopped）的容器重新启动。
+- 因为 Docker 的容器实在太轻量级了，很多时候用户都是随时删除和新创建容器。
+
+- 方式1：新建并启动
+    - 所需要的命令主要为 docker run
+    - 下面的命令输出一个 “Hello World”，之后就自动终止容器。
+        - docker run ubuntu:18.04 /bin/echo 'Hello world'
+        - Hello world
+    - 这跟在本地直接执行 /bin/echo 'hello world' 几乎感觉不出任何区别。
+    
+    - 下面的命令则启动一个 bash 终端，允许用户进行交互。
+        - docker run -t -i ubuntu:18.04 /bin/bash
+        - root@af8bae53bdd3:/#
+        - 其中，-t 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， -i 则让容器的标准输入保持打开。
+        - 在交互模式下，用户可以通过所创建的终端来输入命令，例如
+            - root@af8bae53bdd3:/# pwd
+            - /
+            - root@af8bae53bdd3:/# ls
+            - bin boot dev etc home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var
+        - exit 命令退出并删除容器
+        - docker container ls  查看容器信息，里面是空的
+        - [新建启动容器](008_Docker容器/004_新建启动容器.png)
+    
+    - 当利用 docker run 来创建容器时，Docker 在后台运行的标准操作包括：
+        - 检查本地是否存在指定的镜像，不存在就从公有仓库下载
+        - 利用镜像创建并启动一个容器
+        - 分配一个文件系统，并在只读的镜像层外面挂载一层可读写层
+        - 从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去
+        - 从地址池配置一个 ip 地址给容器
+        - 执行用户指定的应用程序
+        - 执行完毕后容器被终止  
+        
+- 方式2：启动已终止容器
+    - 可以利用 docker start container 命令，直接将一个已经终止的容器启动运行。
+    - 容器的核心为所执行的应用程序，所需要的资源都是应用程序运行所必需的。
+    - 除此之外，并没有其它的资源。可以在伪终端中利用 ps 或 top 来查看进程信息。
+        - root@ba267838cc1b:/# ps
+            - PID TTY          TIME CMD
+            - 1 ?        00:00:00 bash
+            - 11 ?        00:00:00 ps
+        - 可见，容器中仅运行了指定的 bash 应用。这种特点使得 Docker 对资源的利用率极高，是货真价实的轻量级虚拟化 
+    - 再次启动已经终止的容器，启动后是在后台运行的
+        - docker start container_id
+        - 是在后台运行的，可以使用命令查看：docker container ls
+        - docker stop container_id      终止容器
+        - 再次docker container ls查看已经没有容器了
+        - [启动已经终止的容器](008_Docker容器/005_启动已经终止的容器_停止后台运行的容器.png)
+        
+## 4.2 终止、重启容器
+- docker stop container  来终止一个运行中的容器。
+    - 此外，当 Docker 容器中指定的应用终结时，容器也自动终止。
+    - 例如对于上一章节中只启动了一个终端的容器，用户通过 exit 命令或 Ctrl+d 来退出终端时，所创建的容器立刻终止。
+    - 终止状态的容器可以用以下两个命令查看，结果相同：
+        - docker container ls -a 
+        - docker ps -a 
+    - [终止容器](008_Docker容器/006_终止容器_查看已终止容器列表.png)  
+- docker restart container_id  重新启动当前的容器 
+         
