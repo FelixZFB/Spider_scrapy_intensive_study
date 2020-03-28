@@ -1,3 +1,4 @@
+## Crawlab爬虫管理平台安装及使用教程
 
 # 1 爬虫管理平台的定义
 ## 1.1 狭义的爬虫管理平台
@@ -33,6 +34,7 @@
 - 重度 scrapy 爬虫依赖的、又不想折腾的开发者，可以考虑 Scrapydweb；
 - 而对于有各种类型的、复杂技术结构的爬虫开发者来说，应该优先考虑更灵活的 Crawlab。
 
+
 # 4 Crawlab爬虫管理平台
 - Crawlab 是基于 Golang 的分布式爬虫管理平台，支持 Python、NodeJS、Java、Go、PHP 等多种编程语言以及多种爬虫框架。
 - Crawlab 主要解决的是大量爬虫管理困难的问题，例如需要监控上百个网站的参杂 scrapy 和 selenium 的项目不容易做到同时管理，而且命令行管理的成本非常高，还容易出错。
@@ -43,20 +45,35 @@
 
 ## 4.1 Crawlab环境安装
 - 1 安装docker
-    - Ubuntu中安装docker：docker-ce docker-ce-cli docker-compose
-    - 具体安装步骤：[Ubuntu18.04 安装及使用Docker（安装常见报错及Docker常用命令）](https://blog.csdn.net/u011318077/article/details/104733149)
-    - WIN10只能专业版和企业版可以安装，家庭版安装比较麻烦，并且安装后会导致VMware和VirtualBox出错
-    - 可以具体参考我的QQ浏览器收藏夹，python相关软件安装/docker安装，里面有家庭版和专业版安装收藏
-    - docker全部安装完成，镜像源修改中国地址，创建 sudo vi /etc/docker/daemon.json 文件，在其中输入如下内容。
+    - Ubuntu虚拟机中安装docker：docker-ce docker-ce-cli docker-compose
+    - 具体安装步骤参考：[Ubuntu18.04 安装及使用Docker（安装常见报错及Docker常用命令）](https://blog.csdn.net/u011318077/article/details/104733149)
+    - docker全部安装完成后，镜像源修改中国的源地址，终端执行命令创建 sudo vi /etc/docker/daemon.json 文件，在其中输入如下内容。
+        
         {
           "registry-mirrors": ["https://registry.docker-cn.com"]
         }
+        
+        - 然后输入:符号，输入wq保存退出
+    - Ubuntu安装使用Docker注意：
+        - Docker安装完成后，如果不修改源，网速不好，有时候启动或者执行命令会出现失败或者超时提示
+        - 安装博文中提到卸载后重新安装，后面发现是网速问题，只需要新建daemon.json文件，添加中国源即可
+        - 注意，有些命令需要使用sudo docker xxx xxx ... 执行，直接docker执行会报错
+        - 也可以将终端使用 su 回车 输入超级用户密码 回车 进入超级用户 显示符号位#
+    
+    - Docker安装注意事项:
+        - Docker桌面版，WIN10系统只能专业版和企业版可以安装
+        - 家庭版安装比较麻烦，需要视同toolbox工具或者修改注册表伪装为专业版骗过软件安装时候的检测
+        - Docker安装在WIN10下面需要开启HyperV虚拟功能，该功能开启后会导致VMware和VirtualBox出错
+        - 鉴于以上原因，不推荐在WIN10安装Docker,建议Ubuntu虚拟机服务器中安装
+        - Win10安装可以具体参考我的QQ浏览器收藏夹中，python相关软件安装/docker安装，里面有家庭版和专业版安装收藏
+    
+
 - 2 下载 Crawlab 的镜像
     - 官方文档命令：sudo docker pull tikazyq/crawlab:latest  下载超时，网络有问题
     - 使用以下最新源地址：
         - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest
     - [docker下载crawlab镜像](099_爬虫相关图片解释/036_docker下载crawlab镜像.png)
     - docker images   查看已有镜像的具体信息   
-    REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
-    registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab   latest              d9132fa22f35        2 weeks ago         710MB
-    hello-world                                              latest              fce289e99eb9        15 months ago       1.84kB
+    - REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
+    - registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab   latest              d9132fa22f35        2 weeks ago         710MB
+    - hello-world                                              latest              fce289e99eb9        15 months ago       1.84kB
