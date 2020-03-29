@@ -1,6 +1,6 @@
 #### Docker使用教程
-- [Docker中文文档-从入门到实践](https://yeasy.gitbooks.io/docker_practice/image/pull.html)
-- [Docker菜鸟教程](https://www.runoob.com/docker/docker-tutorial.html)
+- [Docker中文文档-从入门到实践(详细全面)](https://yeasy.gitbooks.io/docker_practice/image/pull.html)
+- [Docker菜鸟教程(简单实用，配有截图)](https://www.runoob.com/docker/docker-tutorial.html)
 - [Docker 命令大全](https://www.runoob.com/docker/docker-command-manual.html)
 
 # 1 Docker原理
@@ -70,9 +70,10 @@
     - 比如：
         - docker pull ubuntu:18.04                  
             - 上面的命令中没有给出 Docker 镜像仓库地址，因此将会从 Docker Hub 获取镜像。
-            - 而镜像名称是 ubuntu:18.04因此将会获取官方镜像 library/ubuntu 仓库中标签为 18.04 的镜像
+            - 而镜像名称是 ubuntu:18.04因此将会获取官方镜像 library/ubuntu 仓库源中获取标签为 18.04 的镜像
+        - docker pull httpd  不指定版本，默认获取latest
         - docker pull tikazyq/crawlab:latest        
-            - 从DockerHub中的tikazyq用户获取crawlab镜像，版本为最新的latest 
+            - 从DockerHub官方中的tikazyq用户获取crawlab镜像，版本为最新的latest 
         - docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest
             - 镜像地址：registry.cn-hangzhou.aliyuncs.com
             - 仓库名：用户名/软件名
@@ -86,20 +87,29 @@
     [Docker获取镜像](008_Docker容器/001_Docker获取镜像.png)
     
 - 运行一个简单的容器，以ubuntu:18.04为基础镜像
-    - docker run -it --rm ubuntu:18.04 bash
+    - docker run -it --rm ubuntu:18.04 /bin/bash
     - docker run 就是运行容器的命令，具体格式我们会在 容器 一节进行详细讲解，我们这里简要的说明一下上面用到的参数。
     - 参数 -it 实际是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。
     - 参数 --rm 这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。
         - 我们这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 --rm 可以避免浪费空间。
     - 参数 ubuntu:18.04 这是指用 ubuntu:18.04 镜像为基础来启动容器。
-    - 参数 bash 放在镜像名后的是 命令，这里我们希望有个交互式 Shell 终端，因此用的是 bash
+    - 参数 /bin/bash 放在镜像名后的是 命令，这里我们希望有个交互式 Shell 终端，因此用的是 bash
     - 改命令执行以后，就启动了一个ubuntu系统下的shell终端，然后我们可以终端操作
         - cat /etc/os-release    查看当前容器镜像系统版本信息，cat命令就是打开查看文件信息
         - ls                     查看当前根目录下有哪些文件夹及文件
         - [以Ubuntu镜像运行一个容器](008_Docker容器/002_以Ubuntu镜像运行一个容器.png)
     - 最后我们通过 exit 命令退出了这个容器
     
-## 3.2 列出镜像 
+## 3.2 查找拖取镜像
+- 查找镜像
+    - Docker Hub 网站来搜索镜像，Docker Hub 网址为： https://hub.docker.com/  直接访问网速不好
+    - docker search 命令来搜索镜像。比如我们需要一个 httpd 的镜像来作为我们的 web 服务
+    - 比如我们需要一个 httpd 的镜像来作为我们的 web 服务。我们可以通过 docker search 命令搜索 httpd 来寻找适合我们的镜像。
+    - docker search httpd 
+- 拖去镜像（参考上面3.1）
+    - docker pull httpd  
+
+## 3.3 列出镜像 
 - 列出镜像
     - 以下两个命令都可以
         - docker image ls
@@ -107,6 +117,15 @@
     - 镜像按获取时间，最近获取的在最上面
     - 列表包含了 仓库名、标签、镜像 ID、创建时间 以及 所占用的空间
     - 镜像 ID 则是镜像的唯一标识，一个镜像可以对应多个 标签， 因为标签相当于版本号，一个Ubuntu就有多个版本
+- 列出镜像各个选项说明:
+    - REPOSITORY：表示镜像的仓库源（类似软件名称）
+    - TAG：镜像的标签 （类似软件版本号）
+    - IMAGE ID：镜像ID
+    - CREATED：镜像创建时间
+    - SIZE：镜像大小
+
+- 同一仓库源可以有多个 TAG，代表这个仓库源的不同个版本，如 ubuntu 仓库源里，有 15.10、14.04 等多个不同的版本，
+    - 我们使用 REPOSITORY:TAG 来定义同一个仓库源中不同的镜像。
     
 - 镜像体积
     - docker image ls 显示的是镜像下载到本地后，展开的大小，准确说，是展开后的各层所占空间的总和，
@@ -158,7 +177,7 @@
         5f515359c7f8        redis               latest
         05a60462f8ba        nginx               latest         
         
-## 3.3 删除镜像
+## 3.4 删除镜像
 - 删除本地的镜像，可以使用 docker image rm 命令，其格式为：
     - docker image rm [选项] <镜像1> [<镜像2> ...]
     - <镜像> 可以是 镜像短 ID、镜像长 ID、镜像名 或者 镜像摘要
@@ -169,6 +188,8 @@
         - docker image rm 501               短ID前三位
         - docker image rm centos            镜像REPOSITORY仓库名称
         - docker image rm centos:latest     镜像REPOSITORY仓库名和标签名
+        - 也可以使用以下命令删除
+            - docker rmi hello-world  删除hello-world镜像
     - 精确的是使用 镜像摘要 删除镜像。
         - 查看摘要命令：docker image ls --digests
         - 以摘要删除镜像，@后面就是摘要：
@@ -199,7 +220,41 @@
     - 除了镜像依赖以外，还需要注意的是容器对镜像的依赖。
     - 如果有用这个镜像启动的容器存在（即使容器没有运行），那么同样不可以删除这个镜像。
     - 之前讲过，容器是以镜像为基础，再加一层容器存储层，组成这样的多层存储结构去运行的。
-    - 因此该镜像如果被这个容器所依赖的，那么删除必然会导致故障。如果这些容器是不需要的，应该先将它们删除，然后再来删除镜像。       
+    - 因此该镜像如果被这个容器所依赖的，那么删除必然会导致故障。如果这些容器是不需要的，应该先将它们删除，然后再来删除镜像。 
+    
+ ## 3.5 创建的镜像
+- 创建镜像的两种方式：
+    - 更新镜像：从已经创建的容器中更新镜像，并且提交这个镜像
+    - 构建镜像：使用 Dockerfile 指令来创建一个全新的镜像   
+
+- 更新镜像：
+    - 更新镜像之前，我们需要使用镜像来创建一个容器。比如：
+        - runoob@runoob:~$ docker run -t -i ubuntu:15.10 /bin/bash
+        - root@e218edb10161:/# 
+    - 在运行的容器内使用 apt-get update 命令进行更新。
+    - 在完成操作之后，输入 exit 命令来退出这个容器。
+    - 此时 ID 为 e218edb10161 的容器，是按我们的需求更改的容器。我们可以通过命令 docker commit 来提交容器副本。
+        - runoob@runoob:~$ docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2
+        - sha256:70bf1840fd7c0d2d8ef0a42a817eb29f854c1af8f7c59fc03ac7bdee9545aff8
+        - 各个参数说明：
+            - -m: 提交的描述信息
+            - -a: 指定镜像作者
+            - e218edb10161：容器 ID
+            - runoob/ubuntu:v2: 指定要创建的目标镜像名  
+            
+- 构建镜像：
+    - 首先需要创建一个 Dockerfile 文件，其中包含一组指令来告诉 Docker 如何构建我们的镜像。
+    - 比如构建一个
+        - cat Dockerfile 
+        - docker build -t runoob/centos:6.7 .
+        - 参数说明：
+            - -t ：指定要创建的目标镜像名
+            - . ：Dockerfile 文件所在目录，可以指定Dockerfile 的绝对路径
+    - 设置镜像标签
+        - 我们可以使用 docker tag 命令，为镜像添加一个新的标签。
+        - runoob@runoob:~$ docker tag 860c279d2fec runoob/centos:dev
+
+                     
   
 # 4 容器（Container）
 - 容器是独立运行的一个或一组应用，以及它们的运行态环境，类似一个虚拟机。
@@ -209,7 +264,7 @@
 - 启动容器有两种方式，一种是基于镜像新建一个容器并启动，另外一个是将在终止状态（stopped）的容器重新启动。
 - 因为 Docker 的容器实在太轻量级了，很多时候用户都是随时删除和新创建容器。
 
-- 方式1：新建并启动
+- 方式1：新建并启动进入容器
     - 所需要的命令主要为 docker run
     - 下面的命令输出一个 “Hello World”，之后就自动终止容器。
         - docker run ubuntu:18.04 /bin/echo 'Hello world'
@@ -218,6 +273,7 @@
     
     - 下面的命令则启动一个 bash 终端，允许用户进行交互。
         - docker run -t -i ubuntu:18.04 /bin/bash
+        - 或者 docker run -it ubuntu:18.04 /bin/bash  该方式推荐使用 如果ubuntu不指定版本号，会默认实用latest
         - root@af8bae53bdd3:/#
         - 其中，-t 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， -i 则让容器的标准输入保持打开。
         - 在交互模式下，用户可以通过所创建的终端来输入命令，例如
@@ -237,9 +293,16 @@
         - 从地址池配置一个 ip 地址给容器
         - 执行用户指定的应用程序
         - 执行完毕后容器被终止  
-        
-- 方式2：启动已终止容器
-    - 可以利用 docker start container 命令，直接将一个已经终止的容器启动运行。
+
+- 方式2：新建启动容器(容器后台运行)
+    - docker run -itd --name ubuntu-test ubuntu /bin/bash
+    - 加了 -d 参数默认不会进入容器，想要进入容器需要使用指令 docker exec 命令，参考后面
+    - docker ps      查看当前运行的容器所有信息
+    - docker ps -a   查看已经终止的容器所有信息
+    - 第一列是ID,最后一列是名称NAMES
+
+- 方式3：启动已终止容器
+    - 可以利用 docker start container_id 命令，直接将一个已经终止的容器启动运行。
     - 容器的核心为所执行的应用程序，所需要的资源都是应用程序运行所必需的。
     - 除此之外，并没有其它的资源。可以在伪终端中利用 ps 或 top 来查看进程信息。
         - root@ba267838cc1b:/# ps
@@ -253,7 +316,7 @@
         - docker stop container_id      终止容器
         - 再次docker container ls查看已经没有容器了
         - [启动已经终止的容器](008_Docker容器/005_启动已经终止的容器_停止后台运行的容器.png)
-        
+         
 ## 4.2 终止、重启容器
 - docker stop container  来终止一个运行中的容器。
     - 此外，当 Docker 容器中指定的应用终结时，容器也自动终止。
@@ -263,4 +326,33 @@
         - docker ps -a 
     - [终止容器](008_Docker容器/006_终止容器_查看已终止容器列表.png)  
 - docker restart container_id  重新启动当前的容器 
-         
+
+## 4.3 进入后台容器
+- 进入容器使用 -d 参数时，容器启动后会进入后台。此时想要进入容器，可以通过以下指令进入：
+    - docker attach：不推荐使用，使用 exit 退出容器时，容器会自动终止
+        - docker attach 243c32535da7
+    - docker exec：推荐大家使用 docker exec 命令，因为此退出容器终端，不会导致容器的停止
+        - docker exec -it 243c32535da7 /bin/bash
+        
+## 4.4 导出和导入容器
+- docker export命令
+    - docker export 7691a814370e > ubuntu.tar
+    - 导出容器到本地文件
+- docker import 从容器快照文件中再导入为镜像
+    - cat ubuntu.tar | docker import - test/ubuntu:v1.0
+    - test/ubuntu软件名称，v1.0为版本号
+- 也可以通过指定 URL 或者某个目录来导入，例如
+    - docker import http://example.com/exampleimage.tgz example/imagerepo  
+    
+## 4.5 删除容器
+- 删除容器使用 docker rm 命令，删除容器是删除后台运行或者已终止的容器，因为容器id是唯一的
+    - docker rm -f 1e560fca3906
+    - docker ps -a 查看已终止的容器
+- 删除所有已终止的容器
+    - docker container prune
+    - [删除容器](008_Docker容器/007_新建容器删除容器删除所有容器.png) 
+    
+## 4.5 容器运行一个简单Web应用实例        
+
+    
+      
