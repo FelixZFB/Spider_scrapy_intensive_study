@@ -43,11 +43,27 @@
         }
  
     - 然后输入:符号，输入wq保存退出
+    
 - Ubuntu安装使用Docker注意：
     - Docker安装完成后，如果不修改源，网速不好，有时候启动或者执行命令会出现失败或者超时提示
     - 安装博文中提到卸载后重新安装，后面发现是网速问题，只需要新建daemon.json文件，添加中国源即可
     - 注意，有些命令需要使用sudo docker xxx xxx ... 执行，直接docker执行会报错
     - 也可以将终端使用 su 回车 输入超级用户密码 回车 进入超级用户 显示符号位#
+    
+- Docker拖取镜像速度慢的终极解决办法：
+    - 上面daemon.json虽然添加了官方的加速源地址，电信速度还可以(有时也很慢)，但是移动速度很慢，有时候超时或者失败
+    - 推荐使用阿里云镜像，具体方法参考博文，[docker下载镜像使用阿里云加速器](https://blog.csdn.net/weixin_43569697/article/details/89279225?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task
+)：
+    - 具体步骤：
+        - 1. 注册阿里云账号，搜索容器镜像服务，然后进入
+        - 2. 镜像仓库里面新建一个镜像仓库
+        - 3. 左侧菜单栏有个镜像加速器，点开
+        - 4. 复制里面加速器地址，到daemon.json文件替换https://registry.docker-cn.com，保存退出
+        - 5. 依次执行命令：
+            - sudo systemctl daemon-reload    重载daemon.json配置文件
+            - sudo systemctl restart docker   重启docker服务
+        - 此时下载速度已经可以达到你的宽带速度正常值，可以删除一个镜像，然后重新下载对比速度。
+        
 
 - Docker安装注意事项:
     - Docker桌面版，WIN10系统只能专业版和企业版可以安装
@@ -69,8 +85,8 @@
     - 对于 Docker Hub，如果不给出用户名，则默认为 library，也就是官方镜像。
     - 比如：
         - docker pull ubuntu:18.04                  
-            - 上面的命令中没有给出 Docker 镜像仓库地址，因此将会从 Docker Hub 获取镜像。
-            - 而镜像名称是 ubuntu:18.04因此将会获取官方镜像 library/ubuntu 仓库源中获取标签为 18.04 的镜像
+            - 上面的命令中没有给出 Docker 镜像仓库地址，因此将会从 Docker Hub 获取镜像，省略了官方用户名 library
+            - 而镜像名称是 ubuntu:18.04 实际将会获取官方镜像 library/ubuntu 仓库源中获取标签为 18.04 的镜像
         - docker pull httpd  不指定版本，默认获取latest
         - docker pull tikazyq/crawlab:latest        
             - 从DockerHub官方中的tikazyq用户获取crawlab镜像，版本为最新的latest 
@@ -114,7 +130,7 @@
     - 以下两个命令都可以
         - docker image ls
         - docker images 
-    - 镜像按获取时间，最近获取的在最上面
+    - 镜像按CREATED,即创建时间排列，最近创建的在最上面
     - 列表包含了 仓库名、标签、镜像 ID、创建时间 以及 所占用的空间
     - 镜像 ID 则是镜像的唯一标识，一个镜像可以对应多个 标签， 因为标签相当于版本号，一个Ubuntu就有多个版本
 - 列出镜像各个选项说明:
@@ -185,7 +201,8 @@
         - 使用脚本的时候可能会用长 ID，但是人工输入就太累了，所以更多的时候是用 短 ID 来删除镜像。
         - docker image ls 默认列出的就已经是短 ID 了，一般取前3个字符以上，只要足够区分于别的镜像就可以了
     - 删除示例：
-        - docker image rm 501               短ID前三位
+        - docker image rm da3fadgad34l      以完整IMAGE ID删除，推荐使用
+        - docker image rm 501               短ID，IMAGE ID 前三位
         - docker image rm centos            镜像REPOSITORY仓库名称
         - docker image rm centos:latest     镜像REPOSITORY仓库名和标签名
         - 也可以使用以下命令删除
@@ -232,7 +249,7 @@
         - runoob@runoob:~$ docker run -t -i ubuntu:15.10 /bin/bash
         - root@e218edb10161:/# 
     - 在运行的容器内使用 apt-get update 命令进行更新。
-    - 在完成操作之后，输入 exit 命令来退出这个容器。
+    - 在完成操作(比如在容器下安装一些包之类)之后，输入 exit 命令来退出这个容器。
     - 此时 ID 为 e218edb10161 的容器，是按我们的需求更改的容器。我们可以通过命令 docker commit 来提交容器副本。
         - runoob@runoob:~$ docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2
         - sha256:70bf1840fd7c0d2d8ef0a42a817eb29f854c1af8f7c59fc03ac7bdee9545aff8
@@ -240,7 +257,9 @@
             - -m: 提交的描述信息
             - -a: 指定镜像作者
             - e218edb10161：容器 ID
-            - runoob/ubuntu:v2: 指定要创建的目标镜像名  
+            - runoob/ubuntu:v2: 指定要创建的目标镜像名称 
+            - runoob/ubuntu为了区别用户自己的镜像和网上拖取的镜像
+    - 参考5.2节更新镜像实例 
             
 - 构建镜像：
     - 首先需要创建一个 Dockerfile 文件，其中包含一组指令来告诉 Docker 如何构建我们的镜像。
@@ -263,6 +282,7 @@
 ## 4.1 创建启动容器
 - 启动容器有两种方式，一种是基于镜像新建一个容器并启动，另外一个是将在终止状态（stopped）的容器重新启动。
 - 因为 Docker 的容器实在太轻量级了，很多时候用户都是随时删除和新创建容器。
+- 新建容器时候一般不指定容器名称，名称都是自动创建的，容器互联时候指定名称，参考5.2节
 
 - 方式1：新建并启动进入容器
     - 所需要的命令主要为 docker run
@@ -273,15 +293,21 @@
     
     - 下面的命令则启动一个 bash 终端，允许用户进行交互。
         - docker run -t -i ubuntu:18.04 /bin/bash
-        - 或者 docker run -it ubuntu:18.04 /bin/bash  该方式推荐使用 如果ubuntu不指定版本号，会默认实用latest
+        - docker run -it ubuntu:18.04 /bin/bash     该方式推荐使用
+        - docker run -it ubuntu /bin/bash           如果ubuntu不指定版本号，会默认实用latest
+        - docker run -itd ubuntu:18.04 /bin/bash    容器后台运行，新建容器时候不进入容器    
         - root@af8bae53bdd3:/#
-        - 其中，-t 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， -i 则让容器的标准输入保持打开。
+        - 参数说明：
+            - -t 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， 
+            - -i 则让容器的标准输入保持打开
+            - -d 容器后台运行，不进入容器(不直接调出终端，要进入容器使用docker exec -it 243c32535da7 /bin/bash)
+            
         - 在交互模式下，用户可以通过所创建的终端来输入命令，例如
             - root@af8bae53bdd3:/# pwd
             - /
             - root@af8bae53bdd3:/# ls
             - bin boot dev etc home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var
-        - exit 命令退出并删除容器
+        - exit 命令退出容器
         - docker container ls  查看容器信息，里面是空的
         - [新建启动容器](008_Docker容器/004_新建启动容器.png)
     
@@ -331,7 +357,7 @@
 - 进入容器使用 -d 参数时，容器启动后会进入后台。此时想要进入容器，可以通过以下指令进入：
     - docker attach：不推荐使用，使用 exit 退出容器时，容器会自动终止
         - docker attach 243c32535da7
-    - docker exec：推荐大家使用 docker exec 命令，因为此退出容器终端，不会导致容器的停止
+    - docker exec：推荐大家使用 docker exec 命令，因为此方法退出容器终端，不会导致容器的停止
         - docker exec -it 243c32535da7 /bin/bash
         
 ## 4.4 导出和导入容器
@@ -346,13 +372,172 @@
     
 ## 4.5 删除容器
 - 删除容器使用 docker rm 命令，删除容器是删除后台运行或者已终止的容器，因为容器id是唯一的
-    - docker rm -f 1e560fca3906
+    - docker rm 容器名称或ID
+    - docker rm -f 容器名称或ID
     - docker ps -a 查看已终止的容器
+    - docker ps -l 查看最后一次创建的容器
+    - 注意：删除容器时，容器必须是停止状态，否则会报如下错误
 - 删除所有已终止的容器
     - docker container prune
     - [删除容器](008_Docker容器/007_新建容器删除容器删除所有容器.png) 
     
-## 4.5 容器运行一个简单Web应用实例        
-
+## 4.5 容器运行一个简单Web应用实例  
+- docker容器中运行一个 Python Flask 应用来运行一个web应用      
+1. 新建容器
+    - docker pull training/webapp  # 载入镜像
+    - docker run -d -P training/webapp python app.py
+    - 参数说明:
+        - -d:让容器在后台运行。
+        - -P:将容器内部使用的网络端口映射到我们使用的主机上。
+        - Docker 开放了 5000 端口（默认 Python Flask 端口）映射到主机端口 32768 上。
+    - 通过主机的浏览器访问容器内部WEB应用：192.168.0.21:5000 
+    - [创建Webapp应用](008_Docker容器/008_创建Webapp应用.png)
     
-      
+    - -p 指定映射端口
+        - docker run -d -p 5000:5000 training/webapp python app.py
+        - docker ps 查看容器列表信息，里面有端口PORTS的详细映射信息
+
+- 2. 查看容器映射网络端口      
+    - docker port container_name or container_id 可以查看容器端口的映射情况
+        - 5000/tcp -> 0.0.0.0:5000   前面是容器端口，后面是映射的主机（0.0.0.0就是当前电脑主机）和端口
+        
+- 3. 查看Web应用程序日志
+    - docker logs -f 容器名称或者ID
+    - -f: 让 docker logs 像使用 tail -f 一样来输出容器内部的标准输出。 
+    - 退出使用ctrl + z 或者 ctrl + d
+    
+- 4. 查看web应用程序的进程
+    - docker top 容器名称或者ID 
+    
+- 5. 检查 WEB 应用程序
+    - docker inspect 容器名称或者ID
+    - 查看 Docker 的底层信息。它会返回一个 JSON 文件记录着 Docker 容器的配置和状态信息。
+    - [](008_Docker容器/010_检查容器启动容器停止容器删除容器1.png)
+    
+- 6. 停止 WEB 应用容器
+    - docker stop 容器名称或者ID
+    
+- 7. 重启WEB应用容器
+    - 已经停止的容器，我们可以使用命令 docker start 来启动。
+    - docker start 容器名称或者ID
+    - [](008_Docker容器/011_检查容器启动容器停止容器删除容器2.png)
+    
+# 5 Docker容器连接
+## 5.1 网络端口映射
+- 上面的4.5节中我们实现了通过网络端口来访问运行在 docker 容器内的服务。
+- 容器中可以运行一些网络应用，要让外部也可以访问这些应用，可以通过 -P 或 -p 参数来指定端口映射。
+    - -P : 是容器内部端口随机映射到主机的高端口。
+    - -p : 是容器内部端口绑定到指定的主机端口。
+    - 比如以下实例:
+    - docker run -d -P training/webapp python app.py
+        - PORTS： 0.0.0.0:32768->5000/tcp  容器应用的5000端口映射到主机上的32768端口
+    - docker run -d -p 5000:5000 training/webapp python app.py
+        - PORTS:  0.0.0.0:5000->5000/tcp   容器应用的5000端口映射到主机上指定的5000端口
+        - 我们可以通过浏览器 192.168.0.21:5000 来访问容器的 5000 端口，即容器内部的web应用
+
+- 可以指定容器绑定的网络地址，比如绑定 127.0.0.1
+    - docker run -d -p 127.0.0.1:5001:5000 training/webapp python app.py
+        - PORTS：127.0.0.1:5001->5000/tcp  容器应用的5000端口映射到网络IP地址127.0.0.1指定的5000端口
+        - 我们可以通过浏览器 127.0.0.1:5001 来访问容器的 5000 端口，即容器内部的web应用
+
+- 上述方法，默认绑定都是tcp端口
+    - 如果要绑定udp端口，端口号后面加上/udp即可
+    - docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py
+        - PORTS：127.0.0.1:5000->5000/udp
+
+- 查看容器映射网络端口      
+    - docker port container_name or container_id 可以查看容器端口的映射情况  
+    
+## 5.2 Docker容器互联
+- 端口映射并不是唯一把 docker 连接到另一个容器的方法。
+    - docker 有一个连接系统允许将多个容器连接在一起，共享连接信息。
+    - docker 连接会创建一个父子关系，其中父容器可以看到子容器的信息。
+    
+- 容器命名
+    - 当我们创建一个容器的时候，docker 会自动对它进行命名。另外，我们也可以使用 --name 标识来命名容器，例如：
+    - runoob@runoob:~$  docker run -d -P --name runoob training/webapp python app.py
+    - 指定容器的名称为 runoob
+    
+- 新建网络
+    - 下面先创建一个新的 Docker 网络。
+    - docker network create -d bridge test-net
+    - 参数说明：
+        - -d：参数后面指定 Docker 网络类型，有 bridge、overlay。
+        - 其中 overlay 网络类型用于 Swarm mode，在本小节中你可以忽略它。
+        - test-net：网络的名称，后面容器连接该网络时候使用该名称
+        - -d： 在前面创建容器时候，用途是新建容器后，容器后台运行，不进入容器
+    - [](008_Docker容器/012_Docker容器互联_创建网络.png)
+
+- 连接容器
+    - 该终端运行一个容器并连接到上面新建的 test-net 网络:
+        - docker run -itd --name test1 --network test-net ubuntu /bin/bash
+    - 打开新的终端，再运行一个容器并加入到 test-net 网络:
+        - docker run -itd --name test2 --network test-net ubuntu /bin/bash
+    - 安装 ping 工具（网络连通测试）
+        - 如果 test1、test2 容器内中无 ping 命令，则在容器内执行以下命令安装 ping
+            - apt-get update                先更新以下源地址列表
+            - apt install iputils-ping      下载安装 ping 工具
+
+    - 具体步骤：
+        - 进入test1的容器终端：docker exec -it test1 /bin/bash
+        - 然后执行上面两个命令：
+            - apt-get update
+            - apt install iputils-ping
+        - [](008_Docker容器/013_Docker容器互联_更新源地址列表然后安装ping.png)
+    
+    - 安装完成后，然后分别进行ping测试：
+        - test1容器：ping test2
+        - test2容器：ping test1
+        - 连接成功，相互就有数据传输
+        - [](008_Docker容器/014_Docker容器互联_容器相互ping测试.png)
+
+- 更新镜像实例： 
+    - 上面我们已经在一个容器里面，更新了源地址列表，同时又安装了ping工具
+    - 此时镜像和创建容器时候的镜像已经发生了改变，我们可以提交为自己的镜像
+    - 下次创建容器时候就可以用我们自己的镜像，里面的包就不用重新安装了  
+    - 上面已经更新了Ubuntu的源列表，并安装了ping工具，先 exit 命令退出容器，我们提交容器副本：
+        - docker commit -m="has update" -a="felix" e218edb10161 felix/ubuntu:v2
+        - 各个参数说明：
+            - -m: 提交的描述信息
+            - -a: 指定镜像作者，即用户名
+            - e218edb10161：容器 ID
+            - felix/ubuntu:v2: 指定要创建的目标镜像名称 (REPOSITORY仓库名)和版本号（TAG）
+            - felix/ubuntu为了区别用户自己的镜像和网上拖取的镜像
+        - 提交后本地镜像库就有了刚刚提交的镜像，提交成功如下图：
+        - [](008_Docker容器/015_更新镜像_提交容器副本_更新本地镜像.png)
+        
+        
+
+
+## 5.3 配置全部容器的DNS
+- 我们可以在宿主机的 /etc/docker/daemon.json 文件中增加以下内容来设置全部容器的 DNS：
+        ```
+        {
+          "dns" : [
+            "114.114.114.114",
+            "8.8.8.8"
+          ]
+        }
+        ```
+- 设置后，启动容器的 DNS 会自动配置为 114.114.114.114 和 8.8.8.8。
+    - 配置完，需要重启 docker 才能生效: 
+        - /etc/init.d/docker restart
+    - 查看容器的 DNS 是否生效可以使用以下命令:
+        - docker run -it --rm ubuntu  cat etc/resolv.conf
+        - 它会输出容器的 DNS 信息:
+            - nameserver 114.114.114.114
+            - nameserver 8.8.8.8
+            
+            
+- 手动指定单个容器的配置
+    - 如果只想在指定的容器设置 DNS，则可以使用以下命令：
+    - docker run -it --rm -h host_ubuntu --dns=114.114.114.114 --dns-search=test.com ubuntu
+    - 参数说明：
+        - -h HOSTNAME 或者 --hostname=HOSTNAME： 设定容器的主机名，它会被写到容器内的 /etc/hostname 和 /etc/hosts。可以通过，cat /etc/hostname 查看文件内容 
+        - --dns=IP_ADDRESS： 添加 DNS 服务器到容器的 /etc/resolv.conf 中，让容器用这个服务器来解析所有不在 /etc/hosts 中的主机名。    
+        - --dns-search=DOMAIN： 设定容器的搜索域，当设定搜索域为 .example.com 时，在搜索一个名为 host 的主机时，DNS 不仅搜索 host，还会搜索 host.example.com。        
+    - 如果在容器启动时没有指定 --dns 和 --dns-search，Docker 会默认用宿主主机上的 /etc/resolv.conf 来配置容器的 DNS    
+     
+  
+    
+    
