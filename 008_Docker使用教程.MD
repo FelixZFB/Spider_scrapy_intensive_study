@@ -270,7 +270,7 @@
             - -t ：指定要创建的目标镜像名
             - . ：Dockerfile 文件所在目录，可以指定Dockerfile 的绝对路径
     - 设置镜像标签
-        - 我们可以使用 docker tag 命令，为镜像添加一个新的标签。
+        - 我们可以使用 docker tag 命令，为镜像（可用镜像ID或者REPOSITORY名称）添加一个新的标签(REPOSITORY名称和TAG)。
         - runoob@runoob:~$ docker tag 860c279d2fec runoob/centos:dev
 
                      
@@ -505,11 +505,31 @@
             - felix/ubuntu为了区别用户自己的镜像和网上拖取的镜像
         - 提交后本地镜像库就有了刚刚提交的镜像，提交成功如下图：
         - [](008_Docker容器/015_更新镜像_提交容器副本_更新本地镜像.png)
-        
-        
+
+## 5.3 Docker Hub 仓库管理
+- 在 https://hub.docker.com 免费注册一个 Docker 账号 
+    - 网速很慢，需要挂代理，注册后选择免费community版
+    - 本地登录和退出用户
+        - docker login
+        - docker logout
+        - 登录需要输入用户名和密码，登录成功后，我们就可以从 docker hub 上拉取自己账号下的全部镜像
+        - 网速不好，挂代理还是经常登录不了
+    - 推送镜像
+        - 用户登录后，可以通过 docker push 命令将自己的镜像推送到 Docker Hub。
+        - docker tag ubuntu:18.04 felixzfb/ubuntu:18.04  将本地的ubuntu:18.04镜像添加tag变成自己镜像
+        ```
+            REPOSITORY      TAG        IMAGE ID            CREATED           ...  
+            ubuntu          18.04      275d79972a86        6 days ago        ...  
+            felixzfb/ubuntu 18.04      275d79972a86        6 days ago
+        ```
+        - 上述添加标签的镜像ID相同，因为直接用的本地镜像添加标签，未做任何改动，ID一模一样
+        - 参考015图片，本地镜像进行更新提交后的镜像，是一个全新的镜像ID已经发生了变化
+        - docker push felixzfb/ubuntu:18.04  将添加标签的镜像推送到Docker Hub自己的账户中，即felixzfb中
+        - docker search felixzfb/ubuntu      搜索自己仓库的镜像
 
 
-## 5.3 配置全部容器的DNS
+
+## 5.4 配置全部容器的DNS
 - 我们可以在宿主机的 /etc/docker/daemon.json 文件中增加以下内容来设置全部容器的 DNS：
         ```
         {
