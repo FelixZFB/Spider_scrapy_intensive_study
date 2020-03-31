@@ -46,7 +46,7 @@
 - 项目GitHub地址：https://github.com/crawlab-team/crawlab
 - 官方文档地址：https://docs.crawlab.cn/
 
-## 4.1 Crawlab环境安装
+## 4.1 Crawlab 部署安装
 ### 4.1.1 安装docker
 - Ubuntu虚拟机中安装docker：docker-ce docker-ce-cli docker-compose
     - 具体安装步骤参考：[Ubuntu18.04 安装及使用Docker（安装常见报错及Docker常用命令）](https://blog.csdn.net/u011318077/article/details/104733149)
@@ -57,6 +57,24 @@
         }
  
     - 然后输入:符号，输入wq保存退出
+
+- docker-compose安装注意：
+- 上面直接使用 apt install  docker-compose 安装的版本不是最新的，只是1.17
+    - sudo apt remove docker-compose 卸载掉 1.17 版本
+    - 然后先安装 pip 工具： sudo apt install python-pip
+    - pip工具有pip 和 pip3 只安装pip即可
+    - 由于系统已经安装了anaconda3，上面安装 pip 默认安装在 anaconda3 python3.7 下面
+    - 下面使用pip安装的包，也都会在anaconda3里面，所以下面启动需要创建软连接
+    - pip安装参考[Ubuntu上安装pip及使用pip安装包](https://linux.cn/article-10110-1.html)  
+    - pip install docker-compose    前提 Ubuntu 系统里面要已经安装了 python3 版本
+    - 安装后的 docker-compose 是在 anaconda3 里面 ，需要建立软连接到 /usr/bin 目录下面，才能直接终端运行命令
+    - sudo ln -s /home/felix/anaconda3/bin/docker-compose /usr/bin/docker-compose 
+    - [](008_Docker容器/026_安装pip工具_pip安装docker-compose最新版.png)
+    - 安装完成并且软连接以后，使用以下命令查看是否成功：
+        - docker-compose --version  
+        - docker-compose ps   查看docker-compose容器，该命令需要先在用户下面创建一个 crawlab 文件夹，然后创建 yml 文件并写入配置，才能使用该命令
+    
+
 - Ubuntu安装使用Docker注意：
     - Docker安装完成后，如果不修改源，网速不好，有时候启动或者执行命令会出现失败或者超时提示
     - 安装博文中提到卸载后重新安装，后面发现是网速问题，只需要新建daemon.json文件，添加中国源即可
@@ -73,10 +91,77 @@
 ### 4.1.2 下载 Crawlab 的镜像
 - 官方文档命令：sudo docker pull tikazyq/crawlab:latest  下载超时，网络有问题
 - 使用以下最新源地址：
-    - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest
+    - docker pull tikazyq/crawlab:latest    dockerhub官方下载镜像
+    - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest  阿里云
 - [docker下载crawlab镜像](099_爬虫相关图片解释/036_docker下载crawlab镜像.png)
 - docker images   查看已有镜像的具体信息   
     - REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
     - registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab   latest              d9132fa22f35        2 weeks ago         710MB
     - hello-world                                              latest              fce289e99eb9        15 months ago       1.84kB
+    
+### 4.1.3 启动crawlab
+- 先保证上面 docker docker-compose 安装成功
+- crawlab镜像已下载到本地
+- crawlab启动步骤：  
+    - 在用户下面创建一个 crawlab 文件夹，切换到该文件夹下面
+    - 该文件下创建一个 docker-compose.yml 文件，填入配置内容
+    - 具体配置查看[Docker 安装部署](https://docs.crawlab.cn/Installation/Docker.html)
+    - 以及[如何快速搭建实用的爬虫管理平台](https://gitbook.cn/books/5d4ea403664ff37af8176bde/index.html)
+    - [yaml配置文件详细说明](https://docs.crawlab.cn/Config/)
+    - 执行容器启动命令：docker-compose up 或者 docker-compose up -d (后台运行)
+    - 第一次运行上述命令后，Docker Compose 会去拉取 MongoDB 和 Redis 的镜像，
+    - 这可能会花几分钟时间。拉取完毕后，四个服务会依次启动，您将会在命令行中看到4个done 并且开始打印log日志信息
+    - 并且浏览器中输入http://localhost:8080，就会进入 crawlab 登陆界面(用户名：admin 密码：admin)
+    - [](008_Docker容器/027_docker-compose首次运行crawlab_自动下载安装依赖环境镜像.png)
+    - [](008_Docker容器/028_pip安装位置_docker-compose安装位置.png)
+    - [](008_Docker容器/029_docker-compose启动crawlab_启动成功.png)
+    - [](008_Docker容器/031_crawlab网页登录界面.png)
+    
+    - 退出容器终端，使用 ctrl + z
+    - 此时 docker-compose ps 查看容器都在后台运行
+    - 停止并删除 crawlab 容器：docker-compose down
+    - 终端命令先是 stop 然后 remove
+    - 我们也可以停止容器不删除，下次直接启动,停止后再删除：
+        - docker-compose stop  
+        - docker-compose start
+        - docker-compose rm
+    - 此时 docker-compose ps 查看，没有容器相关信息
+    - 更多 docker-compose 命令查看[Docker使用教程](008_Docker使用教程.MD)
+    - [](008_Docker容器/032_停止并删除crawlab容器.png)
+    
+- 再次启动crawlab：
+    - 由于docker容器很小，可以每次用完删除，下次再次直接启动一个新的
+    - 先切换到用户felix下面的crawlab文件夹，执行启动命令：docker-compose up 
+    - 由于首次启动，crawlab依赖的mongo和redis镜像已经拖取到本地docker了，再次启动迅速启动完成
+    - [](008_Docker容器/033_再次启动crawlab容器.png)
+    
+- 当 Crawlab 有更新时，我们会将新的变更构建更新到新的镜像中。
+    - 最新的镜像名称都是 tikazyq/crawlab:latest。
+    - 而一个指定版本号的镜像名称为 tikazyq/crawlab:<version>，
+    - 例如 tikazyq/crawlab:0.4.7 为 v0.4.7 版本对应的镜像。
+    - 拉取最新镜像
+        - docker pull tikazyq/crawlab:latest
+    - 日常启动 Docker 容器，后台执行
+        - docker-compose up -d
+        
+- crawlab 环境部署注意点：
+- 注意点1：
+    - docker-compose.yml 配置文件
+    - 需要注意CRAWLAB_API_ADDRESS这个环境变量，很多初学使用者都是因为该变量配置不正确而导致无法登陆。
+    - CRAWLAB_API_ADDRESS: "localhost:8000"  # 前端调用的 API 地址，默认为 localhost:8000
+    - 避免该端口被其它进程占用，一般不用做修改
+- 注意点2：
+    - 本机上启动的 Docker Compose，可以在浏览器中输入http://localhost:8080，然后就能看到登陆界面了；
+    - 如果您是在其他机器上启动的 Docker Compose，您需要在本机的浏览器中输入http://<your_ip>:8080来看到登陆界面，
+    - <your_ip>是其他机器(启动 Docker Compose 的机器)的 IP 地址（请保证 8080 端口在该机器已对外开放）。
+- 注意点3：
+    - 初始登陆用户名密码是 admin/admin，您可以使用这个用户名密码来登陆。
+    - 如果您的环境变量CRAWLAB_API_ADDRESS设置得不正确，
+    - 您可能会看到点击登陆后登陆按钮会一直转圈而没有任何提示。
+    - 这时请重新在docker-compose.yml中设置正确的CRAWLAB_API_ADDRESS（将localhost替换为<your_ip>），
+    - 重新启动docker-compose up。然后在浏览器中输入http://<your_ip>:8080。
+    
+
+    
+
 

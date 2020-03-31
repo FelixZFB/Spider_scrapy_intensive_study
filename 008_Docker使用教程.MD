@@ -1,4 +1,4 @@
-#### Docker使用教程
+#### Docker使用教程 (图文详细教程)
 - [Docker中文文档-从入门到实践(详细全面)](https://yeasy.gitbooks.io/docker_practice/image/pull.html)
 - [Docker菜鸟教程(简单实用，配有截图)](https://www.runoob.com/docker/docker-tutorial.html)
 - [Docker 命令大全](https://www.runoob.com/docker/docker-command-manual.html)
@@ -591,7 +591,9 @@
     - 使用 Dockerfile 定义应用程序的环境。
     - 使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。
     - 最后，执行 docker-compose up 命令来启动并运行整个应用程序 
-- docker-compose安装 第 2 章里面的博文，安装完成后输入，docker-compose --version 显示版本就是安装成功
+- docker-compose安装 第 2 章里面的博文，安装完成后输入：
+    - docker-compose --version   显示版本就是安装成功
+    - 
 
 - docker-compose使用需要配置 yml 文件，yml 文件配置说明参考以下文章
 - [YAML 入门教程](https://www.runoob.com/w3cnote/yaml-intro.html)
@@ -654,4 +656,23 @@
         
 - 该实例及 yml 配置详细配置参考：[菜鸟教程-Docker Compose](https://www.runoob.com/docker/docker-compose.html)
 
+### 6.3 docker-compose 常用命令
+- 由于docker-compose 启动的是多容器 Docker 应用程序 
+- 启动停止都是依赖的 docker-compose.yml 配置文件
+- 并且都是在项目文件夹启动的，所有服务都是相互依赖的
+- 使用 docker-compose ps 查看服务运行状态，是没有ID的
+- 命令和docker一样，但是执行命令不需要指定名称和ID
+- 所有命令都是在项目文件夹下执行：
+    - docker-compose up         启动多容器应用，进入
+    - docker-compose up -d      启动多容器应用，后台运行
+    - ctrl + d                  退出应用终端，回到用户终端
+    - docker-compose ps         查看后台容器信息或者已停止容器信息
+    - docker-compose ps -a      查看已停止容器信息      
+    - docker-compose stop       停止容器
+    - docker-compose start      重启已停止的容器
+    - docker-compose rm         删除已停止的容器
+    - docker-compose down       停止并删除所有的容器
+    - [](008_Docker容器/034_docker-compose常用命令1.png)
+    - [](008_Docker容器/035_docker-compose常用命令2.png)
+            
     
