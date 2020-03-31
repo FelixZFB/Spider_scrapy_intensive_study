@@ -433,7 +433,7 @@
     - docker start 容器名称或者ID
     - [](008_Docker容器/011_检查容器启动容器停止容器删除容器2.png)
     
-# 5 Docker容器连接
+# 5 Docker 容器连接
 ## 5.1 网络端口映射
 - 上面的4.5节中我们实现了通过网络端口来访问运行在 docker 容器内的服务。
 - 容器中可以运行一些网络应用，要让外部也可以访问这些应用，可以通过 -P 或 -p 参数来指定端口映射。
@@ -582,6 +582,71 @@
         - --dns-search=DOMAIN： 设定容器的搜索域，当设定搜索域为 .example.com 时，在搜索一个名为 host 的主机时，DNS 不仅搜索 host，还会搜索 host.example.com。        
     - 如果在容器启动时没有指定 --dns 和 --dns-search，Docker 会默认用宿主主机上的 /etc/resolv.conf 来配置容器的 DNS    
      
-  
+# 6 Docker Compose
+## 6.1  Compose 简介
+- Compose 是用于定义和运行多容器 Docker 应用程序的工具。
+- 通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。
+- 然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。
+- Compose 使用的三个步骤：
+    - 使用 Dockerfile 定义应用程序的环境。
+    - 使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。
+    - 最后，执行 docker-compose up 命令来启动并运行整个应用程序 
+- docker-compose安装 第 2 章里面的博文，安装完成后输入，docker-compose --version 显示版本就是安装成功
+
+- docker-compose使用需要配置 yml 文件，yml 文件配置说明参考以下文章
+- [YAML 入门教程](https://www.runoob.com/w3cnote/yaml-intro.html)
+
+## 6.2 docker-compose 使用案例
+- 配置文件尽量粘贴复制，以防出错
+- 由于我的Ubuntu和Win之间出现相互之间不能粘贴复制，但是共享文件夹可以访问
+- 折中办法：共享文件夹中新建打开一个txt文件，WIN10下面复制粘贴，Ubuntu每次重新载入，相当于一个实时剪贴板
+
+- 1. 准备
+    - 创建一个测试目录：
+        - mkdir composetest  
+        - cd composetest
+        - touch app.py       测试目录中创建一个名为 app.py 的文件
+        - 具体步骤如下图，具体文件内部内容都是WIN10直接复制到txt剪贴板，然后粘贴进去
+        
+        -示例中，redis 是应用程序网络上的 redis 容器的主机名，该主机使用的端口为 6379。
+        - 然后继续在 composetest 目录中创建另一个名为 requirements.txt 的文件，内容参考截图
+         
+    - [](008_Docker容器/020_docker-compose使用准备.png)
     
+- 2. 创建 Dockerfile 文件
+    - 在 composetest 目录中，创建一个名为的文件 Dockerfile
+    - 具体内容如下截图
+    - Dockerfile 内容解释：
+        - FROM python:3.7-alpine: 从 Python 3.7 映像开始构建镜像。
+        - WORKDIR /code: 将工作目录设置为 /code。
+        - ENV FLASK_APP app.py
+        - ENV FLASK_RUN_HOST 0.0.0.0
+        - 设置 flask 命令使用的环境变量。
+        
+        - RUN apk add --no-cache gcc musl-dev linux-headers
+        - 安装 gcc，以便诸如 MarkupSafe 和 SQLAlchemy 之类的 Python 包可以编译加速。
+        - COPY requirements.txt requirements.txt
+        - RUN pip install -r requirements.txt
+        - 复制 requirements.txt 并安装 Python 依赖项。
+        
+        - COPY . .: 将 . 项目中的当前目录复制到 . 镜像中的工作目录。
+        - CMD ["flask", "run"]: 容器提供默认的执行命令为：flask run。
+    - [](008_Docker容器/021_docker-compose使用_创建Dockerfile文件1.png)
+    - [](008_Docker容器/022_docker-compose使用_创建Dockerfile文件2.png)
+        
+- 3. 创建 docker-compose.yml
+    - 在测试目录中创建一个名为 docker-compose.yml 的文件
+    - 该 yml 文件定义了两个服务：web 和 redis。
+        - web：该 web 服务使用从 Dockerfile 当前目录中构建的镜像。然后，它将容器和主机绑定到暴露的端口 5000。此示例服务使用 Flask Web 服务器的默认端口 5000 。
+        - redis：该 redis 服务使用 Docker Hub 的公共 Redis 映像。
+    - [](008_Docker容器/023_docker-compose使用_创建docker-compose.yml配置文件.png)    
+    
+- 4. 使用 Compose 命令构建和运行您的应用
+    - 在测试目录中，执行以下命令来启动应用程序：
+        - docker-compose up
+    - 如果你想在后台执行该服务可以加上 -d 参数：
+        - docker-compose up -d
+        
+- 该实例及 yml 配置详细配置参考：[菜鸟教程-Docker Compose](https://www.runoob.com/docker/docker-compose.html)
+
     
