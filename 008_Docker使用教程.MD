@@ -212,6 +212,9 @@
         - 以摘要删除镜像，@后面就是摘要：
             - docker image rm node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228
 
+- 删除ID相同的镜像，直接使用ID删除，系统不知道删除那个，需要使用仓库名和标签名删除
+    - [](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)    
+    
 - 批量删除镜像
     - 删除所有仓库名为 redis 的镜像：
         - docker image rm $(docker image ls -q redis)
@@ -251,15 +254,21 @@
     - 在运行的容器内使用 apt-get update 命令进行更新。
     - 在完成操作(比如在容器下安装一些包之类)之后，输入 exit 命令来退出这个容器。
     - 此时 ID 为 e218edb10161 的容器，是按我们的需求更改的容器。我们可以通过命令 docker commit 来提交容器副本。
+    - 提交镜像就相当于添加了标签
         - runoob@runoob:~$ docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2
         - sha256:70bf1840fd7c0d2d8ef0a42a817eb29f854c1af8f7c59fc03ac7bdee9545aff8
         - 各个参数说明：
             - -m: 提交的描述信息
             - -a: 指定镜像作者
             - e218edb10161：容器 ID
-            - runoob/ubuntu:v2: 指定要创建的目标镜像名称 
-            - runoob/ubuntu为了区别用户自己的镜像和网上拖取的镜像
-    - 参考5.2节更新镜像实例 
+            - runoob/ubuntu:v2: 指定要创建的目标镜像名称，我们创建镜像时候要使用自己的账户名，felixzfb/ubuntu:v2
+            - ubuntu镜像通过tag进行区别，上面tag就是v2
+            - 一个镜像，不做修改，直接tag添加标签，新的镜像和原始镜像的ID是一样的
+    - 特别注意：
+        - commit 提交时候，软件名称斜线前面的用户名要写自己dockerhub的账户名，不然push到个人仓库会找不到用户名，会被denied
+        - tag 标签时候，用户名也是自己的账户名，后面是仓库名称和tag标签
+        - tag 标签命令可以用来修改镜像的 REPOSITORY 名称，也可以同时修改名称和tag
+    - 详细细节参考5.2节更新镜像实例 
             
 - 构建镜像：
     - 首先需要创建一个 Dockerfile 文件，其中包含一组指令来告诉 Docker 如何构建我们的镜像。
@@ -272,6 +281,8 @@
     - 设置镜像标签
         - 我们可以使用 docker tag 命令，为镜像（可用镜像ID或者REPOSITORY名称）添加一个新的标签(REPOSITORY名称和TAG)。
         - runoob@runoob:~$ docker tag 860c279d2fec runoob/centos:dev
+
+
 
                      
   
@@ -501,22 +512,23 @@
             - -m: 提交的描述信息
             - -a: 指定镜像作者，即用户名
             - e218edb10161：容器 ID
-            - felix/ubuntu:v2: 指定要创建的目标镜像名称 (REPOSITORY仓库名)和版本号（TAG）
-            - felix/ubuntu为了区别用户自己的镜像和网上拖取的镜像
+            - felixzfb/ubuntu:v2: 指定要创建的目标镜像名称 (REPOSITORY仓库名)和版本号（TAG）
+            - ubuntu不同的镜像通过tag的v2进行区分
+            - 提交的镜像就已经有了新的tag标签
         - 提交后本地镜像库就有了刚刚提交的镜像，提交成功如下图：
         - [](008_Docker容器/015_更新镜像_提交容器副本_更新本地镜像.png)
 
-## 5.3 Docker Hub 仓库管理
+## 5.3 Docker Hub 个人仓库管理
 - 在 https://hub.docker.com 免费注册一个 Docker 账号 
     - 网速很慢，需要挂代理，注册后选择免费community版
     - 本地登录和退出用户
         - docker login
         - docker logout
         - 登录需要输入用户名和密码，登录成功后，我们就可以从 docker hub 上拉取自己账号下的全部镜像
-        - 网速不好，挂代理还是经常登录不了
+        - 登陆用户时候不用挂代理，因为daemon.json已经设置了阿里云加速地址，但是有时网速不好会登陆不上
     - 推送镜像
         - 用户登录后，可以通过 docker push 命令将自己的镜像推送到 Docker Hub。
-        - docker tag ubuntu:18.04 felixzfb/ubuntu:18.04  将本地的ubuntu:18.04镜像添加tag变成自己镜像
+        - docker tag ubuntu:18.04 felixzfb/ubuntu:18.04  将本地的ubuntu:18.04镜像直接使用添加tag标签变成自己镜像
         ```
             REPOSITORY      TAG        IMAGE ID            CREATED           ...  
             ubuntu          18.04      275d79972a86        6 days ago        ...  
@@ -526,8 +538,20 @@
         - 参考015图片，本地镜像进行更新提交后的镜像，是一个全新的镜像ID已经发生了变化
         - docker push felixzfb/ubuntu:18.04  将添加标签的镜像推送到Docker Hub自己的账户中，即felixzfb中
         - docker search felixzfb/ubuntu      搜索自己仓库的镜像
+        - 特别注意：
+            - commit 提交时候，软件名称斜线前面的用户名要写自己dockerhub的账户名，不然push到个人仓库会找不到用户名，会被denied
+            - tag 标签时候，用户名也是自己的账户名，后面是仓库名称和tag标签
+            - tag 标签命令可以用来修改镜像的 REPOSITORY 名称，也可以同时修改名称和tag
+        - [](008_Docker容器/016_登陆个人仓库_上传本地镜像到个人仓库.png)
+        - [](008_Docker容器/017_登陆个人仓库_上传本地自己的镜像到个人仓库.png)
+        - [](008_Docker容器/018_登陆个人网站_查看已上传的镜像.png)
+        - 上述图片可以发现：
+            - docker push felix/ubuntu  失败，因为它去查找的是felix账户，不是自己的账户，没有权限
+            - 然后将felix/ubuntu 镜像直接使用 tag 命令修改，相当于修改 REPOSITORY 名称得到的镜像和原始镜像的ID是一模一样的
 
-
+- 删除ID相同的镜像，直接使用ID删除，系统不知道删除那个，需要使用仓库名和标签名删除
+    - [](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)
+            
 
 ## 5.4 配置全部容器的DNS
 - 我们可以在宿主机的 /etc/docker/daemon.json 文件中增加以下内容来设置全部容器的 DNS：
