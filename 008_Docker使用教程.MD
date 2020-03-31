@@ -647,6 +647,11 @@
     - 如果你想在后台执行该服务可以加上 -d 参数：
         - docker-compose up -d
         
+    - ctrl + d 退出容器
+    - docker exec -it xxxxxxxxxx /bin/sh 进入容器终端
+    - [](008_Docker容器/024_docker-compose使用_启动docker-compose服务1.png)
+    - [](008_Docker容器/025_docker-compose使用_启动docker-compose服务2.png)
+        
 - 该实例及 yml 配置详细配置参考：[菜鸟教程-Docker Compose](https://www.runoob.com/docker/docker-compose.html)
 
     
