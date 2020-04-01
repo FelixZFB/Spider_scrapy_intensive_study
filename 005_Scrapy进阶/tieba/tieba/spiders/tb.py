@@ -41,6 +41,7 @@ class TbSpider(scrapy.Spider):
 
 
         # 爬取下一页,调用的还是parse方法
+        """"
         next_url = response.xpath('.//a[@class="next pagination-item "]/@href').extract_first()
         print(next_url)
         if next_url is not None:
@@ -49,6 +50,7 @@ class TbSpider(scrapy.Spider):
             yield scrapy.Request(url=next_url, callback=self.parse)
         else:
             print("数据提取完成!")
+        """
 
 
     def parse_detail(self, response):

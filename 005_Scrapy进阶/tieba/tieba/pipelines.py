@@ -21,7 +21,7 @@ class TiebaPipeline(object):
     def process_item(self, item, spider):
         # 判断item字典对象中title对应的是否还有值
         if item['title']:
-            # 将item字典类型的数据转换成json格式的字符串,
+            # 将item字典类型的数据转换成json格式的字符串, 每一个爬取一次(一个帖子)的结果的item，以一行写入，加上换行符
             # 注意json.dumps序列化时对中文默认使用的ascii编码，要想写入中文，加上ensure_ascii=False
             line = json.dumps(dict(item), ensure_ascii=False) + "\n"
             self.file.write(line)

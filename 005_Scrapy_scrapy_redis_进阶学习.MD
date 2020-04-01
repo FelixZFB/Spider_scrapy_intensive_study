@@ -398,7 +398,7 @@ rules = [
 ### 2.2.1 中国保险监督管理委员会circ的CrawlSpider
 - 该项目重点是：自定义中间件，参考项目中间件及下面2.4 里面说明
 - 随机更换User-Agent参考项目中的settings和middlewares中的设置
-- 1 激活虚拟环境，进入要创建爬虫项目的文件夹分别执行以下命令：
+- 1 激活虚拟环境，进入要放置爬虫项目的文件夹005_cric里面，分别执行以下命令：
     - scrapy startproject cric 创建爬虫项目
     - cd cric 切换到爬虫项目文件夹
     - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
