@@ -608,6 +608,7 @@
 - 由于我的Ubuntu和Win之间出现相互之间不能粘贴复制，但是共享文件夹可以访问
 - 折中办法：共享文件夹中新建打开一个txt文件，WIN10下面复制粘贴，Ubuntu每次重新载入，相当于一个实时剪贴板
 
+- 标准案例步骤：
 - 1. 准备
     - 创建一个测试目录：
         - mkdir composetest  
@@ -661,7 +662,13 @@
         
 - 该实例及 yml 配置详细配置参考：[菜鸟教程-Docker Compose](https://www.runoob.com/docker/docker-compose.html)
 
-### 6.3 docker-compose 常用命令
+- 补充1：
+    - docker-compose 启动多容器 Docker 应用程序 实际最核心就是 yml 文件
+    - 我们只需要新建一个文件夹，文件夹下面创建 yml 配置文件
+    - 当前文件夹执行 docker-compose up 就可以启动一个 docker-compose 容器
+    - 上面案例是 1 2 步并非一定操作，可以参考 007_Crawlab爬虫管理平台中 4.1.3 节启动crawlab管理平台容器
+    
+## 6.3 docker-compose 常用命令
 - 由于docker-compose 启动的是多容器 Docker 应用程序 
 - 启动停止都是依赖的 docker-compose.yml 配置文件
 - 并且都是在项目文件夹启动的，所有服务都是相互依赖的

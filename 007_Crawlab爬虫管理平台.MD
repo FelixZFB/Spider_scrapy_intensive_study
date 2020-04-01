@@ -160,8 +160,76 @@
     - 您可能会看到点击登陆后登陆按钮会一直转圈而没有任何提示。
     - 这时请重新在docker-compose.yml中设置正确的CRAWLAB_API_ADDRESS（将localhost替换为<your_ip>），
     - 重新启动docker-compose up。然后在浏览器中输入http://<your_ip>:8080。
+  
     
+### 4.1.4 安装 CLI 命令行工具
+- [CLI 命令行工具](https://docs.crawlab.cn/SDK/CLI.html)
+- 安装 CLI 之前，您需要确保您用的 Python 版本是 3.6 以上，否则将可能会在使用中出现错误
+- 打开一个新的终端，执行以下命令
+    - pip install crawlab-sdk
+    - ![](007_Crawlab爬虫管理平台/002_安装CLI命令行工具_crawlab-sdk安装.png)
+    - ![](007_Crawlab爬虫管理平台/003_安装CLI命令行工具_crawlab-sdk安装完成.png)
+- 安装完成后，需要登录 crawlab 后端，执行以下命令
+    - 登录并输入参数
+        - crawlab login -u <username> -a <api_address>
+    - 例子
+        - crawlab login -u admin -a http://localhost:8080/api
+        - 然后会要求输入登录密码：admin
+        - 注意：登录之前，不要打开 http://localhost:8080 ，并登陆进去，如果打开或者已经网页手动登陆进去此处输入密码会提示错误
+        - ![](007_Crawlab爬虫管理平台/004_CLI命令上传项目的crawlab管理平台.png)   
+    - 如果登录成功，CLI 会将用户名、密码、API 地址和获取到的 Token 保存在本地，供后面使用。
+    - 注意：这里的 <api_address> 是后端 API 的地址。如果您是用的 Docker 镜像，只需要在 Web 界面 URL 后加一个 /api 后缀就可以了。
+    - 例如，如果您访问 Web 的地址是 http://localhost:8080，您的 <api_url> 就是 http://localhost:8080/api
 
+- CLI常用命令：
+
+- 上传爬虫：
+    - 切换到爬虫项目文件夹下，即 scrapy.cfg 同级文件夹, 分别执行以下命令：
+        - cd /home/felix/crawlab/tieba
+        - crawlab upload
+    - 如果不传参数，CLI 会将当前整个目录打包成 zip 文件并上传的，不是很安全，因此并不推荐此做法。
+    - 当然，如果您想进行更复杂的上传爬虫操作，可以采用下面的命令。
+    - 上传指定目录并附带爬虫名称、显示名称、结果集等信息
     
+    ```
+    crawlab upload \
+    -n <spider_name> \ # 爬虫名称, \ 表示换行 < > 不需要写
+    -N <display_name> \ # 显示名称
+    -m <execute_command> \ # 执行命令
+    -c <result_collection> # 结果集
+    ```
+    
+    - 如果您想针对某一个爬虫 ID 上传爬虫，只需要指定 -i 这个命令，将爬虫 ID 传入就可以了，CLI 将上传爬虫并覆盖其爬虫文件。
+    - 具体的爬虫上传 CLI 帮助，请查看 crawlab upload --help
+    
+- 查看节点列表
+    - crawlab nodes
 
+- 查看爬虫列表
+    - crawlab spiders
+- 查看任务列表
+    - crawlab tasks
+- 查看定时任务列表
+    - crawlab schedules    
+    
+## 4.2 Crawlab上传第一个爬虫项目
+- 建议使用 scrapy 爬虫，此处以 tieba 爬虫为例，爬虫为标准 scrapy 文件结构
+![](007_Crawlab爬虫管理平台/005_crawlab爬虫_tieba爬虫项目结构.png)
+- 准备工作：
+    - 确保 4.1 节中 crawlab 已经部署完成
+    - 用户下面新建 crawlab 文件夹， 新建 yml 配置文件，具体参考 4.1.3 节
+    - 将爬虫项目 tieba 文件夹复制到 /home/felix/crawlab 下面，和 yml 同级
+    - 打开一个终端，切换到 crawlab 文件夹，执行以下命令启动 crawlab 容器
+        - docker-compose up  确保 4 个服务启动成功
+    - 再打开一个终端，切换到 /home/felix/crawlab/tieba 文件夹下
+    ![](007_Crawlab爬虫管理平台/001_crawlab启动_上传本地爬虫项目到crawlab.png)
+    - 执行以下命令，登陆 crawlab 爬虫管理平台，具体参考 4.1.4 节
+        - crawlab login -u admin -a http://localhost:8080/api
+    - 登陆成功后，执行以下命令上传项目到 crawlab 管理平台】
+        - crawlab upload
+    ![](007_Crawlab爬虫管理平台/004_CLI命令上传项目的crawlab管理平台.png)  
+    - 上传成功后，浏览器打开 http://localhost:8080 自动跳转到管理界面，可以看到已经成功上传的爬虫
+    ![](007_Crawlab爬虫管理平台/006_crawlab爬虫管理平台网页界面1.png)
+    ![](007_Crawlab爬虫管理平台/007_crawlab爬虫管理平台网页界面2.png)
+    
 
