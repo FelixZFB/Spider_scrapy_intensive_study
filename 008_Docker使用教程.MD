@@ -55,11 +55,11 @@
     - 推荐使用阿里云镜像，具体方法参考博文，[docker下载镜像使用阿里云加速器](https://blog.csdn.net/weixin_43569697/article/details/89279225?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task
 )：
     - 具体步骤：
-        - 1. 注册阿里云账号，搜索容器镜像服务，然后进入
-        - 2. 镜像仓库里面新建一个镜像仓库
-        - 3. 左侧菜单栏有个镜像加速器，点开
-        - 4. 复制里面加速器地址，到daemon.json文件替换https://registry.docker-cn.com，保存退出
-        - 5. 依次执行命令：
+        - 1.注册阿里云账号，搜索容器镜像服务，然后进入
+        - 2.镜像仓库里面新建一个镜像仓库
+        - 3.左侧菜单栏有个镜像加速器，点开
+        - 4.复制里面加速器地址，到daemon.json文件替换https://registry.docker-cn.com，保存退出
+        - 5.依次执行命令：
             - sudo systemctl daemon-reload    重载daemon.json配置文件
             - sudo systemctl restart docker   重启docker服务
         - 此时下载速度已经可以达到你的宽带速度正常值，可以删除一个镜像，然后重新下载对比速度。
@@ -77,7 +77,7 @@
 - Docker Hub 上有大量的高质量的镜像可以用，这里我们就说一下怎么获取这些镜像。
     - 从 Docker 镜像仓库获取镜像的命令是 docker pull。其命令格式为：
     
-    docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]
+        - docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]
     
     - 具体的选项可以通过 docker pull --help 命令看到，这里我们说一下镜像名称的格式。
     - Docker 镜像仓库地址：地址的格式一般是 <域名/IP>[:端口号]。默认地址是 Docker Hub。
@@ -100,7 +100,7 @@
                 - 下载也是一层层的去下载，并非单一文件。下载过程中给出了每一层的 ID 的前 12 位。
                 - 并且下载结束后，给出该镜像完整的 sha256 的摘要，以确保下载一致性。
     - 镜像获取完成后，执行 docker images 即可看到本地所有的镜像
-    [Docker获取镜像](008_Docker容器/001_Docker获取镜像.png)
+    ![Docker获取镜像](008_Docker容器/001_Docker获取镜像.png)
     
 - 运行一个简单的容器，以ubuntu:18.04为基础镜像
     - docker run -it --rm ubuntu:18.04 /bin/bash
@@ -113,7 +113,7 @@
     - 改命令执行以后，就启动了一个ubuntu系统下的shell终端，然后我们可以终端操作
         - cat /etc/os-release    查看当前容器镜像系统版本信息，cat命令就是打开查看文件信息
         - ls                     查看当前根目录下有哪些文件夹及文件
-        - [以Ubuntu镜像运行一个容器](008_Docker容器/002_以Ubuntu镜像运行一个容器.png)
+        - ![以Ubuntu镜像运行一个容器](008_Docker容器/002_以Ubuntu镜像运行一个容器.png)
     - 最后我们通过 exit 命令退出了这个容器
     
 ## 3.2 查找拖取镜像
@@ -152,7 +152,7 @@
     - 因此实际镜像硬盘占用空间很可能要比这个列表镜像大小的总和要小的多。
     - 以下命令来便捷的查看镜像、容器、数据卷所占用的空间
         - docker system df
-    - [镜像列表展示](008_Docker容器/003_镜像列表展示.png)    
+    - ![镜像列表展示](008_Docker容器/003_镜像列表展示.png)    
 
 - 虚悬镜像
     - 一个特殊的镜像，这个镜像既没有仓库名，也没有标签，均为 <none>
@@ -179,19 +179,22 @@
 - 特定格式显示镜像列表
     - 只包含镜像ID和仓库名
     - docker image ls --format "{{.ID}}: {{.Repository}}"
-    
+        ```
         5f515359c7f8: redis
         05a60462f8ba: nginx
         fe9198c04d62: mongo
         00285df0df87: <none>
         1e0c3dd64ccd: ubuntu 
+        ```
     
     - 以表格等距显示，并且有标题行，和默认一样，不过自己定义列
     - docker image ls --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}"
-        
+        ```
         IMAGE ID            REPOSITORY          TAG
         5f515359c7f8        redis               latest
         05a60462f8ba        nginx               latest         
+        ```
+        
         
 ## 3.4 删除镜像
 - 删除本地的镜像，可以使用 docker image rm 命令，其格式为：
@@ -213,7 +216,7 @@
             - docker image rm node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228
 
 - 删除ID相同的镜像，直接使用ID删除，系统不知道删除那个，需要使用仓库名和标签名删除
-    - [](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)    
+    - ![](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)    
     
 - 批量删除镜像
     - 删除所有仓库名为 redis 的镜像：
@@ -320,7 +323,7 @@
             - bin boot dev etc home lib lib64 media mnt opt proc root run sbin srv sys tmp usr var
         - exit 命令退出容器
         - docker container ls  查看容器信息，里面是空的
-        - [新建启动容器](008_Docker容器/004_新建启动容器.png)
+        - ![新建启动容器](008_Docker容器/004_新建启动容器.png)
     
     - 当利用 docker run 来创建容器时，Docker 在后台运行的标准操作包括：
         - 检查本地是否存在指定的镜像，不存在就从公有仓库下载
@@ -352,7 +355,7 @@
         - 是在后台运行的，可以使用命令查看：docker container ls
         - docker stop container_id      终止容器
         - 再次docker container ls查看已经没有容器了
-        - [启动已经终止的容器](008_Docker容器/005_启动已经终止的容器_停止后台运行的容器.png)
+        - ![启动已经终止的容器](008_Docker容器/005_启动已经终止的容器_停止后台运行的容器.png)
          
 ## 4.2 终止、重启容器
 - docker stop container  来终止一个运行中的容器。
@@ -361,7 +364,7 @@
     - 终止状态的容器可以用以下两个命令查看，结果相同：
         - docker container ls -a 
         - docker ps -a 
-    - [终止容器](008_Docker容器/006_终止容器_查看已终止容器列表.png)  
+    - ![终止容器](008_Docker容器/006_终止容器_查看已终止容器列表.png)  
 - docker restart container_id  重新启动当前的容器 
 
 ## 4.3 进入后台容器
@@ -390,11 +393,11 @@
     - 注意：删除容器时，容器必须是停止状态，否则会报如下错误
 - 删除所有已终止的容器
     - docker container prune
-    - [删除容器](008_Docker容器/007_新建容器删除容器删除所有容器.png) 
+    - ![删除容器](008_Docker容器/007_新建容器删除容器删除所有容器.png) 
     
 ## 4.5 容器运行一个简单Web应用实例  
 - docker容器中运行一个 Python Flask 应用来运行一个web应用      
-1. 新建容器
+- 1.新建容器
     - docker pull training/webapp  # 载入镜像
     - docker run -d -P training/webapp python app.py
     - 参数说明:
@@ -402,36 +405,36 @@
         - -P:将容器内部使用的网络端口映射到我们使用的主机上。
         - Docker 开放了 5000 端口（默认 Python Flask 端口）映射到主机端口 32768 上。
     - 通过主机的浏览器访问容器内部WEB应用：192.168.0.21:5000 
-    - [创建Webapp应用](008_Docker容器/008_创建Webapp应用.png)
+    - ![创建Webapp应用](008_Docker容器/008_创建Webapp应用.png)
     
     - -p 指定映射端口
         - docker run -d -p 5000:5000 training/webapp python app.py
         - docker ps 查看容器列表信息，里面有端口PORTS的详细映射信息
 
-- 2. 查看容器映射网络端口      
+- 2.查看容器映射网络端口      
     - docker port container_name or container_id 可以查看容器端口的映射情况
         - 5000/tcp -> 0.0.0.0:5000   前面是容器端口，后面是映射的主机（0.0.0.0就是当前电脑主机）和端口
         
-- 3. 查看Web应用程序日志
+- 3.查看Web应用程序日志
     - docker logs -f 容器名称或者ID
     - -f: 让 docker logs 像使用 tail -f 一样来输出容器内部的标准输出。 
     - 退出使用ctrl + z 或者 ctrl + d
     
-- 4. 查看web应用程序的进程
+- 4.查看web应用程序的进程
     - docker top 容器名称或者ID 
     
 - 5. 检查 WEB 应用程序
     - docker inspect 容器名称或者ID
     - 查看 Docker 的底层信息。它会返回一个 JSON 文件记录着 Docker 容器的配置和状态信息。
-    - [](008_Docker容器/010_检查容器启动容器停止容器删除容器1.png)
+    - ![](008_Docker容器/010_检查容器启动容器停止容器删除容器1.png)
     
-- 6. 停止 WEB 应用容器
+- 6.停止 WEB 应用容器
     - docker stop 容器名称或者ID
     
-- 7. 重启WEB应用容器
+- 7.重启WEB应用容器
     - 已经停止的容器，我们可以使用命令 docker start 来启动。
     - docker start 容器名称或者ID
-    - [](008_Docker容器/011_检查容器启动容器停止容器删除容器2.png)
+    -![](008_Docker容器/011_检查容器启动容器停止容器删除容器2.png)
     
 # 5 Docker 容器连接
 ## 5.1 网络端口映射
@@ -477,7 +480,7 @@
         - 其中 overlay 网络类型用于 Swarm mode，在本小节中你可以忽略它。
         - test-net：网络的名称，后面容器连接该网络时候使用该名称
         - -d： 在前面创建容器时候，用途是新建容器后，容器后台运行，不进入容器
-    - [](008_Docker容器/012_Docker容器互联_创建网络.png)
+    - ![](008_Docker容器/012_Docker容器互联_创建网络.png)
 
 - 连接容器
     - 该终端运行一个容器并连接到上面新建的 test-net 网络:
@@ -494,13 +497,13 @@
         - 然后执行上面两个命令：
             - apt-get update
             - apt install iputils-ping
-        - [](008_Docker容器/013_Docker容器互联_更新源地址列表然后安装ping.png)
+        - ![](008_Docker容器/013_Docker容器互联_更新源地址列表然后安装ping.png)
     
     - 安装完成后，然后分别进行ping测试：
         - test1容器：ping test2
         - test2容器：ping test1
         - 连接成功，相互就有数据传输
-        - [](008_Docker容器/014_Docker容器互联_容器相互ping测试.png)
+        - ![](008_Docker容器/014_Docker容器互联_容器相互ping测试.png)
 
 - 更新镜像实例： 
     - 上面我们已经在一个容器里面，更新了源地址列表，同时又安装了ping工具
@@ -516,7 +519,7 @@
             - ubuntu不同的镜像通过tag的v2进行区分
             - 提交的镜像就已经有了新的tag标签
         - 提交后本地镜像库就有了刚刚提交的镜像，提交成功如下图：
-        - [](008_Docker容器/015_更新镜像_提交容器副本_更新本地镜像.png)
+        - ![](008_Docker容器/015_更新镜像_提交容器副本_更新本地镜像.png)
 
 ## 5.3 Docker Hub 个人仓库管理
 - 在 https://hub.docker.com 免费注册一个 Docker 账号 
@@ -542,19 +545,20 @@
             - commit 提交时候，软件名称斜线前面的用户名要写自己dockerhub的账户名，不然push到个人仓库会找不到用户名，会被denied
             - tag 标签时候，用户名也是自己的账户名，后面是仓库名称和tag标签
             - tag 标签命令可以用来修改镜像的 REPOSITORY 名称，也可以同时修改名称和tag
-        - [](008_Docker容器/016_登陆个人仓库_上传本地镜像到个人仓库.png)
-        - [](008_Docker容器/017_登陆个人仓库_上传本地自己的镜像到个人仓库.png)
-        - [](008_Docker容器/018_登陆个人网站_查看已上传的镜像.png)
+        - ![](008_Docker容器/016_登陆个人仓库_上传本地镜像到个人仓库.png)
+        - ![](008_Docker容器/017_登陆个人仓库_上传本地自己的镜像到个人仓库.png)
+        - ![](008_Docker容器/018_登陆个人网站_查看已上传的镜像.png)
         - 上述图片可以发现：
             - docker push felix/ubuntu  失败，因为它去查找的是felix账户，不是自己的账户，没有权限
             - 然后将felix/ubuntu 镜像直接使用 tag 命令修改，相当于修改 REPOSITORY 名称得到的镜像和原始镜像的ID是一模一样的
 
 - 删除ID相同的镜像，直接使用ID删除，系统不知道删除那个，需要使用仓库名和标签名删除
-    - [](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)
+    - ![](008_Docker容器/019_删除ID相同的镜像使用仓库名和标签名.png)
             
 
 ## 5.4 配置全部容器的DNS
 - 我们可以在宿主机的 /etc/docker/daemon.json 文件中增加以下内容来设置全部容器的 DNS：
+        
         ```
         {
           "dns" : [
@@ -563,6 +567,7 @@
           ]
         }
         ```
+        
 - 设置后，启动容器的 DNS 会自动配置为 114.114.114.114 和 8.8.8.8。
     - 配置完，需要重启 docker 才能生效: 
         - /etc/init.d/docker restart
@@ -613,7 +618,7 @@
         -示例中，redis 是应用程序网络上的 redis 容器的主机名，该主机使用的端口为 6379。
         - 然后继续在 composetest 目录中创建另一个名为 requirements.txt 的文件，内容参考截图
          
-    - [](008_Docker容器/020_docker-compose使用准备.png)
+    - ![](008_Docker容器/020_docker-compose使用准备.png)
     
 - 2. 创建 Dockerfile 文件
     - 在 composetest 目录中，创建一个名为的文件 Dockerfile
@@ -633,15 +638,15 @@
         
         - COPY . .: 将 . 项目中的当前目录复制到 . 镜像中的工作目录。
         - CMD ["flask", "run"]: 容器提供默认的执行命令为：flask run。
-    - [](008_Docker容器/021_docker-compose使用_创建Dockerfile文件1.png)
-    - [](008_Docker容器/022_docker-compose使用_创建Dockerfile文件2.png)
+    - ![](008_Docker容器/021_docker-compose使用_创建Dockerfile文件1.png)
+    - ![](008_Docker容器/022_docker-compose使用_创建Dockerfile文件2.png)
         
 - 3. 创建 docker-compose.yml
     - 在测试目录中创建一个名为 docker-compose.yml 的文件
     - 该 yml 文件定义了两个服务：web 和 redis。
         - web：该 web 服务使用从 Dockerfile 当前目录中构建的镜像。然后，它将容器和主机绑定到暴露的端口 5000。此示例服务使用 Flask Web 服务器的默认端口 5000 。
         - redis：该 redis 服务使用 Docker Hub 的公共 Redis 映像。
-    - [](008_Docker容器/023_docker-compose使用_创建docker-compose.yml配置文件.png)    
+    - ![](008_Docker容器/023_docker-compose使用_创建docker-compose.yml配置文件.png)    
     
 - 4. 使用 Compose 命令构建和运行您的应用
     - 在测试目录中，执行以下命令来启动应用程序：
@@ -651,8 +656,8 @@
         
     - ctrl + d 退出容器
     - docker exec -it xxxxxxxxxx /bin/sh 进入容器终端
-    - [](008_Docker容器/024_docker-compose使用_启动docker-compose服务1.png)
-    - [](008_Docker容器/025_docker-compose使用_启动docker-compose服务2.png)
+    - ![](008_Docker容器/024_docker-compose使用_启动docker-compose服务1.png)
+    - ![](008_Docker容器/025_docker-compose使用_启动docker-compose服务2.png)
         
 - 该实例及 yml 配置详细配置参考：[菜鸟教程-Docker Compose](https://www.runoob.com/docker/docker-compose.html)
 
@@ -672,7 +677,7 @@
     - docker-compose start      重启已停止的容器
     - docker-compose rm         删除已停止的容器
     - docker-compose down       停止并删除所有的容器
-    - [](008_Docker容器/034_docker-compose常用命令1.png)
-    - [](008_Docker容器/035_docker-compose常用命令2.png)
+    - ![](008_Docker容器/034_docker-compose常用命令1.png)
+    - ![](008_Docker容器/035_docker-compose常用命令2.png)
             
     
