@@ -675,16 +675,24 @@
 - 使用 docker-compose ps 查看服务运行状态，是没有ID的
 - 命令和docker一样，但是执行命令不需要指定名称和ID
 - 所有命令都是在项目文件夹下执行：
-    - docker-compose up         启动多容器应用，进入
+    - docker-compose up         启动多容器应用，进入（一次全新的启动）(推荐使用)
     - docker-compose up -d      启动多容器应用，后台运行
     - ctrl + d                  退出应用终端，回到用户终端
     - docker-compose ps         查看后台容器信息或者已停止容器信息
     - docker-compose ps -a      查看已停止容器信息      
     - docker-compose stop       停止容器
     - docker-compose start      重启已停止的容器
-    - docker-compose rm         删除已停止的容器
-    - docker-compose down       停止并删除所有的容器
+    - docker-compose rm         删除已停止的容器 
+    - docker-compose down       停止并删除所有的容器 (推荐使用)
+    - 因为容器镜像占用资源少，每次用完可以直接删除，下次重新启动一个全新的容器
     - ![](008_Docker容器/034_docker-compose常用命令1.png)
     - ![](008_Docker容器/035_docker-compose常用命令2.png)
+    
+- 注意：
+    - docker-compose 依赖 yml 配置文件，所有命令都需要在 yml 所在文件夹执行，
+    - 启动终端后切换到 yml 所在文件夹，然后执行命令，不再 yml 文件执行会报错
+    - docker 命令可以全局执行
+    ![](008_Docker容器/036_docker-compose常用命令3.png)
+    
             
     
