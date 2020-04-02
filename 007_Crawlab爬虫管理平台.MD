@@ -206,8 +206,7 @@
         - 结果集：集合的名称，爬虫抓取结果储存在 MongoDB 数据库里的集合（Collection），类似于 SQL 数据库中的表（Table）。
        
     - 如果您想针对某一个爬虫 ID 上传爬虫，只需要指定 -i 这个命令，将爬虫 ID 传入就可以了，CLI 将上传爬虫并覆盖其爬虫文件。
-    - 具体的爬虫上传 CLI 帮助，请查看 crawlab upload --help
-    
+    - 具体的爬虫上传 CLI 帮助，请查看 crawlab upload --help    
     
 - 查看节点列表
     - crawlab nodes
@@ -218,7 +217,18 @@
 - 查看定时任务列表
     - crawlab schedules    
     
-## 4.2 Crawlab上传及运行第一个爬虫项目
+    
+## 4.2 Crawlab上传运行爬虫项目
+## 4.2.1 requests 普通爬虫 (不推荐)
+- 参考文档：
+    - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
+    - [可配置爬虫--功能是基于scrapy的](https://docs.crawlab.cn/Spider/ConfigurableSpider.html) 
+- 不推荐，不做详细介绍
+
+## 4.2.2 scrapy 爬虫 (推荐)
+- 参考文档：
+    - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
+    - [Scrapy 爬虫详细设置说明](https://docs.crawlab.cn/Spider/ScrapySpider.html)
 - 建议使用 scrapy 爬虫，此处以 tieba 爬虫为例，爬虫为标准 scrapy 文件结构
 ![](007_Crawlab爬虫管理平台/005_crawlab爬虫_tieba爬虫项目结构.png)
 - 准备工作：
@@ -253,3 +263,5 @@
     - 任务详情里面有概览、日志(和WIN10启动爬虫后终端显示的日志结果一样)、结果
     ![](007_Crawlab爬虫管理平台/012_crawlab爬虫管理平台_爬虫运行结果查看1.png)
     ![](007_Crawlab爬虫管理平台/013_crawlab爬虫管理平台_爬虫运行结果查看_概览_日志_爬取结果.png)
+    
+    
