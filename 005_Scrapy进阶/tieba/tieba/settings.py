@@ -66,6 +66,8 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'tieba.pipelines.TiebaPipeline': 300,
+   'tieba.pipelines.MyTiebaPipeline': 301,
+   #'crawlab.pipelines.CrawlabMongoPipeline': 888
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -88,3 +90,14 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+
+# 如果只是连接本地MongoDB默认数据库(数据直接存储本地MongoDB数据库中)，不使用副本集，使用以下写法
+# 只需要将数据库接口改成mongodb默认端口即可，其它全部不变，可以对比查看云起书院和51job爬虫是使用的MongoDB副本集
+# 相对于MongoDB副本集，只是MONGO_URI不同，其它全部不变，pipelines.py中连接数据库写入数据都不变，只需对应修改数据库名称和item相关即可
+MONGO_URI = 'mongodb://127.0.0.1:27017'
+# 数据库名称
+MONGO_DATABASE='tieba'
+# 副本集名称，统一的的id
+REPLICASET = 'test'

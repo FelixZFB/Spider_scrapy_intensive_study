@@ -30,13 +30,13 @@ class TbSpider(scrapy.Spider):
                 href = urljoin(response.url, href)
                 # href = response.urljoin(href)
 
-                item = TiebaItem(tieba_name=tieba_name, title=title, author=author, href=href)
-                print(item)
+                tieba_item = TiebaItem(tieba_name=tieba_name, title=title, author=author, href=href)
+                print(tieba_item)
 
                 yield scrapy.Request(
                     url=href,
                     callback=self.parse_detail,
-                    meta={"item": item}
+                    meta={"item": tieba_item}
                 )
 
 
@@ -54,10 +54,10 @@ class TbSpider(scrapy.Spider):
 
 
     def parse_detail(self, response):
-        item = response.meta['item']
+        tieba_item = response.meta['item']
         # 取出帖子回复数，回复数帖子开头和末尾都出现了，样式是唯一的，取出第一个即可，可以使用extract_first()，下面使用列表取出
-        item['reply_num'] = response.xpath('.//span[@style="margin-right:3px"]/text()').extract()[0]
-        yield item
+        tieba_item['reply_num'] = response.xpath('.//span[@style="margin-right:3px"]/text()').extract()[0]
+        yield tieba_item
 
 
 # 命令行scrapy crawl tb可以启动爬虫，

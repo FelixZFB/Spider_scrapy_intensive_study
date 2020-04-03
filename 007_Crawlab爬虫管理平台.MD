@@ -193,8 +193,8 @@
     - 上传指定目录并附带爬虫名称、显示名称、结果集等信息
     
     ```
-    crawlab upload \
-    -n <spider_name> \ # 爬虫名称, \ 表示换行 < > 不需要写
+    crawlab upload \   # \ 表示换行 < > 不需要写
+    -n <spider_name> \ # 爬虫名称,要和爬虫py文件里面的爬虫名称一样，不然会出错, 
     -N <display_name> \ # 显示名称
     -m <execute_command> \ # 执行命令
     -c <result_collection> # 结果集
@@ -241,17 +241,23 @@
     ![](007_Crawlab爬虫管理平台/001_crawlab启动_上传本地爬虫项目到crawlab.png)
     - 执行以下命令，登陆 crawlab 爬虫管理平台，具体参考 4.1.4 节
         - crawlab login -u admin -a http://localhost:8080/api
-    - 登陆成功后，执行以下命令上传项目到 crawlab 管理平台】
+    - 登陆成功后，执行以下命令上传项目到 crawlab 管理平台
         - crawlab upload
     ![](007_Crawlab爬虫管理平台/004_CLI命令上传项目的crawlab管理平台.png)  
     - 上传成功后，浏览器打开 http://localhost:8080 自动跳转到管理界面，可以看到已经成功上传的爬虫
     ![](007_Crawlab爬虫管理平台/006_crawlab爬虫管理平台网页界面1.png)
     ![](007_Crawlab爬虫管理平台/007_crawlab爬虫管理平台网页界面2.png)
     - 停止docker-compose 容器，关闭 crawlab 管理平台
-        - docker-compose down       停止并删除所有的容器 (推荐使用)
-        - 因为容器镜像占用资源少，每次用完可以直接删除，下次重新启动一个全新的容器
-    
-    - 上面上传成功后，关闭删除后重新启动 容器 和上传项目
+        - docker-compose down       停止并删除所有的容器 
+        - 因为容器镜像占用资源少，可以每次用完可以直接删除，下次重新启动一个全新的容器
+        - docker-compose stop  (推荐使用)
+        - 只是停止容器，镜像内容保存，不删除，
+        - 下次启动时候 docker-compose up 或者 docker-compose start 都可以，爬虫不用再次上传，直接打开网页爬虫全部都在
+ 
+ - 停止删除后，一次全新的上传步骤：   
+    - 上面上传成功后，docker-compose down 命令关闭删除后
+    - docker-compose up 重新启动容器(/home/felix/crawlab)
+    - 上传项目(/home/felix/crawlab/tieba)下执行命令：
     - crawlab upload -n tb -N tieba_spider
     ![](007_Crawlab爬虫管理平台/008_停止删除crawlab镜像后_再次启动上传爬虫.png)
     - 点击爬虫名称，进入爬虫详情，对爬虫进行修改，修改后保存(灰色的不可修改，上传爬虫时候指定了爬虫名称，以该名称已经创建了代码目录)
@@ -264,4 +270,7 @@
     ![](007_Crawlab爬虫管理平台/012_crawlab爬虫管理平台_爬虫运行结果查看1.png)
     ![](007_Crawlab爬虫管理平台/013_crawlab爬虫管理平台_爬虫运行结果查看_概览_日志_爬取结果.png)
     
-    
+ - 此时我们查看结果，里面是空的，但是teiba爬虫我们在WIN10的Pycharm里面直接运行，spiders文件下是有json结果文件的
+    - 原因：Crawlab目前只支持MongoDB，而且您需要保证存放的数据与Crawlab的数据库一致，
+    - 另外您需要在传给MongoDB时加上task_id，并设置为Crawlab传过来的环境变量CRAWLAB_TASK_ID，
+    - 您需要存放的collection名字为同样是传过来的CRAWLAB_COLLECTION   
