@@ -92,13 +92,13 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 ITEM_PIPELINES = {
-   'tieba.pipelines.TiebaPipeline': 300,  # 用于存储item数据到本地json文件中
-   'tieba.pipelines.MyTiebaPipeline': 301, # 用于存储item数据到本地MongoDB数据库中
-   # 'crawlab.pipelines.CrawlabMongoPipeline': 888
+   # 'tieba.pipelines.TiebaPipeline': 300,  # 用于存储item数据到本地json文件中
+   # 'tieba.pipelines.MyTiebaPipeline': 301, # 用于存储item数据到本地MongoDB数据库中
+   'crawlab.pipelines.CrawlabMongoPipeline': 888
 }
 
-MONGO_URI = 'mongodb://127.0.0.1:27017'
+# MONGO_URI = 'mongodb://127.0.0.1:27017'
 # 数据库名称
-MONGO_DATABASE='tieba'
+# MONGO_DATABASE='tieba'
 # 副本集名称，统一的的id
-REPLICASET = 'test'
+# REPLICASET = 'test'

@@ -104,8 +104,9 @@
 - crawlab镜像已下载到本地
 - crawlab启动步骤：  
     - 在用户下面创建一个 crawlab 文件夹，切换到该文件夹下面
-    - 该文件下创建一个 docker-compose.yml 文件，填入配置内容
-    - 具体配置查看[Docker 安装部署](https://docs.crawlab.cn/Installation/Docker.html)
+    - 该文件下创建一个 docker-compose.yml 文件，填入配置内容，具体配置查看以下链接：
+    - [docker-compose.yml文件详细参数说明](https://github.com/crawlab-team/crawlab/blob/master/docker-compose.yml)
+    - [Docker 安装部署](https://docs.crawlab.cn/Installation/Docker.html)
     - 以及[如何快速搭建实用的爬虫管理平台](https://gitbook.cn/books/5d4ea403664ff37af8176bde/index.html)
     - [yaml配置文件详细说明](https://docs.crawlab.cn/Config/)
     - 执行容器启动命令：docker-compose up 或者 docker-compose up -d (后台运行)
@@ -169,7 +170,7 @@
     - pip install crawlab-sdk
     - ![](007_Crawlab爬虫管理平台/002_安装CLI命令行工具_crawlab-sdk安装.png)
     - ![](007_Crawlab爬虫管理平台/003_安装CLI命令行工具_crawlab-sdk安装完成.png)
-- 安装完成后，需要登录 crawlab 后端，执行以下命令
+- 安装完成后，需要登录 crawlab 后端，在yml配置文件同级文件夹下面，执行以下命令
     - 登录并输入参数
         - crawlab login -u <username> -a <api_address>
     - 例子
@@ -226,6 +227,20 @@
 - 不推荐，不做详细介绍
 
 ## 4.2.2 scrapy 爬虫 (推荐)
+- 使用007_Crawlab爬虫管理平台下面的tieba爬虫
+- 该爬虫本来是本地运行，要想集成到crawlab中去，需要作以下修改：
+    - settings中添加crawlab管道，注释掉本来已有的管道：
+        - 'crawlab.pipelines.CrawlabMongoPipeline': 888
+    - items添加task_id
+        - task_id = scrapy.Field()
+    - 注释掉settings里面的mongo数据库部分
+    - 其它部分不变，对比005_Scrapy进阶tieba爬虫原始代码
+- crawlab集成scrapy爬虫说明：
+    - CrawlabMongoPipeline是crawlab里面内置管道，
+    - 改管道已经集成了连接redis和MongoDB数据库处理存储数据的方法
+    - 
+    
+
 - 参考文档：
     - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
     - [Scrapy 爬虫详细设置说明](https://docs.crawlab.cn/Spider/ScrapySpider.html)
@@ -253,8 +268,12 @@
         - docker-compose stop  (推荐使用)
         - 只是停止容器，镜像内容保存，不删除，
         - 下次启动时候 docker-compose up 或者 docker-compose start 都可以，爬虫不用再次上传，直接打开网页爬虫全部都在
+
+- 爬虫项目上传特别注意：
+    - 上传爬虫时候如果要指定爬虫名称时，指定的爬虫名称要和爬虫主py文件的爬虫name相同
+    - 不然，运行爬虫时候，弹出的确认窗口，Scrapy爬虫后面的参数不会自动填写，也不能手动修改，导致爬虫运行没有反应        
  
- - 停止删除后，一次全新的上传步骤：   
+- 容器停止全部删除后，一次全新的上传步骤：   
     - 上面上传成功后，docker-compose down 命令关闭删除后
     - docker-compose up 重新启动容器(/home/felix/crawlab)
     - 上传项目(/home/felix/crawlab/tieba)下执行命令：
@@ -270,7 +289,15 @@
     ![](007_Crawlab爬虫管理平台/012_crawlab爬虫管理平台_爬虫运行结果查看1.png)
     ![](007_Crawlab爬虫管理平台/013_crawlab爬虫管理平台_爬虫运行结果查看_概览_日志_爬取结果.png)
     
- - 此时我们查看结果，里面是空的，但是teiba爬虫我们在WIN10的Pycharm里面直接运行，spiders文件下是有json结果文件的
+- 如果爬虫里面item数据是保存到json文件，未保存到数据库，此时直接运行，我们查看结果里面是空的，但是teiba爬虫我们在WIN10的Pycharm里面直接运行，spiders文件下是有json结果文件的
     - 原因：Crawlab目前只支持MongoDB，而且您需要保证存放的数据与Crawlab的数据库一致，
     - 另外您需要在传给MongoDB时加上task_id，并设置为Crawlab传过来的环境变量CRAWLAB_TASK_ID，
     - 您需要存放的collection名字为同样是传过来的CRAWLAB_COLLECTION   
+
+
+- 解决方法：
+    - 爬虫里面添加一个自定义管道，用于存储数据到MongoDB数据库，同时settings里面进行相应设置
+       
+   
+    
+   

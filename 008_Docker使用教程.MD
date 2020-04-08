@@ -598,7 +598,6 @@
     - 最后，执行 docker-compose up 命令来启动并运行整个应用程序 
 - docker-compose安装 第 2 章里面的博文，安装完成后输入：
     - docker-compose --version   显示版本就是安装成功
-    - 
 
 - docker-compose使用需要配置 yml 文件，yml 文件配置说明参考以下文章
 - [YAML 入门教程](https://www.runoob.com/w3cnote/yaml-intro.html)

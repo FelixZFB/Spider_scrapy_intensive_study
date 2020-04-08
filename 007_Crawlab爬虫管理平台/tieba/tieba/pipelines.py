@@ -5,13 +5,15 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
+# 引入相关的库，pymongo 是标准连接 MongoDB 的库
+
 import json
 import scrapy
 from scrapy.exceptions import DropItem
 import pymongo
 from tieba.items import TiebaItem
 
-
+# 该管道将item数据存储到本地的json文件中，在默认创建的管道上进行的修改
 class TiebaPipeline(object):
     # def process_item(self, item, spider):
     #     return item
@@ -73,10 +75,5 @@ class MyTiebaPipeline(object):
 
     # 定义一个方法用于处理工作信息，插入数据到数据库
     def _process_joblist_item(self, item):
-        '''
-        处理小说信息
-        :param item:
-        :return:
-        '''
         # 向数据库tieba中的tieba_akg表中插入item数据
         self.db.tieba_akg.insert(dict(item))
