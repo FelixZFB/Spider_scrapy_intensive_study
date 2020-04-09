@@ -50,7 +50,7 @@
     - 注意，有些命令需要使用sudo docker xxx xxx ... 执行，直接docker执行会报错
     - 也可以将终端使用 su 回车 输入超级用户密码 回车 进入超级用户 显示符号位#
     
-- Docker拖取镜像速度慢的终极解决办法：
+- Docker直接拖取镜像速度慢的终极解决办法：
     - 上面daemon.json虽然添加了官方的加速源地址，电信速度还可以(有时也很慢)，但是移动速度很慢，有时候超时或者失败
     - 推荐使用阿里云镜像，具体方法参考博文，[docker下载镜像使用阿里云加速器](https://blog.csdn.net/weixin_43569697/article/details/89279225?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task
 )：
@@ -62,6 +62,7 @@
         - 5.依次执行命令：
             - sudo systemctl daemon-reload    重载daemon.json配置文件
             - sudo systemctl restart docker   重启docker服务
+            - 然后直接使用 docker pull xxx
         - 此时下载速度已经可以达到你的宽带速度正常值，可以删除一个镜像，然后重新下载对比速度。
         
 
@@ -84,10 +85,12 @@
     - 仓库名：如之前所说，这里的仓库名是两段式名称，即 <用户名>/<软件名>。
     - 对于 Docker Hub，如果不给出用户名，则默认为 library，也就是官方镜像。
     - 比如：
+        - docker pull httpd  不指定版本，默认获取latest
+        - docker pull mongo:latest
+        - docker pull redis:latest
         - docker pull ubuntu:18.04                  
             - 上面的命令中没有给出 Docker 镜像仓库地址，因此将会从 Docker Hub 获取镜像，省略了官方用户名 library
             - 而镜像名称是 ubuntu:18.04 实际将会获取官方镜像 library/ubuntu 仓库源中获取标签为 18.04 的镜像
-        - docker pull httpd  不指定版本，默认获取latest
         - docker pull tikazyq/crawlab:latest        
             - 从DockerHub官方中的tikazyq用户获取crawlab镜像，版本为最新的latest 
         - docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest

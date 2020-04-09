@@ -92,7 +92,9 @@
 - 官方文档命令：sudo docker pull tikazyq/crawlab:latest  下载超时，网络有问题
 - 使用以下最新源地址：
     - docker pull tikazyq/crawlab:latest    dockerhub官方下载镜像
-    - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest  阿里云
+    - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest  阿里云地址
+    - 我本地 docker 已经配置了阿里云加速地址，可以直接使用官方地址即可
+    
 - [docker下载crawlab镜像](099_爬虫相关图片解释/036_docker下载crawlab镜像.png)
 - docker images   查看已有镜像的具体信息   
     - REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
@@ -105,13 +107,16 @@
 - crawlab启动步骤：  
     - 在用户下面创建一个 crawlab 文件夹，切换到该文件夹下面
     - 该文件下创建一个 docker-compose.yml 文件，填入配置内容，具体配置查看以下链接：
+        - yml配置文件直接使用GitHub上面的docker-compose.yml文件里面的内容，直接复制到本地即可，一般使用不需要做修改
+        - 其它连接里面的配置文件已经过期了，版本一直在更新，每次都使用GitHub项目里面的就是最新的配置
     - [docker-compose.yml文件详细参数说明](https://github.com/crawlab-team/crawlab/blob/master/docker-compose.yml)
     - [Docker 安装部署](https://docs.crawlab.cn/Installation/Docker.html)
     - 以及[如何快速搭建实用的爬虫管理平台](https://gitbook.cn/books/5d4ea403664ff37af8176bde/index.html)
     - [yaml配置文件详细说明](https://docs.crawlab.cn/Config/)
     - 执行容器启动命令：docker-compose up 或者 docker-compose up -d (后台运行)
-    - 第一次运行上述命令后，Docker Compose 会去拉取 MongoDB 和 Redis 的镜像，
-    - 这可能会花几分钟时间。拉取完毕后，四个服务会依次启动，您将会在命令行中看到4个done 并且开始打印log日志信息
+    - 第一次运行上述命令后，Docker Compose 会去拉取所依赖的 MongoDB 和 Redis 的镜像，这可能会花几分钟时间。
+    - 可以使用 docker images 查看本地镜像里面已经有了 mongo 和 redis 的tag为latest的镜像
+    - 拉取完毕后，四个服务会依次启动，您将会在命令行中看到4个done 并且开始打印log日志信息
     - 并且浏览器中输入http://localhost:8080，就会进入 crawlab 登陆界面(用户名：admin 密码：admin)
     - [](008_Docker容器/027_docker-compose首次运行crawlab_自动下载安装依赖环境镜像.png)
     - [](008_Docker容器/028_pip安装位置_docker-compose安装位置.png)
@@ -170,7 +175,7 @@
     - pip install crawlab-sdk
     - ![](007_Crawlab爬虫管理平台/002_安装CLI命令行工具_crawlab-sdk安装.png)
     - ![](007_Crawlab爬虫管理平台/003_安装CLI命令行工具_crawlab-sdk安装完成.png)
-- 安装完成后，需要登录 crawlab 后端，在yml配置文件同级文件夹下面，执行以下命令
+- 安装完成后，需要登录 crawlab 后端，在yml配置文件同级文件夹里面，执行以下登陆命令
     - 登录并输入参数
         - crawlab login -u <username> -a <api_address>
     - 例子
@@ -217,9 +222,15 @@
     - crawlab tasks
 - 查看定时任务列表
     - crawlab schedules    
+
+- 容器及CLI命令执行注意点：
+    - docker-compose up 启动容器在容器的 yml 配置文件同级文件夹下
+    - crawlab login 登陆执行在容器的 yml 配置文件同级文件夹下
+    - crawlab upload 上传在爬虫的 scrapy.cfg 配置文件同级文件夹下
+    - crawlab upload 上传爬虫指定的爬虫名称要和项目中爬虫名称一致（不然会导致爬虫运行时候识别不了爬虫名称无法运行起来）
     
     
-## 4.2 Crawlab上传运行爬虫项目
+## 4.2 Crawlab上传运行爬虫项目实例
 ## 4.2.1 requests 普通爬虫 (不推荐)
 - 参考文档：
     - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
@@ -227,25 +238,25 @@
 - 不推荐，不做详细介绍
 
 ## 4.2.2 scrapy 爬虫 (推荐)
+
 - 使用007_Crawlab爬虫管理平台下面的tieba爬虫
 - 该爬虫本来是本地运行，要想集成到crawlab中去，需要作以下修改：
     - settings中添加crawlab管道，注释掉本来已有的管道：
         - 'crawlab.pipelines.CrawlabMongoPipeline': 888
-    - items添加task_id
+    - items添加task_id（task_id非必须，可以不用写）
         - task_id = scrapy.Field()
-    - 注释掉settings里面的mongo数据库部分
+    - 注释掉settings里面的mongo数据库部分(三行代码)
     - 其它部分不变，对比005_Scrapy进阶tieba爬虫原始代码
 - crawlab集成scrapy爬虫说明：
     - CrawlabMongoPipeline是crawlab里面内置管道，
-    - 改管道已经集成了连接redis和MongoDB数据库处理存储数据的方法
-    - 
+    - 该管道已经集成了连接redis和MongoDB数据库和处理存储数据的方法
     
-
 - 参考文档：
     - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
     - [Scrapy 爬虫详细设置说明](https://docs.crawlab.cn/Spider/ScrapySpider.html)
 - 建议使用 scrapy 爬虫，此处以 tieba 爬虫为例，爬虫为标准 scrapy 文件结构
 ![](007_Crawlab爬虫管理平台/005_crawlab爬虫_tieba爬虫项目结构.png)
+
 - 准备工作：
     - 确保 4.1 节中 crawlab 已经部署完成
     - 用户下面新建 crawlab 文件夹， 新建 yml 配置文件，具体参考 4.1.3 节
@@ -257,7 +268,7 @@
     - 执行以下命令，登陆 crawlab 爬虫管理平台，具体参考 4.1.4 节
         - crawlab login -u admin -a http://localhost:8080/api
     - 登陆成功后，执行以下命令上传项目到 crawlab 管理平台
-        - crawlab upload
+        - crawlab upload -n tb -N tieba_spider -c tieba_akg (数据集合名称可以上传后管理平台再填写)
     ![](007_Crawlab爬虫管理平台/004_CLI命令上传项目的crawlab管理平台.png)  
     - 上传成功后，浏览器打开 http://localhost:8080 自动跳转到管理界面，可以看到已经成功上传的爬虫
     ![](007_Crawlab爬虫管理平台/006_crawlab爬虫管理平台网页界面1.png)
@@ -265,23 +276,32 @@
     - 停止docker-compose 容器，关闭 crawlab 管理平台
         - docker-compose down       停止并删除所有的容器 
         - 因为容器镜像占用资源少，可以每次用完可以直接删除，下次重新启动一个全新的容器
-        - docker-compose stop  (推荐使用)
+        - docker-compose stop  (推荐使用，只会停止master和worker两个服务，mongo和redis处于up状态)
         - 只是停止容器，镜像内容保存，不删除，
         - 下次启动时候 docker-compose up 或者 docker-compose start 都可以，爬虫不用再次上传，直接打开网页爬虫全部都在
-
+        ![](007_Crawlab爬虫管理平台/016_crawlab爬虫管理平台_stop容器后再次start启动容器.png)
+        ![](007_Crawlab爬虫管理平台/017_crawlab爬虫管理平台_再次启动容器后查看爬虫详情.png)
+        
 - 爬虫项目上传特别注意：
     - 上传爬虫时候如果要指定爬虫名称时，指定的爬虫名称要和爬虫主py文件的爬虫name相同
     - 不然，运行爬虫时候，弹出的确认窗口，Scrapy爬虫后面的参数不会自动填写，也不能手动修改，导致爬虫运行没有反应        
- 
+---
 - 容器停止全部删除后，一次全新的上传步骤：   
     - 上面上传成功后，docker-compose down 命令关闭删除后
     - docker-compose up 重新启动容器(/home/felix/crawlab)
     - 上传项目(/home/felix/crawlab/tieba)下执行命令：
-    - crawlab upload -n tb -N tieba_spider
+    - crawlab upload -n tb -N tieba_spider 
     ![](007_Crawlab爬虫管理平台/008_停止删除crawlab镜像后_再次启动上传爬虫.png)
-    - 点击爬虫名称，进入爬虫详情，对爬虫进行修改，修改后保存(灰色的不可修改，上传爬虫时候指定了爬虫名称，以该名称已经创建了代码目录)
+    - 点击爬虫名称，进入爬虫详情，对爬虫进行修改，修改后保存
+        - 灰色的不可修改，上传爬虫时候指定了爬虫名称，以该名称已经自动创建了代码目录
+        - 项目：No Project 非必须，指的同一类爬虫，我们可以放在同一个项目文件夹下，指定名称后，相同的项目名称爬虫会归为一类
+        - 结果集：存储到MongoDB数据库里面集合的名称（database--collection--document）
+        - 备注：描述信息，非必须
+        - 其它设置看需求进行设置
     ![](007_Crawlab爬虫管理平台/009_crawlab爬虫管理平台_准备运行爬虫.png)
     - 点击右下方，运行爬虫，然后弹出窗口，确认就开始启动爬虫了
+        - scrapy爬虫名称是上传时候已经指定，
+        - 运行类型，日志等级一般默认即可，也可以自己点击箭头选择其它选项
     ![](007_Crawlab爬虫管理平台/010_crawlab爬虫管理平台_启动爬虫1.png)
     ![](007_Crawlab爬虫管理平台/011_crawlab爬虫管理平台_启动爬虫2.png)
     - 运行中或者运行结束后，点击爬虫任务状态下面的进行中或者已完成查看任务详情
@@ -291,12 +311,10 @@
     
 - 如果爬虫里面item数据是保存到json文件，未保存到数据库，此时直接运行，我们查看结果里面是空的，但是teiba爬虫我们在WIN10的Pycharm里面直接运行，spiders文件下是有json结果文件的
     - 原因：Crawlab目前只支持MongoDB，而且您需要保证存放的数据与Crawlab的数据库一致，
-    - 另外您需要在传给MongoDB时加上task_id，并设置为Crawlab传过来的环境变量CRAWLAB_TASK_ID，
-    - 您需要存放的collection名字为同样是传过来的CRAWLAB_COLLECTION   
+    - 上面的截图中结果没有数据，主要是忘了集成crawlab的自带管道，只需要将爬虫管道重新设置即可
+    - 具体参考 4.2.2 节开头内容及代码 settings.py 文件
 
-
-- 解决方法：
-    - 爬虫里面添加一个自定义管道，用于存储数据到MongoDB数据库，同时settings里面进行相应设置
+ 
        
    
     
