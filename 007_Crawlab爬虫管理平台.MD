@@ -311,14 +311,138 @@
     
 - 如果爬虫里面item数据是保存到json文件，未保存到数据库，此时直接运行，我们查看结果里面是空的，但是teiba爬虫我们在WIN10的Pycharm里面直接运行，spiders文件下是有json结果文件的
     - 原因：Crawlab目前只支持MongoDB，而且您需要保证存放的数据与Crawlab的数据库一致，
-    - 上面的截图中结果没有数据，主要是忘了集成crawlab的自带管道，只需要将爬虫管道重新设置即可
+    - 上面的截图中结果没有数据，主要是忘了集成crawlab的自带管道，只需要将爬虫管道重新设置即可，注释掉之前保存本地json和本地MongoDB数据库的管道接口
     - 具体参考 4.2.2 节开头内容及代码 settings.py 文件
     - 添加 管道设置后 重新启动运行，运行结果如下
+    - 此时管理平台中的结果就已经有了数据，下面进入容器里面的调用的docker数据库也可以看见数据了
     ![](007_Crawlab爬虫管理平台/018_crawlab爬虫管理平台_爬虫运行结果查看.png)
-    
 
- 
-       
-   
+
+- 进入容器的 mongo 和 redis 数据库
+    - mongo 和 redis 服务都是已经启动的，进入容器终端后只需执行客户端命令即可
     
-   
+    - 进入容器的 mongo 数据库：
+        - 进入 docker-compose 下面的容器
+        - docker-compose ps 查看多容器运行状态信息
+        - docker ps  查看容器信息
+        - docker exec -it container_id /bin/bash  进入某个容器的shell终端
+        - 然后终端执行相关命令，比如终端执行 mongo 进入容器的数据库
+        - MongoDB 用于存储数据，里面已经有了爬取的结果
+        ![](007_Crawlab爬虫管理平台/019_crawlab爬虫管理平台_查看容器信息.png)
+        ![](007_Crawlab爬虫管理平台/020_crawlab爬虫管理平台_进入mongo容器终端.png)
+        ![](007_Crawlab爬虫管理平台/021_crawlab爬虫管理平台_进入mongo容器_查看数据信息.png)
+        - 退出容器和退出终端，直接使用 exit 命令
+    
+    - 进入容器的 redis 数据库：
+        - 退出上面 mongo 终端，或者重新打开一个新的终端窗口
+        - 上面步骤一样，进入 redis 容器的shell终端后执行 redis-cli 连接服务器即可
+        - redis-server 是已经启动状态了
+        ![](007_Crawlab爬虫管理平台/022_crawlab爬虫管理平台_进入redis容器.png)
+        - redis 数据库只是数据爬取时候作为缓存使用，负责通信，并没有进行数据持久化，里面没有爬虫相关的数据
+  
+    
+# 5 Crawlab 原理
+## 5.1 整体架构
+- Crawlab的架构包括了一个主节点（Master Node）和多个工作节点（Worker Node），
+- 以及负责通信和数据储存的Redis和MongoDB数据库。 
+![](007_Crawlab爬虫管理平台/023_crawlab整体架构.png)
+- 前端应用向主节点请求数据，主节点通过MongoDB和Redis来执行任务派发调度以及部署，
+- 工作节点收到任务之后，开始执行爬虫任务，并将任务结果储存到MongoDB。
+- 架构相对于v0.3.0之前的Celery版本有所精简，去除了不必要的节点监控模块Flower，节点监控主要由Redis完成。
+ 
+- 主节点（Master Node）  
+    - 主节点是整个Crawlab架构的核心，属于Crawlab的中控系统。
+    - 主节点主要负责以下功能:
+        - 爬虫任务调度
+        - 工作节点管理和通信
+        - 爬虫部署
+        - 前端以及API服务
+        - 执行任务（可以将主节点当成工作节点）
+    - 主节点负责与前端应用进行通信，并通过Redis将爬虫任务派发给工作节点。
+    - 同时，主节点会同步（部署）爬虫给工作节点，通过 Redis 和 MongoDB 的 GridFS 。     
+
+- 工作节点（Worker Node）
+    - 工作节点的主要功能是执行爬虫任务和储存抓取数据与日志，并且通过Redis的PubSub跟主节点通信。
+    - 通过增加工作节点数量，Crawlab可以做到横向扩展，不同的爬虫任务可以分配到不同的节点上执行。
+    
+- MongoDB
+    - MongoDB是Crawlab的运行数据库，储存有节点、爬虫、任务、定时任务等数据，
+    - 另外GridFS文件储存方式是主节点储存爬虫文件并同步到工作节点的中间媒介。
+
+- Redis
+    - Redis是非常受欢迎的Key-Value数据库，在Crawlab中主要实现节点间数据通信的功能。
+    - 例如，节点会将自己信息通过HSET储存在Redis的nodes哈希列表中，主节点根据哈希列表来判断在线节点。
+
+- 前端
+    - 前端是一个基于Vue-Element-Admin的单页应用。其中重用了很多Element-UI的控件来支持相应的展示。   
+    
+## 5.2 节点通信 
+- 通信主要由 Redis 来完成 
+- Redis PubSub
+    - 这是Redis版发布／订阅消息模式的一种实现。其用法非常简单：
+        - 订阅者利用SUBSCRIBE channel1 channel2 ...来订阅一个或多个频道；
+        - 发布者利用PUBLISH channelx message来发布消息给该频道的订阅者。
+        - Redis的PubSub可以用作广播模式，即一个发布者对应多个订阅者。
+        - 而在Crawlab中，我们只有一个订阅者(工作节点)对应一个发布者(主节点)的情况（主节点->工作节点：nodes:<node_id>）
+        - 或一个订阅者(主节点)对应多个发布者(工作节点)的情况（工作节点->主节点：nodes:master>）。这是为了方便双向通信。
+
+- 各个节点会通过Redis的PubSub功能来做相互通信。
+![](007_Crawlab爬虫管理平台/024_crawlab节点通信.png)    
+
+- 所谓PubSub，简单来说是一个发布订阅模式。订阅者（Subscriber）会在Redis上订阅（Subscribe）一个通道，
+- 其他任何一个节点都可以作为发布者（Publisher）在该通道上发布（Publish）消息。
+
+- 在Crawlab中，主节点会订阅nodes:master通道，其他节点如果需要向主节点发送消息，只需要向nodes:master发布消息就可以了。
+- 同理，各工作节点会各自订阅一个属于自己的通道nodes:<node_id>（node_id是MongoDB里的节点ID，是MongoDB ObjectId），如果需要给工作节点发送消息，只需要发布消息到该通道就可以了。
+
+- 一个网络请求的简单过程如下:
+    - 客户端（前端应用）发送请求给主节点（API）；
+    - 主节点通过Redis PubSub的<nodes:<node_id>通道发布消息给相应的工作节点；
+    - 工作节点收到消息之后，执行一些操作，并将相应的消息通过<nodes:master>通道发布给主节点；
+    - 主节点收到消息之后，将消息返回给客户端。
+    - 不是所有节点通信都是双向的，也就是说，主节点只会单方面对工作节点通信，工作节点并不会返回响应给主节点，所谓的单向通信。
+    - 以下是Crawlab的通信类型。
+        - 操作名称	通信类别
+        - 获取日志	双向通信
+        - 获取系统信息	双向通信
+        - 取消任务	单向通信
+        - 通知工作节点向GridFS获取爬虫文件单向通信
+        
+## 5.3 节点监控
+- Crawlab的节点监控是通过Redis来完成的。原理如下图：
+![](007_Crawlab爬虫管理平台/025_crawlab节点监控.png)   
+
+- 工作节点会不断更新心跳信息在Redis上，利用HSET nodes <node_id> <msg>，心跳信息<msg>包含节点MAC地址，IP地址，当前时间戳，
+- 主节点会周期性获取Redis上的工作节点心跳信息。
+    - 如果有工作节点的时间戳在60秒之前，则考虑该节点为离线状态，会在Redis中删除该节点的信息，并在MongoDB中设置为"离线"；
+    - 如果时间戳在过去60秒之内，则保留该节点信息，在MongoDB中设置为"在线"。
+
+## 5.4 爬虫部署
+- 爬虫是自动部署在工作节点上的。下面的示意图展示了Crawlab爬虫部署的架构。
+![](007_Crawlab爬虫管理平台/026_crawlab爬虫部署.png) 
+
+- 如上图所示，整个爬虫自动部署的生命周期如下(源码在services/spider.go#InitSpiderService)：
+    - 主节点每5秒，会从爬虫的目录获取爬虫信息，然后更新到数据库（这个过程不涉及文件上传）；
+    - 主节点每60秒,从数据库获取所有的爬虫信息，然后将爬虫打包成zip文件，并上传到MongoDB GridFS，并且在MongoDB的spiders表里写入file_id文件ID；
+    - 主节点通过Redis PubSub发布消息（file.upload事件，包含文件ID）给工作节点，通知工作节点获取爬虫文件；
+    - 工作节点接收到获取爬虫文件的消息，从MongoDB GridFS获取zip文件，并解压储存在本地。
+    - 这样，所有爬虫将被周期性的部署在工作节点上。
+
+- MongoDB GridFS
+    - GridFS是MongoDB储存大文件（大于16Mb）的文件系统。
+    - Crawlab利用GridFS作为了爬虫文件储存的中间媒介，可以让工作节点主动去获取并部署在本地。
+    - 这样绕开了其他传统传输方式，例如RPC、消息队列、HTTP，因为这几种都要求更复杂也更麻烦的配置和处理。
+
+    - Crawlab在GridFS上储存文件，会生成两个collection集合，files.files和files.fs。
+    - 前者储存文件的元信息，后者储存文件内容。spiders里的file_id是指向files.files的_id。
+
+## 5.5 任务执行
+- Crawlab的任务执行依赖于shell。执行一个爬虫任务相当于在shell中执行相应的命令，
+- 因此在执行爬虫任务之前，要求使用者将执行命令存入数据库。执行命令存在spiders表中的cmd字段。
+- 任务执行的架构示意图如下：
+![](007_Crawlab爬虫管理平台/027_crawlab任务执行.png) 
+
+- 当爬虫任务被派发时，主节点会在Redis中的tasks:<node_id>（指定工作节点）和tasks:public（任意工作节点）派发任务，也就是RPUSH命令。
+    - 工作节点在启动时会起N个执行器（通过环境变量CRAWLAB_TASK_WORKERS配置，默认为4），
+    - 每个执行器会轮训Redis的消息队列，优先获取指定节点消息队列tasks:<node_id>，
+    - 如果指定队列中没有任务，才会获取任意节点消息队列中的任务tasks:public。

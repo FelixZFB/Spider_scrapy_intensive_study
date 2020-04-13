@@ -339,7 +339,7 @@
 
 - 方式2：新建启动容器(容器后台运行)
     - docker run -itd --name ubuntu-test ubuntu /bin/bash
-    - 加了 -d 参数默认不会进入容器，想要进入容器需要使用指令 docker exec 命令，参考后面
+    - 加了 -d 参数默认不会进入容器，想要进入容器需要使用指令 docker exec 命令，参考后面章节
     - docker ps      查看当前运行的容器所有信息
     - docker ps -a   查看已经终止的容器所有信息
     - 第一列是ID,最后一列是名称NAMES
@@ -375,7 +375,9 @@
     - docker attach：不推荐使用，使用 exit 退出容器时，容器会自动终止
         - docker attach 243c32535da7
     - docker exec：推荐大家使用 docker exec 命令，因为此方法退出容器终端，不会导致容器的停止
+        - 使用以下两种方式进入shell脚本终端，及Ubuntu终端界面
         - docker exec -it 243c32535da7 /bin/bash
+        - 或者docker exec -it 243c32535da7 /bin/sh
         
 ## 4.4 导出和导入容器
 - docker export命令
@@ -593,8 +595,11 @@
 # 6 Docker Compose
 ## 6.1  Compose 简介
 - Compose 是用于定义和运行多容器 Docker 应用程序的工具。
-- 通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。
-- 然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。
+    - 通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。
+    - 然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。
+    - 启动以后：
+        - docker-compose ps 可以查看所有应用服务
+        - docker ps 可以查看对应所有容器对应的详细信息，然后可以单独进入某个容器
 - Compose 使用的三个步骤：
     - 使用 Dockerfile 定义应用程序的环境。
     - 使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。
@@ -658,7 +663,7 @@
         - docker-compose up -d
         
     - ctrl + d 退出容器
-    - docker exec -it xxxxxxxxxx /bin/sh 进入容器终端
+    - docker exec -it xxxxxxxxxx /bin/sh 进入某个容器终端
     - ![](008_Docker容器/024_docker-compose使用_启动docker-compose服务1.png)
     - ![](008_Docker容器/025_docker-compose使用_启动docker-compose服务2.png)
         
@@ -680,11 +685,11 @@
     - docker-compose up         启动多容器应用，进入（一次全新的启动）(推荐使用)
     - docker-compose up -d      启动多容器应用，后台运行
     - ctrl + d                  退出应用终端，回到用户终端
-    - docker-compose ps         查看后台容器信息或者已停止容器信息
-    - docker-compose ps -a      查看已停止容器信息      
-    - docker-compose stop       停止容器
-    - docker-compose start      重启已停止的容器
-    - docker-compose rm         删除已停止的容器 
+    - docker-compose ps         查看后台所有容器信息或者已停止容器信息
+    - docker-compose ps -a      查看所有已停止容器信息      
+    - docker-compose stop       停止所有容器
+    - docker-compose start      重启所有已停止的容器
+    - docker-compose rm         删除所有已停止的容器 
     - docker-compose down       停止并删除所有的容器 (推荐使用)
     - 因为容器镜像占用资源少，每次用完可以直接删除，下次重新启动一个全新的容器
     - ![](008_Docker容器/034_docker-compose常用命令1.png)
@@ -695,6 +700,17 @@
     - 启动终端后切换到 yml 所在文件夹，然后执行命令，不再 yml 文件执行会报错
     - docker 命令可以全局执行
     ![](008_Docker容器/036_docker-compose常用命令3.png)
+
+- 进入 docker-compose 下面的容器
+    - docker-compose ps 查看多容器运行状态信息
+    - docker ps  查看容器信息
+    - docker exec -it container_id /bin/bash  进入某个容器的shell终端
+    - 然后终端执行相关命令，比如终端执行 mongo 进入容器的数据库
+    ![](007_Crawlab爬虫管理平台/019_crawlab爬虫管理平台_查看容器信息.png)
+    ![](007_Crawlab爬虫管理平台/020_crawlab爬虫管理平台_进入mongo容器终端.png)
+    ![](007_Crawlab爬虫管理平台/021_crawlab爬虫管理平台_进入mongo容器_查看数据信息.png)
+    - 详细参考007_Crawlab爬虫管理平台 4.2.2 节
+    
     
             
     
