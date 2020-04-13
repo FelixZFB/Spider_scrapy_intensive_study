@@ -376,7 +376,8 @@
         - docker attach 243c32535da7
     - docker exec：推荐大家使用 docker exec 命令，因为此方法退出容器终端，不会导致容器的停止
         - 使用以下两种方式进入shell脚本终端，及Ubuntu终端界面
-        - docker exec -it 243c32535da7 /bin/bash
+        - docker exec -it container_id或者container_name /bin/bash
+        - docker exec -it 243c32535da7 /bin/bash (推荐)
         - 或者docker exec -it 243c32535da7 /bin/sh
         
 ## 4.4 导出和导入容器
