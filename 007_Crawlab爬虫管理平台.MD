@@ -146,7 +146,10 @@
     - 而一个指定版本号的镜像名称为 tikazyq/crawlab:<version>，
     - 例如 tikazyq/crawlab:0.4.7 为 v0.4.7 版本对应的镜像。
     - 拉取最新镜像
-        - docker pull tikazyq/crawlab:latest
+        - 使用官方地址拉取(源地址已经更改为私人的阿里云加速地址，速度完美)：
+            - docker pull tikazyq/crawlab:latest
+        - 使用阿里云加速地址：
+            - docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest
     - 日常启动 Docker 容器，后台执行
         - docker-compose up -d
         
