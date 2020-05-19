@@ -178,6 +178,14 @@ print('hello world')
     以上三种方法从前往后尝试，能够100%的解决所有网页解码的问题
     所以：更推荐使用**response.content.decode()**的方式获取响应的html页面
 
+## 2.2 requests 请求对象的本质是什么？
+- requests 在发送请求的时候在内部构造了一个 Request 对象，并给这个对象赋予了各种参数，
+- 包括 url、headers、data ，等等。然后直接把这个 Request 对象发送出去，
+- 请求成功后会再得到一个 Response 对象，再解析即可。
+- 那么这个 Request 是什么类型呢？实际上它就是 Prepared Request。
+- 参考001文件夹中013案例
+
+
 # 3. 使用代理IP和代理UserAgent
 - 准备一堆的ip地址，组成ip池，随机选择一个ip来使用
 - 如何选择随机代理ip,让使用次数最少的ip被用到
@@ -255,20 +263,24 @@ print('hello world')
 - 参考案例011
 
 - requests使用小技巧
-    1、requests.utils.dict_from_cookiejar(cookies)  把cookie对象转化为字典
+    - 1、requests.utils.dict_from_cookiejar(cookies)  把cookie对象转化为字典
         cookies转换为字典后，就可以加入到get的参数中使用
         1.1. requests.get(url,cookies={})
     
-    2、请求SSL证书验证，添加一个参数，跳过证书验证
-       response = requests.get("https://www.12306.cn/mormhweb/ ", verify=False)
+    - 2、SSL证书验证：
+        - 请求SSL证书验证，添加一个参数，跳过证书验证
+            - response = requests.get("https://www.12306.cn/mormhweb/ ", verify=False)
+        - 另外一种方式：
+            - 利用非认证的上下文环境替换认证的上下文环境，替换后就可以正常访问了，代码开头加上以下代码：
+            - ssl._create_default_https_context = ssl._create_unverified_context
     
-    3、设置超时,有些网址网速不好，设置一个超时参数，超过了就直接结束请求
+    - 3、设置超时,有些网址网速不好，设置一个超时参数，超过了就直接结束请求
        response = requests.get(url,timeout=3)
     
-    4、配合状态码判断是否请求成功
-       assert response.status_code == 200
+    - 4、配合状态码判断是否请求成功
+       - assert response.status_code == 200
     
-    5、retrying重试功能
+    - 5、retrying重试功能
         
 - 使用技巧参考001文件夹中案例012   
 
