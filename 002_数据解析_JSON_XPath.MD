@@ -21,7 +21,7 @@
     - 具体区别参考Python_development_skills_summary中的004文件夹
     
 # 2. XPath
-- 详细使用参考：Python_advanced_learning项目中相关知识
+- 详细使用参考：Python_advanced_learning项目中XPath相关知识
 
 - 常用扩展工具
     - Firefox 
