@@ -11,6 +11,8 @@ Date: 2020/5/26 17:19
 Desc:
 '''
 import asyncio
+
+# async 封装一个协程对象
 async def execute(x):
    print('Number:', x)
    return x
