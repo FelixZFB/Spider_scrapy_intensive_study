@@ -40,7 +40,8 @@ def scrape_api(url):
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            # 直接返回响应结果的json格式数据，返回的实际是一个JsonResponse对象，后面直接可以使用get取出属性对应的值
+            # 直接返回响应结果的json格式数据，返回的实际是一个JsonResponse对象
+            # 直接调用json方法，返回字典格式数据，get取出属性对应的值
             return response.json()
         logging.error('get invalid status code %s while scraping %s', response.status_code, url)
     except requests.RequestException:
