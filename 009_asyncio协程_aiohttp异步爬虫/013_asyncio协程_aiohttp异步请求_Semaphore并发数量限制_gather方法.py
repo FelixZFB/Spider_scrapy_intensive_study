@@ -30,9 +30,11 @@ async def scrape_api(session):
         async with session.get(URL) as response:
             # 等待2秒后，返回结果，然后进行下一次并发请求
             await asyncio.sleep(2)
+            print(response.status)
+            await asyncio.sleep(2)
             return await response.text()
 
-
+# 创建协程主函数
 async def main():
     # 创建aiohttp异步请求客户端
     session = aiohttp.ClientSession()
