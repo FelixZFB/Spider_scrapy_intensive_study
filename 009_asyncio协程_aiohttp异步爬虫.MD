@@ -161,3 +161,10 @@
     - session.head('http://httpbin.org/get')
     - session.options('http://httpbin.org/get')
     - session.patch('http://httpbin.org/patch', data=b'data')
+- 参考009文件夹中案例010/011/012案例:
+
+# 6 aiohttp 并发限制
+- 由于 aiohttp 可以支持非常大的并发，比如上万、十万、百万都是能做到的，
+- 但这么大的并发量，目标网站是很可能在短时间内无法响应的，而且很可能瞬时间将目标网站爬挂掉。
+- 所以我们需要控制一下爬取的并发量。
+- 在一般情况下，我们可以借助于 asyncio 的 Semaphore 来控制并发量

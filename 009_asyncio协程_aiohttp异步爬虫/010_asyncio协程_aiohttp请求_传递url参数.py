@@ -16,9 +16,9 @@ import asyncio
 async def main():
     # url参数使用一个字典传递进去
     params = {'name': 'germey', 'age': 25}
+    # 创建一个aiohttp的客户端，用于发送请求
     async with aiohttp.ClientSession() as session:
         # 传递参数给url
-        #
         # 实际请求的url是：https://httpbin.org/get?name=germey&age=25
         async with session.get('https://httpbin.org/get', params=params) as response:
             print(await response.text())
