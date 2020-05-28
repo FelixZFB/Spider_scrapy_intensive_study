@@ -30,6 +30,7 @@ async def get(url):
 async def request():
     url = 'https://www.baidu.com/'
     print('Waiting for', url)
+    # await后面需要接一个协程对象，上面使用async构造get()函数为协程对象
     response = await get(url)
     print('Get response from', url, 'response', response)
 
@@ -38,7 +39,7 @@ async def request():
 tasks = [asyncio.ensure_future(request()) for _ in range(100)]
 # get_event_loop 方法创建了一个事件循环 loop，
 loop = asyncio.get_event_loop()
-# task对象协程使用wait方法，变成多任务协程，注册到事件循环 loop 中，然后执行协程对象
+# task列表对象协程使用wait方法，变成多任务协程，注册到事件循环 loop 中，然后执行协程对象
 loop.run_until_complete(asyncio.wait(tasks))
 
 end = time.time()
