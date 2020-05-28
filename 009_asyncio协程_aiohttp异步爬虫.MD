@@ -152,3 +152,12 @@
         - 注意在 Python 3.7 及以后的版本中，我们可以使用 asyncio.run(main()) 来代替最后的启动操作，
         - 不需要显式声明事件循环，run 方法内部会自动启动一个事件循环。
         - 但这里为了兼容更多的 Python 版本，依然还是显式声明了事件循环。
+
+# 5 aiohttp 其他请求类型
+- 另外 aiohttp 还支持其他的请求类型，如 POST、PUT、DELETE 等等，这个和 requests 的使用方式有点类似，示例如下：
+    - session.post('http://httpbin.org/post', data=b'data')
+    - session.put('http://httpbin.org/put', data=b'data')
+    - session.delete('http://httpbin.org/delete')
+    - session.head('http://httpbin.org/get')
+    - session.options('http://httpbin.org/get')
+    - session.patch('http://httpbin.org/patch', data=b'data')
