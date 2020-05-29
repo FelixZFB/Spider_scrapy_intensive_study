@@ -14,7 +14,9 @@ import asyncio
 from pyppeteer import launch
 from pyquery import PyQuery as pq
 
+# async关键字定义协程方法
 async def main():
+    # 创建await关键字创建一个客户端对象，支持异步，遇到await关键字可以挂起当前操作，继续下一步操作
     browser = await launch()
     page = await browser.newPage()
     await page.goto('https://dynamic2.scrape.cuiqingcai.com/')
