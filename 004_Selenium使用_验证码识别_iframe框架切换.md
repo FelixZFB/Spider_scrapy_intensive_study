@@ -56,11 +56,12 @@ print(logo.get_attribute('src'))
 - 然后获取 class 为 logo-image 的节点，最后打印出它的 src 属性
   
   
-- selenium获取的页面数据是浏览器中检查可以看到的所有elements的内容，包含了js返回的元素
+- selenium获取的页面数据是浏览器中检查可以看到的所有elements的内容，里面包含了js返回的元素，但是网页源码是没有网页内容
+- 网页源码中只有一些css和js文件的引用
 - find_element和find_elements的区别
-  - find_element返回一个element，如果没有会报错
-  - find_elements返回一个列表，没有就是空列表
-  - 在判断是否有下一页的时候，使用find_elements来根据结果的列表长度来判断
+    - find_element返回一个element，如果没有会报错
+    - find_elements返回一个列表，没有就是空列表
+    - 在判断是否有下一页的时候，使用find_elements来根据结果的列表长度来判断
 - 如果页面中含有iframe、frame，需要先调用driver.switch_to.frame的方法切换到frame中才能定位元素
 
 - selenium请求第一页的时候回等待页面加载完了之后在获取数据，但是在点击翻页之后，
