@@ -18,6 +18,8 @@
     - 那么有了 Pyppeteer 之后，我们就可以免去那些烦琐的环境配置等问题。
     - 如果第一次运行的时候，Chromium 浏览器没有安装，那么程序会帮我们自动安装和配置，就免去了烦琐的环境配置等工作。
     - 另外 Pyppeteer 是基于 Python 的新特性 async 实现的，所以它的一些执行也支持异步操作，效率相对于 Selenium 来说也提高了。
+    
+    - Pyppeteer 安装：
     - windows: pip install pyppeteer
     - Linux: pip3 install pyppeteer 
 
