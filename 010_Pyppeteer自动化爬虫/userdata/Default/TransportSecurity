@@ -1,0 +1,11 @@
+{
+   "jr92xFA+6rosSPwh7CFTA/ScSEbmOpXPJeOCyNfzFOo=": {
+      "dynamic_spki_hashes_expiry": 0.0,
+      "expiry": 1606626262.739275,
+      "mode": "force-https",
+      "pkp_include_subdomains": false,
+      "pkp_observed": 0.0,
+      "sts_include_subdomains": true,
+      "sts_observed": 1590901462.739281
+   }
+}
