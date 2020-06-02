@@ -24,11 +24,11 @@ async def main():
     # 选择节点
     await page.waitForSelector('.item .name')
 
-    # 返回第一个节点
+    # 返回第一个节点，以下两种方式结果一样
     j_result1 = await page.J('.item .name')
     j_result2 = await page.querySelector('.item .name')
 
-    # 返回所有的节点
+    # 返回所有的节点，以下两种方式结果一样
     jj_result1 = await page.JJ('.item .name')
     jj_result2 = await page.querySelectorAll('.item .name')
     print('J Result1:', j_result1)

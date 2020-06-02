@@ -35,7 +35,8 @@ async def main():
     # 3.Page 对象调用了 goto 方法就相当于在浏览器中输入了这个 URL，浏览器跳转到了对应的页面进行加载。
     await page.goto('https://dynamic2.scrape.cuiqingcai.com/')
 
-    # 4.Page 对象调用 waitForSelector 方法，传入选择器，那么页面就会等待选择器所对应的节点信息加载出来，如果加载出来了，立即返回，否则会持续等待直到超时。此时如果顺利的话，页面会成功加载出来。
+    # 4.Page 对象调用 waitForSelector 方法，传入选择器selector，使用css选择器语法，
+    # 获取要选择器内容，那么页面就会等待选择器所对应的节点信息加载出来，如果加载出来了，立即返回，否则会持续等待直到超时。此时如果顺利的话，页面会成功加载出来。
     await page.waitForSelector('.item .name')
 
     # 5.页面加载完成之后再调用 content 方法，可以获得当前浏览器页面的源代码(浏览器JavaScript动态渲染以后的页面元素的代码，开发者工具查看元素里面的代码，并不是右键查看源代码中的代码)，这就是 JavaScript 渲染后的结果。
