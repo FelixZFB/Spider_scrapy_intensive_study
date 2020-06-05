@@ -86,6 +86,8 @@ async def scrape_index(page):
 # 然后对这些节点通过 pageFunction 定义的逻辑抽取出对应的结果并返回
 # 这里第一个参数 selector 就传入电影名称对应的节点，其实是超链接 a 节点。由于提取结果有多个，所以这里 JavaScript 对应的 pageFunction 输入参数就是 nodes，输出结果是调用了 map 方法得到每个 node，然后调用 node 的 href 属性即可。
 # 这样返回结果就是当前列表页的所有电影的详情页 URL 组成的列表了。
+# querySelectorAllEval 提取所有符合条件的数据，返回结果是一个列表
+# querySelectorEval 提取符合条件的一个数据，比如下面parse_detail方法，结果为字符串
 async def parse_index():
     return await tab.querySelectorAllEval('.item .name', 'nodes => nodes.map(node => node.href)')
 
@@ -98,6 +100,7 @@ async def parse_detail():
     # 提取标签页的网址
     url = tab.url
     # 选定第一个节点h2，即标题标签，然后执行js代码，提取标签里的文字内容
+    # 第一个参数选择到节点位置，第二个参数提取节点里面的具体内容
     name = await tab.querySelectorEval('h2', 'node => node.innerText')
     # 选定所有的.categories button span的节点，调用了 map 方法得到每个 node，然后调用 node 的 href 属性即可，返回的结果是要一个列表
     categories = await tab.querySelectorAllEval('.categories button span', 'nodes => nodes.map(node => node.innerText)')
