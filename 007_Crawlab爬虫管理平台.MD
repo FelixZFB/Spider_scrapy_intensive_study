@@ -93,7 +93,7 @@
 - 使用以下最新源地址：
     - docker pull tikazyq/crawlab:latest    dockerhub官方下载镜像
     - sudo docker pull registry.cn-hangzhou.aliyuncs.com/crawlab-team/crawlab:latest  阿里云地址
-    - 我本地 docker 已经配置了阿里云加速地址，可以直接使用官方地址即可
+    - 因为我本地 docker 已经配置了阿里云加速地址，可以直接使用官方地址下载即可
     
 - [docker下载crawlab镜像](099_爬虫相关图片解释/036_docker下载crawlab镜像.png)
 - docker images   查看已有镜像的具体信息   

@@ -105,14 +105,14 @@
     - 镜像获取完成后，执行 docker images 即可看到本地所有的镜像
     ![Docker获取镜像](008_Docker容器/001_Docker获取镜像.png)
     
-- 运行一个简单的容器，以ubuntu:18.04为基础镜像
+- 运行一个简单的容器，以ubuntu:18.04为基础镜像运行一个容器
     - docker run -it --rm ubuntu:18.04 /bin/bash
     - docker run 就是运行容器的命令，具体格式我们会在 容器 一节进行详细讲解，我们这里简要的说明一下上面用到的参数。
     - 参数 -it 实际是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。
     - 参数 --rm 这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。
         - 我们这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 --rm 可以避免浪费空间。
     - 参数 ubuntu:18.04 这是指用 ubuntu:18.04 镜像为基础来启动容器。
-    - 参数 /bin/bash 放在镜像名后的是 命令，这里我们希望有个交互式 Shell 终端，因此用的是 bash
+    - 参数 /bin/bash 放在镜像名后的是命令，这里我们希望有个交互式 Shell 终端，因此用的是 bash
     - 改命令执行以后，就启动了一个ubuntu系统下的shell终端，然后我们可以终端操作
         - cat /etc/os-release    查看当前容器镜像系统版本信息，cat命令就是打开查看文件信息
         - ls                     查看当前根目录下有哪些文件夹及文件
@@ -616,7 +616,7 @@
 - 由于我的Ubuntu和Win之间出现相互之间不能粘贴复制，但是共享文件夹可以访问
 - 折中办法：共享文件夹中新建打开一个txt文件，WIN10下面复制粘贴，Ubuntu每次重新载入，相当于一个实时剪贴板
 
-- 标准案例步骤：
+- docker-compose标准案例步骤：
 - 1. 准备
     - 创建一个测试目录：
         - mkdir composetest  
@@ -624,7 +624,7 @@
         - touch app.py       测试目录中创建一个名为 app.py 的文件
         - 具体步骤如下图，具体文件内部内容都是WIN10直接复制到txt剪贴板，然后粘贴进去
         
-        -示例中，redis 是应用程序网络上的 redis 容器的主机名，该主机使用的端口为 6379。
+        - 示例中，redis 是应用程序网络上的 redis 容器的主机名，该主机使用的端口为 6379。
         - 然后继续在 composetest 目录中创建另一个名为 requirements.txt 的文件，内容参考截图
          
     - ![](008_Docker容器/020_docker-compose使用准备.png)
@@ -675,6 +675,13 @@
     - 我们只需要新建一个文件夹，文件夹下面创建 yml 配置文件
     - 当前文件夹执行 docker-compose up 就可以启动一个 docker-compose 容器
     - 上面案例是 1 2 步并非一定操作，可以参考 007_Crawlab爬虫管理平台中 4.1.3 节启动crawlab管理平台容器
+
+- 补充2：
+    - GitHub项目docker运行
+    - GitHub项目很多已经配置好了yml文件，只需要项目下载到本地
+    - 进入项目文件夹，使用 docker-compose up 启动即可，启动项目文件
+    - 比如IP代理池项目：https://github.com/Python3WebSpider/ProxyPool
+    - 推荐使用docker容器运行启动，启动成功后直接Web接口即可获取到代理IP
     
 ## 6.3 docker-compose 常用命令
 - 由于docker-compose 启动的是多容器 Docker 应用程序 

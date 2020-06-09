@@ -6,7 +6,7 @@
 
 # 直观看见的网址，复制粘贴到浏览器中打开会找不到URL地址
 # https://www.baidu.com/baidu?wd=熊猫
-# URL编码后的地址
+# URL编码后的地址：
 # https://www.baidu.com/baidu?wd=%E7%86%8A%E7%8C%AB
 
 import requests

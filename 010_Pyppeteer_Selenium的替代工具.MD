@@ -64,6 +64,8 @@
     - Selenium需要使用自己的语法，写法更复杂一点，比如：
         - find_element_by_id
         - find_element_by_xpath
+    - Pyppeteer 也可以使用xpath选择器，选择到节点后，然后提取数据
+        - 参考案例006
 
 # 3 Page 页面
 - Page 即页面，就对应一个网页，一个选项卡。
