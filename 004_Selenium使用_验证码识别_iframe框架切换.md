@@ -155,7 +155,10 @@ print(input)
     - 隐式等待的效果其实并没有那么好，因为我们只规定了一个固定时间，而页面的加载时间会受到网络条件的影响。
     - 这里还有一种更合适的显式等待方法，它指定要查找的节点，然后指定一个最长等待时间。
     - 如果在规定时间内加载出来了这个节点，就返回查找的节点；
-    - 如果到了规定时间依然没有加载出该节点，则抛出超时异常。示例如下：
+    - 如果到了规定时间依然没有加载出该节点，则抛出超时异常。
+    - 使用案例，Python_prevent_spider的04文件夹打码平台使用
+    - 示例如下：
+    
 ```python
 from selenium import webdriver 
 from selenium.webdriver.common.by import By 
@@ -163,7 +166,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 browser = webdriver.Chrome() 
 browser.get('https://www.taobao.com/') 
+# 显示等待，传入浏览器，超时时间，单位秒
 wait = WebDriverWait(browser, 10) 
+# until等待验证，EC模块进行检测，presence_of_element_located元素是否加载处理，使用元素ID或者CSS选择器
 input = wait.until(EC.presence_of_element_located((By.ID, 'q'))) 
 button =  wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn-search'))) 
 print(input, button)
@@ -179,6 +184,7 @@ print(input, button)
 - 下表我列出了所有的等待条件。
 - ![WebDriverWait延时等待条件](004_Selenium_模拟浏览器登陆豆瓣/007_WebDriverWait延时等待条件.png)
 - [更多详细的等待条件的参数及用法介绍可以参考官方文档](http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.expected_conditions)
+
 
 # 7 Selenium 操作 Cookies
 - 使用 Selenium，还可以方便地对 Cookies 进行操作，
