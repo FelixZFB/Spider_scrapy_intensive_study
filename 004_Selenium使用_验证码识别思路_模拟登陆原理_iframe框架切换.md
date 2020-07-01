@@ -30,7 +30,7 @@
   - 1.实例化session
   - 2.使用session请求登录页面，获取验证码的地址
   - 3.使用session请求验证码，识别
-  - 4.使用session发送post请求’
+  - 4.使用session发送post请求
 
 - 使用selenium登录，遇到验证码
   - url不变，验证码会变，同上
@@ -38,6 +38,7 @@
     - 1.selenium请求登录页面，同时拿到验证码的地址
     - 2.获取登录页面中driver中的cookie，交给requests模块发送验证码的请求，识别
     - 3.输入验证码，点击登录
+- 验证码识别详细查看：Python_prevent_spider项目04_验证码
 
 # 3 selenium使用的注意点
 - 获取文本(text)和获取属性(get_attribute)
@@ -230,3 +231,99 @@ browser.get('https://antispider1.scrape.cuiqingcai.com/')
 ```
 - 大多数的情况，以上的方法均可以实现 Selenium 反屏蔽。
 - 但对于一些特殊的网站，如果其有更多的 WebDriver 特征检测，可能需要具体排查。
+
+# 9 Selenium 截图
+- 注意，chrome浏览器必须先截屏浏览器窗口，然后再定位截取元素，火狐浏览器定位元素后可以直接截取元素
+- 火狐可以直接使用element.save_screenshot('xxx.png')
+
+- 谷歌浏览器：
+    - 1. chrome save_screenshot() 截图，可以截取整个网页。
+    - 2. 利用element的size和location属性，获取element在网页(浏览器窗口)中的位置。
+    - 3. 这之后用PIL下Image中的crop方法截取元素。
+    - 使用案例，Python_prevent_spider的04文件夹打码平台使用,里面截取保存验证码部分
+    
+# 10 模拟登陆
+## 10.1 登陆验证方式
+- 登陆验证方式一：
+    - Session + Cookies 的验证
+    - Session 就是存在服务端的，里面保存了用户此次访问的会话信息，Cookies 则是保存在用户本地浏览器的，
+    - 它会在每次用户访问网站的时候发送给服务器，Cookies 会作为 Request Headers 的一部分发送给服务器，
+    - 服务器根据 Cookies 里面包含的信息判断找出其 Session 对象，不同的 Session 对象里面维持了不同访问用户的状态，
+    - 服务器可以根据这些信息决定返回 Response 的内容。
+
+- SSession + Cookies 的验证的两种状态
+    - Cookies 里面可能只存了 Session ID 相关信息，
+        - 服务器能根据 Cookies 找到对应的 Session，用户登录之后，
+        - 服务器会在对应的 Session 里面标记一个字段，代表已登录状态或者其他信息（如角色、登录时间）等等，
+        - 这样用户每次访问网站的时候都带着 Cookies 来访问，
+        - 服务器就能找到对应的 Session，然后看一下 Session 里面的状态是登录状态，
+        - 就可以返回对应的结果或执行某些操作。
+    - 当然 Cookies 里面也可能直接存了某些凭证信息。
+        - 比如说用户在发起登录请求之后，服务器校验通过，
+        - 返回给客户端的 Response Headers 里面可能带有 Set-Cookie 字段，
+        - 里面可能就包含了类似凭证的信息，这样客户端会执行 Set Cookie 的操作，
+        - 将这些信息保存到 Cookies 里面，以后再访问网页时携带这些 Cookies 信息，
+        - 服务器拿着这里面的信息校验，自然也能实现登录状态检测了。
+
+
+- 登陆验证方式一：
+    - JWT（JSON Web Token）的验证
+    - 传统的基于 Session 和 Cookies 的校验也存在一定问题，
+    - 比如服务器需要维护登录用户的 Session 信息，
+    - 而且不太方便分布式部署，也不太适合前后端分离的项目。
+
+- JWT 技术   
+    - JWT，英文全称叫作 JSON Web Token，是为了在网络应用环境间传递声明而执行的一种基于 JSON 的开放标准。
+    - 实际上就是每次登录的时候通过一个 Token 字符串来校验登录状态。
+    
+    - JWT 的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，
+    - 以便于从资源服务器获取资源，也可以增加一些额外的其他业务逻辑所必须的声明信息，
+    - 所以这个 Token 也可直接被用于认证，也可传递一些额外信息。
+    
+    - JWT，一些认证就不需要借助于 Session 和 Cookies 了，服务器也无需维护 Session 信息，减少了服务器的开销。
+    - 服务器只需要有一个校验 JWT 的功能就好了，同时也可以做到分布式部署和跨语言的支持。
+
+- JWT 字符串说明   
+    - JWT 通常就是一个加密的字符串，它也有自己的标准，类似下面的这种格式：
+    - eyJ0eXAxIjoiMTIzNCIsImFsZzIiOiJhZG1pbiIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJVc2VySWQiOjEyMywiVXNlck5hbWUiOiJhZG1pbiIsImV4cCI6MTU1MjI4Njc0Ni44Nzc0MDE4fQ.pEgdmFAy73walFonEm2zbxg46Oth3dlT02HR9iVzXa8
+    - 字符串中间有两个“.”来分割开，可以把它看成是一个三段式的加密字符串。
+    - 它由三部分构成，分别是 Header、Payload、Signature：
+        - Header，声明了 JWT 的签名算法，如 RSA、SHA256 等等，也可能包含 JWT 编号或类型等数据，然后整个信息 Base64 编码即可。
+        - Payload，通常用来存放一些业务需要但不敏感的信息，如 UserID 等，另外它也有很多默认的字段，如 JWT 签发者、JWT 接受者、JWT 过期时间等等，Base64 编码即可。
+        - Signature，这个就是一个签名，是把 Header、Payload 的信息用秘钥 secret 加密后形成的，这个 secret 是保存在服务器端的，不能被轻易泄露。这样的话，即使一些 Payload 的信息被篡改，服务器也能通过 Signature 判断出来是非法请求，拒绝服务。
+
+- JWT 验证流程
+    - 登录认证流程也很简单了，用户拿着用户名密码登录，然后服务器生成 JWT 字符串返回给客户端，
+    - 客户端每次请求都带着这个 JWT 就行了，服务器会自动判断其有效情况，如果有效，那自然就返回对应的数据。
+    - 但 JWT 的传输就多种多样了，可以放在 Request Headers，也可以放在 URL 里，
+    - 甚至有的网站也放在 Cookies 里，但总而言之，能传给服务器校验就好了。
+    
+## 10.2 Session + Cookies 模拟登陆
+- 基于 Session 和 Cookies 的模拟登录，如果我们要用爬虫实现的话，
+- 其实最主要的就是把 Cookies 的信息维护好，因为爬虫就相当于客户端浏览器，我们模拟好浏览器做的事情就好了
+
+- 模拟登陆的三种方式：
+    - 方式1：已经手动登录过账号
+        - 如果我们已经在浏览器里面登录了自己的账号，我们要想用爬虫模拟的话，
+        - 可以直接把 Cookies 复制过来交给爬虫就行了，这也是最省事省力的方式。
+        - 这就相当于，我们用浏览器手动操作登录了，然后把 Cookies 拿过来放到代码里面，
+        - 爬虫每次请求的时候把 Cookies 放到 Request Headers 里面，
+        - 就相当于完全模拟了浏览器的操作，服务器会通过 Cookies 校验登录状态，
+        - 如果没问题，自然可以执行某些操作或返回某些内容了。
+    - 方式2：爬虫模拟登陆过程
+        - 如果我们不想有任何手工操作，可以直接使用爬虫来模拟登录过程。
+        - 需要分析真实的请求地址，一些地址存在加密和各种参数，分析较难
+        - 登录的过程其实多数也是一个 POST 请求，我们用爬虫提交用户名密码等信息给服务器，
+        - 服务器返回的 Response Headers 里面可能带了 Set-Cookie 的字段，我们只需要把这些 Cookies 保存下来就行了。
+        - 所以，最主要的就是把这个过程中的 Cookies 维护好就行了。
+        - 当然这里可能会遇到一些困难，比如登录过程还伴随着各种校验参数，不好直接模拟请求，
+        - 也可能网站设置 Cookies 的过程是通过 JavaScript 实现的，
+        - 所以可能还得仔细分析下其中的一些逻辑，尤其是我们用 requests 这样的请求库进行模拟登录的时候，遇到的问题可能比较多。
+    - 方式3：自动化测试工具模拟登陆
+        - (上面爬虫无法模拟的登陆一般使用 Selenium 或 Pyppeteer 可以实现模拟登陆，只是效率低一些而已)
+        - 我们也可以用一些简单的方式来实现模拟登录，即把人在浏览器中手工登录的过程自动化实现，
+        - 比如我们用 Selenium 或 Pyppeteer 来驱动浏览器模拟执行一些操作，
+        - 如填写用户名、密码和表单提交等操作，等待登录成功之后，
+        - 通过 Selenium 或 Pyppeteer 获取当前浏览器的 Cookies 保存起来即可。
+        - 然后后续的请求可以携带 Cookies 的内容请求，同样也能实现模拟登录。
+    - 上面3种方式的目的就是维护好客户端的 Cookies 信息，然后每次请求都携带好 Cookies 信息就能实现模拟登录了
