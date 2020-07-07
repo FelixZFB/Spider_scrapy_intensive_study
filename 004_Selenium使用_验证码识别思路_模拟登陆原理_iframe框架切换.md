@@ -346,6 +346,7 @@ browser.get('https://antispider1.scrape.cuiqingcai.com/')
     - 我们可以建立一个账号池，用多个账号来随机访问或爬取，这样就能数倍提高爬虫的并发量或者降低被封的风险了。
     - 比如在访问某个网站的时候，我们可以准备 100 个账号，然后 100 个账号都模拟登录，
     - 把对应的 Cookies 或 JWT 存下来，每次访问的时候随机取一个来访问，
+    - 提高 Cookies 利用率或降低封号几率，可以搭建一个 Cookies 池实现 Cookies 的随机取用。
     - 由于账号多，所以每个账号被取用的概率也就降下来了，
     - 这样就能避免单账号并发过大的问题，也降低封号风险。
     
@@ -391,3 +392,7 @@ browser.get('https://antispider1.scrape.cuiqingcai.com/')
     - Cookies:  [{'domain': 'login2.scrape.cuiqingcai.com', 'expiry': 1595317458.177094, 'httpOnly': True, 'name': 'sessionid', 'path': '/', 'secure': False, 'value': 'o3cctl1fbeedt3q3m3bg6nlxtv0m9os7'}]
     - session对象设置后，requests使用的cookies值
     - <RequestsCookieJar[<Cookie sessionid=o3cctl1fbeedt3q3m3bg6nlxtv0m9os7 for />]>
+    
+## 11.3 JWT 验证
+- 基于 JWT 的网站，其通常都是采用前后端分离式的(前端只放一些js和ajax代码，静态和动态数据都是通过后端调用完成的)，前后端的数据传输依赖于 Ajax，
+- 登录验证依赖于 JWT 本身这个 token 的值，如果 JWT 这个 token 是有效的，那么服务器就能返回想要的数据。
