@@ -348,3 +348,46 @@ browser.get('https://antispider1.scrape.cuiqingcai.com/')
     - 把对应的 Cookies 或 JWT 存下来，每次访问的时候随机取一个来访问，
     - 由于账号多，所以每个账号被取用的概率也就降下来了，
     - 这样就能避免单账号并发过大的问题，也降低封号风险。
+    
+# 11 Session + Cookies 及 JWT 验证实例
+## 11.1 Session + Cookies 验证
+- request 库手动使用cookies
+    - cookies值放在headers里面的Cookie参数里面
+    - headers = {'Cookie': 'anonymid=jqz93aa61j2ebq; depovince=ZGQT; _r01_=1; JSESSIONID=abcCDVfle7EH5eGmyXAHw; ick_login=2c2236f7-9001-4b87-8f7a-4d1ef7936834; t=0c73459378e50f6e3ee47ae345e53ff28; societyguester=0c73459378e50f6e3ee47ae345e53ff28; id=969464538; xnsid=a53a566e; jebecookies=f50fc9af-aab9-4b0e-ba46-2f6662e91791|||||; ver=7.0; loginfrom=null; wp_fold=0'}
+    - req = request.Request(url, headers=headers)
+    - 参考000_43_12案例
+
+- request 库可以使用http库中cookiejar自动处理cookies
+    - 自动提取，下次访问自动携带cookies
+    - requests库中的cookies使用，底层就是cookiejar实现的
+    - 参考000_43_13案例
+    
+- requests 库使用cookies
+    - 先获取取出，然后直接使用get请求的cookies参数，不用使用headers
+    - cookies = response_login.cookies
+    - response_index = requests.get(INDEX_URL, cookies=cookies)
+    - 参考006案例
+    
+- requests 库使用Session对象自动管理携带cookies
+    - requests 内置的 Session 对象来帮我们自动处理 Cookies，
+    - 使用了 Session 对象之后，requests 会将每次请求后需要设置的 Cookies 自动保存好，
+    - 并在下次请求时自动携带上去，就相当于帮我们维持了一个 Session 对象
+    - 注意：所有post和get请求,由requests替换为session对象
+    - 参考007案例
+    
+## 11.2 Session + Cookies 验证升级
+- 参考前面的 # 7 Selenium 操作 Cookies
+- 复杂的登陆页面，动态请求，带有加密参数，带有验证码的登陆页面
+    - 上面 11.1 中适用于可以直接找到登陆请求地址的情况，
+    - 但是实际很多登陆页面都是动态的，并且真实地址都带有加密参数，无法准确获取
+    - 复杂一点的网站，如带有验证码，带有加密参数等等，直接用 requests 并不好处理模拟登录，
+    - 如果登录不了，那岂不是整个页面都没法爬了吗？那么有没有其他的方式来解决这个问题呢？
+    - 当然是有的，比如说，我们可以使用 Selenium 来通过模拟浏览器的方式实现模拟登录，
+    - 然后获取模拟登录成功后的 Cookies，再把获取的 Cookies 交由 requests 等来爬取就好了。
+    
+- 参考008案例
+    - 注意
+    - 使用selenium取出的cookies值，里面有很多参数，只需要字典里面的name和value的值
+    - Cookies:  [{'domain': 'login2.scrape.cuiqingcai.com', 'expiry': 1595317458.177094, 'httpOnly': True, 'name': 'sessionid', 'path': '/', 'secure': False, 'value': 'o3cctl1fbeedt3q3m3bg6nlxtv0m9os7'}]
+    - session对象设置后，requests使用的cookies值
+    - <RequestsCookieJar[<Cookie sessionid=o3cctl1fbeedt3q3m3bg6nlxtv0m9os7 for />]>
