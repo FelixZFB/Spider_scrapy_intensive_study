@@ -396,3 +396,11 @@ browser.get('https://antispider1.scrape.cuiqingcai.com/')
 ## 11.3 JWT 验证
 - 基于 JWT 的网站，其通常都是采用前后端分离式的(前端只放一些js和ajax代码，静态和动态数据都是通过后端调用完成的)，前后端的数据传输依赖于 Ajax，
 - 登录验证依赖于 JWT 本身这个 token 的值，如果 JWT 这个 token 是有效的，那么服务器就能返回想要的数据。
+
+- 登陆案例分析：
+    - 登录时其请求的 URL 为 https://login3.scrape.cuiqingcai.com/api/login，
+    - 是通过 Ajax 请求的，同时其 Request Body 是 JSON 格式的数据，而不是 Form Data，返回状态码为 200。
+    - 登陆请求的返回结果是一个 JSON 格式的数据，包含一个 token 字段
+    - 后续获取数据的 Ajax 请求中的 Request Headers 里面就多了一个 Authorization 字段，
+    - 其结果为 jwt 然后加上刚才的 JWT 的内容，返回结果就是 JSON 格式的数据。
+    - 构造 Request Headers，然后设置 Authorization 字段并按格式传入 JWT 即可，这样就能成功获取数据了。

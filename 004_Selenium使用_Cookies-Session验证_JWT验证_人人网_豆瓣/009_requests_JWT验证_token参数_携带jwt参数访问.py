@@ -43,11 +43,12 @@ headers = {
    'Authorization': f'jwt {jwt}'
 }
 
-# 携带jwt访问，limit和offset是访问网址？后面的参数，限制每页显示的图书数量
+# 携带jwt访问，limit和offset是访问网址？后面的参数，限制每页显示的图书数量，和当前对应的页数
 response_index = requests.get(INDEX_URL, params={
    'limit': 18,
    'offset': 0
 }, headers=headers)
+
 print('Response Status', response_index.status_code)
 print('Response URL', response_index.url)
 print('Response Data', response_index.json())
