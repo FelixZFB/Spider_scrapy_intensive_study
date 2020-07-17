@@ -403,3 +403,82 @@
         - ![查看图片025](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/025_JS混淆库混淆前后的代码对比.png)
         
 - javascript-obfuscator 混淆库使用查看 js-obfuscate 项目
+
+## 4.9 JavaScript 加密
+- JavaScript 加密技术
+    - 不同于 JavaScript 混淆技术，JavaScript 加密技术可以说是对 JavaScript 混淆技术防护的进一步升级，
+    - 其基本思路是将一些核心逻辑使用诸如 C/C++ 语言来编写，并通过 JavaScript 调用执行，从而起到二进制级别的防护作用。
+    - 其加密的方式现在有 Emscripten 和 WebAssembly 等，其中后者越来越成为主流。
+
+- Emscripten
+    - 现在，许多 3D 游戏都是用 C/C++ 语言写的，如果能将 C / C++ 语言编译成 JavaScript 代码，
+    - 它们不就能在浏览器里运行了吗？众所周知，JavaScript 的基本语法与 C 语言高度相似。
+    - 于是，有人开始研究怎么才能实现这个目标，为此专门做了一个编译器项目 Emscripten。
+    - 这个编译器可以将 C / C++ 代码编译成 JavaScript 代码，
+    - 但不是普通的 JavaScript，而是一种叫作 asm.js 的 JavaScript 变体。
+
+    - 因此说，某些 JavaScript 的核心功能可以使用 C/C++ 语言实现，
+    - 然后通过 Emscripten 编译成 asm.js，再由 JavaScript 调用执行，这可以算是一种前端加密技术。
+
+- WebAssembly
+    - 如果你对 JavaScript 比较了解，可能知道还有一种叫作 WebAssembly 的技术，
+    - 也能将 C/C++ 转成 JavaScript 引擎可以运行的代码。那么它与 asm.js 有何区别呢？
+    - 其实两者的功能基本一致，就是转出来的代码不一样：asm.js 是文本，
+    - WebAssembly 是二进制字节码，因此运行速度更快、体积更小。从长远来看，WebAssembly 的前景更光明。
+
+    - WebAssembly 是经过编译器编译之后的字节码，可以从 C/C++ 编译而来，
+    - 得到的字节码具有和 JavaScript 相同的功能，但它体积更小，
+    - 而且在语法上完全脱离 JavaScript，同时具有沙盒化的执行环境。
+    - 利用 WebAssembly 技术，我们可以将一些核心的功能利用 C/C++ 语言实现，形成浏览器字节码的形式。
+    - 这种加密方式更加安全，因为作为二进制编码它能起到的防护效果无疑是更好的。
+    - 如果想要逆向或破解那得需要逆向 WebAssembly，难度也是很大的。
+
+# 5  JavaScript 逆向实战
+- API 接口层有加密，前端 JavaScript 也带有压缩和混淆，其前端压缩打包工具使用了现在流行的 Webpack，
+- 混淆工具是使用了 javascript-obfuscator，这二者结合起来，前端的代码会变得难以阅读和分析。
+
+- 如果我们不使用 Selenium 或 Pyppeteer 等工具来模拟浏览器的形式爬取的话，要想直接从接口层面上获取数据，
+- 基本上需要一点点调试分析 JavaScript 的调用逻辑、堆栈调用关系来弄清楚整个网站加密的实现方法，
+- 我们可以称这个过程叫 JavaScript 逆向。这些接口的加密参数往往都是一些加密算法或编码的组合，
+- 完全搞明白其中的逻辑之后，我们就能把这个算法用 Python 模拟出来，从而实现接口的请求了。
+
+## 5.1 JavaScript 逆向爬取案例1
+- 目标网址：https://dynamic6.scrape.cuiqingcai.com/
+- 网页初步分析：
+    - 分页和详情页多打开几个分析规律：
+    - 进入网页，打开网络，选择XHR(ajax动态请求类型)
+    - 多访问几个分页查看结果，发现每次都是2个请求，一个301请求，一个200请求，301请求重定位到200请求
+    - 每个分页请求和电影详情页面请求的 Ajax 接口的 URL 里面多了一个 token，
+    - 而且不同的页码 token 是不一样的，这个 token 看似是一个 Base64 编码的字符串。
+    - 接口还是有时效性的，如果我们把 Ajax 接口 URL 直接复制下来，短期内是可以访问的，
+    - 但是过段时间之后就无法访问了，会直接返回 401 状态码
+    - - 查看![图片026](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/026_JavaScript逆向实例1_网页源码接口分析1.png)
+    
+    - 分页网页地址：https://dynamic6.scrape.cuiqingcai.com/page/2
+    - 分页动态请求ajax接口：https://dynamic6.scrape.cuiqingcai.com/api/movie/?limit=10&offset=10&token=ZDNkNjY2NGQ5ZmNiNTRhMGNkYTM4ZDY3MzAwMzk3MGQzNmRiMjI1MSwxNTk0OTU1MDQ2
+    - 详情页网页地址：https://dynamic6.scrape.cuiqingcai.com/detail/ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx
+    - 详情页动态请求的ajax接口：https://dynamic6.scrape.cuiqingcai.com/api/movie/ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx/?token=NTk3Nzg0M2MwZjZlOTIyYWIwZDkzNDRlYzE2OGZhN2U0OTVmZjZmMiwxNTk0OTU0Nzg3
+    
+    - 总结下来这个网站就有如下特点：
+        - 列表页的 Ajax 接口参数带有加密的 token；
+        - 详情页的 URL 带有加密 id；
+        - 详情页的 Ajax 接口参数带有加密 id(同一部电影，加密id是保持一致的) 和加密 token
+
+- 爬取思路：
+    - 通过接口的形式来爬取，必须要把这些加密 id 和 token 构造出来才行，而且必须要一步步来，
+    - 首先我们要构造出列表页 Ajax 接口的 token 参数，然后才能获取每部电影的数据信息，
+    - 然后根据数据信息构造出加密 id 和 token。
+    
+    - 加密逻辑一定藏在前端代码中，但前面我们也说了，前端为了保护其接口加密逻辑不被轻易分析出来，
+    - 会采取压缩、混淆的方式来加大分析的难度。
+    
+- 接口深入分析：
+    - 分别查看列表页源码和请求中js文件
+    - 查看![图片027](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/027_JavaScript逆向实例1_网页源码JavaScirpt源码分析.png)
+    
+    - 查看列表页源码，其 JavaScript 文件名带有编码字符、chunk、vendors 等关键字，
+    - 整体就是经过 Webpack 打包压缩后的源代码，目前主流的前端开发，如 Vue.js、React.js 的输出结果都是类似这样的结果。
+    
+    - 查看JavaScript文件源码，开发者工具中打开 Sources 选项卡下的 Page 选项卡，
+    - 然后打开 js 文件夹，这里我们就能看到 JavaScript 的源代码
+    
