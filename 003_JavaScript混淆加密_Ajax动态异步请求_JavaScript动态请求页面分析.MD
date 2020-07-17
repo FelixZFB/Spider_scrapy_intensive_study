@@ -481,4 +481,25 @@
     
     - 查看JavaScript文件源码，开发者工具中打开 Sources 选项卡下的 Page 选项卡，
     - 然后打开 js 文件夹，这里我们就能看到 JavaScript 的源代码
-    
+    - JavaScript源码里面一些变量都是一些十六进制字符串，而且代码全被压缩了。
+    - 全部是混淆后的js代码，没错，我们就是要从这里面找出 token 和 id 的构造逻辑
+
+- 列表页 Ajax 入口寻找
+    - 接下来，我们就开始第一步入口的寻找吧，这里简单介绍两种寻找入口的方式：
+        - 方式1：全局搜索标志字符串；
+        - 方式2：设置 Ajax 断点。
+
+- 方式1：全局搜索标志字符串 (首选方式)
+    - chrome 全局搜索，我们一般搜索关键字
+    - 列表页动态请求ajax接口：https://dynamic6.scrape.cuiqingcai.com/api/movie/?limit=10&offset=10&token=ZDNkNjY2NGQ5ZmNiNTRhMGNkYTM4ZDY3MzAwMzk3MGQzNmRiMjI1MSwxNTk0OTU1MDQ2
+    - limit offset 可以自己构造，关键是找到 token 的构造方式
+    - 全局搜索 token ，搜索结果显示有两个 js 文件里面含有 token 内容，
+    - 查看![图片028](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/028_JavaScript逆向实例1_全局搜索token.png)
+    - 然后，点击开发者工具栏上方，Sources-js文件夹中分别查看每个js文件
+    - 打开js文件，显示一行代码，点击左下方的{}格式化代码，弹出来了一个新的选项卡，
+    - 其名称是 JavaScript 文件名加上了 :formatted，代表格式化后代码结果，在这里我们再次(ctrl + f)定位到 token 观察一下
+    - 两个文件中都有token，但是其中一个token处还有，limit,offset，关键字，放在一个function函数中
+    - 可以初步判定，该函数就是生成token和列表页ajax接口的地方,如果不是的话可以继续搜索其他的文件观察下
+    - 查看![图片029](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/029_JavaScript逆向实例1_js源代码中搜索token.png)
+
+— 方式2：XHR 断点   
