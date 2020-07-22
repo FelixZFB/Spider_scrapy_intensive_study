@@ -455,9 +455,9 @@
     - - 查看![图片026](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/026_JavaScript逆向实例1_网页源码接口分析1.png)
     
     - 分页网页地址：https://dynamic6.scrape.cuiqingcai.com/page/2
-    - 分页动态请求ajax接口：https://dynamic6.scrape.cuiqingcai.com/api/movie/?limit=10&offset=10&token=ZDNkNjY2NGQ5ZmNiNTRhMGNkYTM4ZDY3MzAwMzk3MGQzNmRiMjI1MSwxNTk0OTU1MDQ2
+    - 分页动态请求ajax接口(真实数据接口)：https://dynamic6.scrape.cuiqingcai.com/api/movie/?limit=10&offset=10&token=ZDNkNjY2NGQ5ZmNiNTRhMGNkYTM4ZDY3MzAwMzk3MGQzNmRiMjI1MSwxNTk0OTU1MDQ2
     - 详情页网页地址：https://dynamic6.scrape.cuiqingcai.com/detail/ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx
-    - 详情页动态请求的ajax接口：https://dynamic6.scrape.cuiqingcai.com/api/movie/ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx/?token=NTk3Nzg0M2MwZjZlOTIyYWIwZDkzNDRlYzE2OGZhN2U0OTVmZjZmMiwxNTk0OTU0Nzg3
+    - 详情页动态请求的ajax接口(真实数据接口)：https://dynamic6.scrape.cuiqingcai.com/api/movie/ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx/?token=NTk3Nzg0M2MwZjZlOTIyYWIwZDkzNDRlYzE2OGZhN2U0OTVmZjZmMiwxNTk0OTU0Nzg3
     
     - 总结下来这个网站就有如下特点：
         - 列表页的 Ajax 接口参数带有加密的 token；
@@ -473,7 +473,7 @@
     - 会采取压缩、混淆的方式来加大分析的难度。
     
 - 接口深入分析：
-    - 分别查看列表页源码和请求中js文件
+    - 分别查看列表页源码和网络请求中js文件
     - 查看![图片027](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/027_JavaScript逆向实例1_网页源码JavaScirpt源码分析.png)
     
     - 查看列表页源码，其 JavaScript 文件名带有编码字符、chunk、vendors 等关键字，
@@ -488,6 +488,8 @@
     - 接下来，我们就开始第一步入口的寻找吧，这里简单介绍两种寻找入口的方式：
         - 方式1：全局搜索标志字符串；
         - 方式2：设置 Ajax 断点。
+        - 方式3：Hook 关键函数的方式(后期介绍，查看xxx)
+        - 使用 Chrome 浏览器
 
 - 方式1：全局搜索标志字符串 (首选方式)
     - chrome 全局搜索，我们一般搜索关键字
@@ -503,5 +505,31 @@
     - 查看![图片029](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/029_JavaScript逆向实例1_js源代码中搜索token.png)
 
 — 方式2：XHR 断点   
-    - 
-    -
+    - 上面方式1中， token 字符串并没有被混淆，所以上面的这个方法是奏效的。之前我们也讲过，这种字符串由于非常容易成为找寻入口点的依据，
+    - 所以这样的字符串也会被混淆成类似 Unicode、Base64、RC4 的一些编码形式，这样我们就没法轻松搜索到了
+    - 遇到全局搜索不能查找入口，有一种通过打 XHR 断点的方式来寻找入口。
+    - XHR 断点，顾名思义，就是在发起 XHR 的时候进入断点调试模式，JavaScript 会在发起 Ajax 请求的时候停住，
+    - 页面访问 ajax 接口的瞬间就会暂停一下，这时候我们可以通过当前的调用栈的逻辑顺着找到入口。
+    - 具体方式：
+        - 第一步：
+        - 打开 Chrome 浏览器，访问 https://dynamic6.scrape.cuiqingcai.com/， 多打开几个列表页面
+        - network 下面勾选 xhr 类型，可以观察到列表页的ajax接口，类似如下网址，每个页面 ？后面url参数值不一样
+        - https://dynamic6.scrape.cuiqingcai.com/api/movie/?limit=10&offset=20&token=ZjdiMGYyN2U2MjVhODhhNDIxMjI1YzI3YzExZWY1OTkyOWExYTVjMSwxNTk1Mzg1NjU0
+        - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/030_JavaScript逆向实例1_XHR断点_观察列表页接口.png)
+        - 第二步：
+        - XHR断点打开，在 Sources 选项卡的右侧，XHR/fetch Breakpoints 处添加一个断点选项。点击 + 号，然后输入匹配的 URL 内容。
+        - 添加列表页ajax接口url中有规律的字符串， ajax接口都是.../api/movie/?limit=10... 这样的格式，所这里我们就截取一段填进去就好了，这里填的就是 /api/movie
+        - 然后重新访问 https://dynamic6.scrape.cuiqingcai.com/ ，就会在访问 ajax 接口的瞬间暂停，
+        - 然后格式化代码，就可以看到访问 ajax 接口瞬间的位置，图中可以看到在一个send的位置，这里就是发送 ajax 请求的位置
+        - 但是，到了这里感觉 Ajax 马上就要发出去了，是不是有点太晚了，我们想找的是构造 Ajax 的时刻来分析 Ajax 参数啊！
+        - 第三步：
+        - 不用担心，这里我们通过调用栈就可以找回去。我们点击右侧的 Call Stack，这里记录了 JavaScript 的方法逐层调用过程
+        - Call Stack 下面的列表项，就是逐层调用的方法，我们可以从上往下，一个个点开查看，
+        - 当前指向的是一个名字为 anonymouns，也就是匿名的调用，这个方法对应的就是发送 ajax 请求的send的位置，
+        - 在它的下方就显示了调用这个 anonymouns 的方法，名字叫作 _0x60fefc，
+        - 然后再下一层就又显示了调用 _0x5d7bb0 这个方法的方法，依次类推。
+        - 这里我们可以逐个往下查找，然后通过一些观察看看有没有 token 这样的信息，就能找到对应的位置了，
+        - 最后我们就可以找到 onFetchData 这个方法里面找到了这个 token 的构造逻辑，这样我们也成功找到 token 的参数构造的位置了
+        - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/031_JavaScript逆向实例1_XHR断点_添加断点条件.png)
+        - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/032_JavaScript逆向实例1_XHR断点_断点位置_ajax访问瞬间.png)
+        - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/033_JavaScript逆向实例1_XHR断点_逐层查找ajax接口构造位置.png)
