@@ -442,7 +442,7 @@
 - 我们可以称这个过程叫 JavaScript 逆向。这些接口的加密参数往往都是一些加密算法或编码的组合，
 - 完全搞明白其中的逻辑之后，我们就能把这个算法用 Python 模拟出来，从而实现接口的请求了。
 
-## 5.1 JavaScript 逆向爬取案例1
+## 5.1 JavaScript 逆向爬取案例
 - 目标网址：https://dynamic6.scrape.cuiqingcai.com/
 - 网页初步分析：
     - 分页和详情页多打开几个分析规律：
@@ -484,6 +484,8 @@
     - JavaScript源码里面一些变量都是一些十六进制字符串，而且代码全被压缩了。
     - 全部是混淆后的js代码，没错，我们就是要从这里面找出 token 和 id 的构造逻辑
 
+
+### 5.1.1 列表页接口逆向分析
 - 列表页 Ajax 入口寻找
     - 接下来，我们就开始第一步入口的寻找吧，这里简单介绍两种寻找入口的方式：
         - 方式1：全局搜索标志字符串；
@@ -533,3 +535,45 @@
         - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/031_JavaScript逆向实例1_XHR断点_添加断点条件.png)
         - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/032_JavaScript逆向实例1_XHR断点_断点位置_ajax访问瞬间.png)
         - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/033_JavaScript逆向实例1_XHR断点_逐层查找ajax接口构造位置.png)
+
+- 列表页接口构造逻辑分析 (token值构造逻辑)
+    - 上面采用方式1或者方式2我们已经找到 token 的所在的位置了，可以观察一下这个 token 对应的变量叫作 _0x39f52，
+    - 关键就是要找这个变量是哪里来的了。打个断点看下这个变量是在哪里生成的就好了，
+    - 我们在定义变量 _0x39f52 对应的169行前面点击一下打一个断点，
+    - 刚才 XHR/fetch Breakpoints 处的 XHR 断点 /api/movie 先取消掉
+    - 此时重新刷新网页，url 地址栏重新点击一下刷新，此时网页停留在刚刚打的断点位置,具体如下：
+    - token值对应的变量 var _0x39f52 = Object(_0x376c60['a'])(this['$store']['state']['url']['index']);_0x39f52 = Object(_0x376c60['a'])(this['$store']['state']['url']['index']);
+    - 查看![图片034](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/034_JavaScript逆向实例1_XHR断点_ajax接口token参数查找.png)
+    - 此时我们移动鼠标到 _0x39f52 上显示出来的就是具体的token对应的值，一个加密的字符串
+    - 移动鼠标到 _0x376c60 和 this 上面会显示该值具体的内容
+    - 查看具体的内容，也可以右侧 watch 点击 + 号，将 _0x376c60 和 this 直接复制添加
+    - 鼠标复制 this['$store']['state']['url']['index'] 悬浮窗就会显示对应的值：/api/movie
+    - 或者复制 this['$store']['state']['url']['index'] watch添加后也会显示对应的值：/api/movie
+    - 查看![图片035](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/035_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
+    - 观察可以发现 _0x376c60 是一个 Object 对象，它有个 a 属性，其值是一个 function函数：ƒ _0x31b852()
+    - 然后 this['$store']['state']['url']['index'] 的值其实就是 /api/movie，就是 Ajax 请求 URL 的 Path。
+    - token 值对应的变量 _0x39f52 的属性值就是调用了上面这个 function 函数，然后传入了 /api/movie 得到的。
+    - 查看![图片036](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/036_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
+    
+    - 经过上面分析，已经发现token值是有一个function函数生成的，下一步就是去寻找这个 function 在哪里了，
+    - 我们可以把 Watch 面板的 _0x376c60 展开，展开列表里面会显示一个 FunctionLocation，就是这个 function 的代码位置
+    - 点击对应的位置进入之后发现其仍然是未格式化的代码，再次点击 {} 格式化代码。
+    - 查看![图片037](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/037_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
+    - 这时候我们就进入了一个新的名字为 _0x31b852 的方法里面，这个方法里面应该就是 token 的生成逻辑了，
+    - 我们再function函数这里打上断点，然后执行面板右上角蓝色箭头状的 Resume 按钮, 调试到该函数执行位置
+    - 查看![图片037](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/038_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
+    - function 函数具体如下：
+```javascript
+ function _0x31b852() {
+            for (var _0x320ba5 = Math['round'](new Date()['getTime']() / 0x3e8)['toString'](), _0x1c2e1a = arguments['length'], _0x4fef38 = new Array(_0x1c2e1a), _0x2bf388 = 0x0; _0x2bf388 < _0x1c2e1a; _0x2bf388++)
+                _0x4fef38[_0x2bf388] = arguments[_0x2bf388];
+            _0x4fef38['push'](_0x320ba5);
+            var _0x216573 = _0x39d65d['SHA1'](_0x4fef38['join'](','))['toString'](_0x39d65d['enc']['Hex'])
+              , _0x322162 = [_0x216573, _0x320ba5]['join'](',')
+              , _0x93d0aa = _0x3fc8fd['encode'](_0x322162);
+            return _0x93d0aa;
+        }
+```
+
+
+### 5.1.2 详情页接口逆向分析
