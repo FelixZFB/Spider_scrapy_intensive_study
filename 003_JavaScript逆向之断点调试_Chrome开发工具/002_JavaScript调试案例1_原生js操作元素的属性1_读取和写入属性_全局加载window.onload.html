@@ -30,16 +30,30 @@
             // 修改链接属性，修改鼠标放置后显示的提示内容
             oLink.href = 'http://www.baidu.com';
             oLink.title = '点击跳转到百度首页';
+        };
 
+
+        /*定义一个函数，该函数要放在window.onload外面，具体参考Web_front_and_end里面06_原生js中window.onload说明*/
+        /*函数放在里面会无效，HTML执行到onclick时候，点击时候就会寻找该函数，但是放在window.onload，其实还没有加载，点击就会无效*/
+        /*函数名称匈牙利命名法，前面加个fn*/
+        function fnChange(){
+            /*获取元素*/
+            var oDiv = document.getElementById('div3');
+            /*修改样式*/
+            oDiv.style.color = 'blue';
+            oDiv.style.fontSize = '32px';
         }
-
-
 
     </script>
 </head>
 <body>
-    <div id="div1">这是一个div元素</div>
+    <div id="div1">这是一个div1元素</div>
     <a href="#" id="link">这是一个连接</a>
-    <div class="box" id="div2">这是第二个div元素</div>
+    <div class="box" id="div2">这是第二个div2元素</div>
+
+    <!--函数调用：使用onclick，页面点击响应内容，函数就会被调用-->
+    <div id="div3">这是一个div3元素</div>
+    <!--插入一个按钮，用来调用函数-->
+    <input type="button" name="" value="点击改变div3的样式" onclick="fnChange()">
 </body>
 </html>
