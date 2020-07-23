@@ -560,20 +560,23 @@
     - 点击对应的位置进入之后发现其仍然是未格式化的代码，再次点击 {} 格式化代码。
     - 查看![图片037](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/037_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
     - 这时候我们就进入了一个新的名字为 _0x31b852 的方法里面，这个方法里面应该就是 token 的生成逻辑了，
-    - 我们再function函数这里打上断点，然后执行面板右上角蓝色箭头状的 Resume 按钮, 调试到该函数执行位置
-    - 查看![图片037](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/038_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
+    - 我们再function函数这里打上断点，断点打的位置是function下一行1588行，第一个红点就是函数执行的第一个断点
+    - 函数里面功能依次执行，后面都会自动打上浅蓝色断点
+    - 然后执行面板右上角蓝色箭头状的 Resume 按钮, 调试到该函数执行位置
+    - 查看![图片038](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/038_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
     - function 函数具体如下：
 ```javascript
- function _0x31b852() {
-            for (var _0x320ba5 = Math['round'](new Date()['getTime']() / 0x3e8)['toString'](), _0x1c2e1a = arguments['length'], _0x4fef38 = new Array(_0x1c2e1a), _0x2bf388 = 0x0; _0x2bf388 < _0x1c2e1a; _0x2bf388++)
-                _0x4fef38[_0x2bf388] = arguments[_0x2bf388];
-            _0x4fef38['push'](_0x320ba5);
-            var _0x216573 = _0x39d65d['SHA1'](_0x4fef38['join'](','))['toString'](_0x39d65d['enc']['Hex'])
-              , _0x322162 = [_0x216573, _0x320ba5]['join'](',')
-              , _0x93d0aa = _0x3fc8fd['encode'](_0x322162);
-            return _0x93d0aa;
-        }
+function _0x31b852() {
+        for (var _0x320ba5 = Math['round'](new Date()['getTime']() / 0x3e8)['toString'](), _0x1c2e1a = arguments['length'], _0x4fef38 = new Array(_0x1c2e1a), _0x2bf388 = 0x0; _0x2bf388 < _0x1c2e1a; _0x2bf388++)
+            _0x4fef38[_0x2bf388] = arguments[_0x2bf388];
+        _0x4fef38['push'](_0x320ba5);
+        var _0x216573 = _0x39d65d['SHA1'](_0x4fef38['join'](','))['toString'](_0x39d65d['enc']['Hex'])
+          , _0x322162 = [_0x216573, _0x320ba5]['join'](',')
+          , _0x93d0aa = _0x3fc8fd['encode'](_0x322162);
+        return _0x93d0aa;
+    }
 ```
+
 
 
 ### 5.1.2 详情页接口逆向分析
