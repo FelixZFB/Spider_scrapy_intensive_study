@@ -38,7 +38,13 @@
             - 在Sources面板右侧，找到XHR/Fetch BreakPoints ，右侧有个加号，点击添加需要捕获的URL即可
             - 一般是捕获URL中的每一个参数作为条件，比如图片001中就是捕获URL中的 /api/movie
     - DOM BreakPoints
-        - DOM断点：dom断点是监听dom元素发生变化时所触发的中断，对页面特效的追踪很有效果
+        - DOM（Document Object Model 文档对象模型的缩写， 
+            - 核心 DOM ：针对任何结构化文档的标准模型
+            - XML DOM ：针对 XML 文档的标准模型
+            - HTML DOM ： 针对 HTML 文档的标准模型
+            - DOM 定义了所有 XML/HTML 元素的对象和属性，以及访问它们的方法。
+            - 换言之，XML/HTML DOM 是关于如何获取、修改、添加或删除 HTML 元素的标准
+        - DOM 断点：dom断点是监听dom元素发生变化时所触发的中断，对页面特效的追踪很有效果
         - dom断点是监听dom元素发生变化时所触发的中断，对页面特效的追踪很有效果
         - 它支持的几种断点类型：
             - subtree modifications: 删除添加编辑当前所选节点的子节点内容时触发断点，更改属性不会触发

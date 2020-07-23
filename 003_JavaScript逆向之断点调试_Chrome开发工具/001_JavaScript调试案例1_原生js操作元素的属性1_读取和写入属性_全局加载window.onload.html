@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+
+        // window.onload表示全局加载完成后再执行window.onload里面的js代码
+        // onload标签和标签里面数据都加载完毕(类似于网页渲染)才开始运行内部函数
+        // 主要问题是代码从上往下执行，HTML代码还没有加载，document.getElementById获取元素获取不到
+        window.onload = function () {
+            var oDiv1 = document.getElementById('div1');
+            var oLink = document.getElementById('link');
+
+            /*读取元素的属性,赋值给变量,然后弹出*/
+            var sId = oDiv1.id;
+            alert(sId);
+
+            var sLink = oLink.id;
+            alert(sLink);
+
+            /*写入元素的属性*/
+            /*写入属性，网页上查看源代码，代码和下面的原始html代码相比已经发生了变化*/
+            // 打开网页，弹出窗口，网页开始字体不是红色，弹出窗口确定后，网页文字才进行了修改
+            // 因为代码是先加载下面的整个html文档，然后执行window.onload里面的语句
+            // js动态加载会将下面的body里面的原始HTML代码进行修改
+            oDiv1.style.color = 'red';
+            oDiv1.style.fontSize = '32px';
+
+            // 修改链接属性，修改鼠标放置后显示的提示内容
+            oLink.href = 'http://www.baidu.com';
+            oLink.title = '点击跳转到百度首页';
+
+        }
+
+
+
+    </script>
+</head>
+<body>
+    <div id="div1">这是一个div元素</div>
+    <a href="#" id="link">这是一个连接</a>
+    <div class="box" id="div2">这是第二个div元素</div>
+</body>
+</html>
