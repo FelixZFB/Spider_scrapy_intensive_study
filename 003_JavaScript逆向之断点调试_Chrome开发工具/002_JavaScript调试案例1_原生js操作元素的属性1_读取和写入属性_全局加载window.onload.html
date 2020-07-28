@@ -44,16 +44,36 @@
             oDiv.style.fontSize = '32px';
         }
 
+        function fnChange1(){
+            /*获取元素*/
+            var oDiv = document.getElementById('div4');
+            /*修改样式*/
+            oDiv.style.color = 'green';
+            oDiv.style.fontSize = '32px';
+        }
+
+
+
+
+
     </script>
 </head>
 <body>
     <div id="div1">这是一个div1元素</div>
     <a href="#" id="link">这是一个连接</a>
     <div class="box" id="div2">这是第二个div2元素</div>
+    <br>
 
     <!--函数调用：使用onclick，页面点击响应内容，函数就会被调用-->
     <div id="div3">这是一个div3元素</div>
     <!--插入一个按钮，用来调用函数-->
     <input type="button" name="" value="点击改变div3的样式" onclick="fnChange()">
+    <br>
+    <br>
+
+    <!--函数调用：使用onclick，页面点击响应内容，函数就会被调用-->
+    <div id="div4">这是一个div4元素</div>
+    <!--插入一个按钮，用来调用函数-->
+    <input type="button" name="" value="点击改变div4的样式" onclick="fnChange1()">
 </body>
 </html>
