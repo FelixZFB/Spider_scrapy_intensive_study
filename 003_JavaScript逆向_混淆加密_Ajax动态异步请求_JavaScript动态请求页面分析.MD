@@ -520,7 +520,8 @@
         - 查看![图片030](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/030_JavaScript逆向实例1_XHR断点_观察列表页接口.png)
         - 第二步：
         - XHR断点打开，在 Sources 选项卡的右侧，XHR/fetch Breakpoints 处添加一个断点选项。点击 + 号，然后输入匹配的 URL 内容。
-        - 添加列表页ajax接口url中有规律的字符串， ajax接口都是.../api/movie/?limit=10... 这样的格式，所这里我们就截取一段填进去就好了，这里填的就是 /api/movie
+        - 添加列表页ajax接口url中有规律的字符串， ajax接口都是.../api/movie/?limit=10... 这样的格式，
+        - 所这里我们就截取一段填进去就好了，这里填的就是 /api/movie
         - 然后重新访问 https://dynamic6.scrape.cuiqingcai.com/ ，就会在访问 ajax 接口的瞬间暂停，
         - 然后格式化代码，就可以看到访问 ajax 接口瞬间的位置，图中可以看到在一个send的位置，这里就是发送 ajax 请求的位置
         - 但是，到了这里感觉 Ajax 马上就要发出去了，是不是有点太晚了，我们想找的是构造 Ajax 的时刻来分析 Ajax 参数啊！
@@ -550,7 +551,7 @@
     - 鼠标复制 this['$store']['state']['url']['index'] 悬浮窗就会显示对应的值：/api/movie
     - 或者复制 this['$store']['state']['url']['index'] watch添加后也会显示对应的值：/api/movie
     - 查看![图片035](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/035_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
-    - 观察可以发现 _0x376c60 是一个 Object 对象，它有个 a 属性，其值是一个 function函数：ƒ _0x31b852()
+    - 观察可以发现 _0x376c60 是一个 Object 对象，它有个 a 属性，其值(鼠标放在_0x376c60或者复制后添加到watch栏)是一个 function函数：ƒ _0x31b852()
     - 然后 this['$store']['state']['url']['index'] 的值其实就是 /api/movie，就是 Ajax 请求 URL 的 Path。
     - token 值对应的变量 _0x39f52 的属性值就是调用了上面这个 function 函数，然后传入了 /api/movie 得到的。
     - 查看![图片036](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/036_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
@@ -562,7 +563,7 @@
     - 这时候我们就进入了一个新的名字为 _0x31b852 的方法里面，这个方法里面应该就是 token 的生成逻辑了，
     - 我们再function函数这里打上断点，断点打的位置是function下一行1588行，第一个红点就是函数执行的第一个断点
     - 函数里面功能依次执行，后面都会自动打上浅蓝色断点
-    - 然后执行面板右上角蓝色箭头状的 Resume 按钮, 调试到该函数执行位置
+    - 然后执行面板右上角蓝色箭头状暂停继续的 Resume 按钮, 调试到该函数执行位置
     - 查看![图片038](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/038_JavaScript逆向实例1_XHR断点_ajax接口token构造逻辑分析.png)
     - function 函数具体如下：
 ```javascript
