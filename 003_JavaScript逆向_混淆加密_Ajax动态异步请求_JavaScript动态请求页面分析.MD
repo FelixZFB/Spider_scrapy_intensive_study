@@ -607,6 +607,20 @@ function _0x31b852() {
         - 2d7d4319d42c7187b5a1b8a33c069c79ae6053bf,1596078581
     - 将拼接后的结果进行 Base64 编码。
         - MmQ3ZDQzMTlkNDJjNzE4N2I1YTFiOGEzM2MwNjljNzlhZTYwNTNiZiwxNTk2MDc4NTgx
+- Python 实现逻辑查看 040_JavaScript逆向_列表页获取_构造逻辑破解
 
 
 ### 5.1.2 详情页接口逆向分析
+- 我们查看列表页返回结果：
+    - 方式1：Chrome浏览器里面查看ajax动态请求的response
+    - 方式2：上面040已经模拟了ajax请求，直接打印输出查看
+- 我们在第一页观察elements里面已经有了电影详情页地址，说明获取列表页时候，详情页地址也已经请求获取了
+    - 网址都是https://dynamic6.scrape.cuiqingcai.com/detail/ 加上一个字符串
+    - ID 1 第一部电影：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIx
+    - ID 2 第二部电影：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIy
+    - ID 3 第三部电影：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWIz
+    - ID 4          ：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWI0
+    - ID 5          ：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWI1
+    - 看似有规律，就是末尾字符串不同，但是去查看第二个、第三个列表页，规律发生了变化，并没有和第一页规律一致
+    
+    
