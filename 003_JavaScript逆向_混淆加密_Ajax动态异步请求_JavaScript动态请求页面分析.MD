@@ -490,7 +490,7 @@
     - 接下来，我们就开始第一步入口的寻找吧，这里简单介绍两种寻找入口的方式：
         - 方式1：全局搜索标志字符串；
         - 方式2：设置 Ajax 断点。
-        - 方式3：Hook 关键函数的方式(后期介绍，查看xxx)
+        - 方式3：Hook 关键函数的方式(后期介绍，查看5.1.2)
         - 使用 Chrome 浏览器
 
 - 方式1：全局搜索标志字符串 (首选方式)
@@ -504,6 +504,7 @@
     - 其名称是 JavaScript 文件名加上了 :formatted，代表格式化后代码结果，在这里我们再次(ctrl + f)定位到 token 观察一下
     - 两个文件中都有token，但是其中一个token处还有，limit,offset，关键字，放在一个function函数中
     - 可以初步判定，该函数就是生成token和列表页ajax接口的地方,如果不是的话可以继续搜索其他的文件观察下
+    - 此时就找到了token构造的位置，然后接下来就可以分析具体的function函数
     - 查看![图片029](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/029_JavaScript逆向实例1_js源代码中搜索token.png)
 
 — 方式2：XHR 断点   
@@ -546,7 +547,7 @@
     - token值对应的变量 var _0x39f52 = Object(_0x376c60['a'])(this['$store']['state']['url']['index']);_0x39f52 = Object(_0x376c60['a'])(this['$store']['state']['url']['index']);
     - 查看![图片034](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/034_JavaScript逆向实例1_XHR断点_ajax接口token参数查找.png)
     - 此时我们移动鼠标到 _0x39f52 上显示出来的就是具体的token对应的值，一个加密的字符串
-    - token 值是由 _0x376c60['a'] 对应一个函数和 /api/movie 一起生成的
+    - token 值是由 _0x376c60['a'] 对应一个函数(变量_0x376c60属性a对应一个function函数)和 /api/movie 一起生成的
     - 移动鼠标到 _0x376c60 和 this 上面会显示该值具体的内容
     - 查看具体的内容，也可以右侧 watch 点击 + 号，将 _0x376c60 和 this 直接复制添加
     - 鼠标复制 this['$store']['state']['url']['index'] 悬浮窗就会显示对应的值：/api/movie
@@ -622,5 +623,14 @@ function _0x31b852() {
     - ID 4          ：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWI0
     - ID 5          ：ZWYzNCN0ZXVxMGJ0dWEjKC01N3cxcTVvNS0takA5OHh5Z2ltbHlmeHMqLSFpLTAtbWI1
     - 看似有规律，就是末尾字符串不同，但是去查看第二个、第三个列表页，规律发生了变化，并没有和第一页规律一致
+    
+- 每个详情页唯一不同就是带了一个加密的ID,我们去查看该ID是什么时候生生成的？
+    - 看看页面elements，可以看到在没有点击之前，详情页链接的 href 里面就已经带有加密 id 了
+    - 可以确定，这个加密 id 是在列表页 Ajax 请求完成之后生成的，而且肯定也是由 JavaScript 生成的了。
+
+- 加密ID是如何生成的？
+    - 由于详情页URL除了ID不同，就是相同的，并且ID是在列表页请求时候就生成了
+    - 列表页URL地址有一定规律，含有标志性字符串，可以使用全局搜索或者XHR断点方式查找网址构造逻辑
+    - 详情页并不能采用像列表页一样使用断点调试去找ID生成位置，过程太繁琐复杂，不一定找的到。
     
     
