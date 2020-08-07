@@ -776,4 +776,57 @@ B = funB()
 
 ### 5.1.2.3 Tampermonkey 注入   
 - Tampermonkey 油猴注入
-如果我们不想用 Overrides 的方式改写 JavaScript 的方式注入的话，还可以借助于浏览器插件来实现注入，这里推荐的浏览器插件叫作 Tampermonkey，中文叫作“油猴”。它是一款浏览器插件，支持 Chrome。利用它我们可以在浏览器加载页面时自动执行某些 JavaScript 脚本。由于执行的是 JavaScript，所以我们几乎可以在网页中完成任何我们想实现的效果，如自动爬虫、自动修改页面、自动响应事件等等。
+    - 如果我们不想用 Overrides 的方式改写 JavaScript 的方式注入的话，还可以借助于浏览器插件来实现注入，
+    - 这里推荐的浏览器插件叫作 Tampermonkey，中文叫作“油猴”。它是一款浏览器插件，支持 Chrome。
+    - 利用它我们可以在浏览器加载页面时自动执行某些 JavaScript 脚本。
+    - 由于执行的是 JavaScript，所以我们几乎可以在网页中完成任何我们想实现的效果，
+    - 如自动爬虫、自动修改页面、自动响应事件等等。
+    - 可以管理网上下载的一些脚本
+
+- 安装Tampermonkey插件
+    - 官网下载：https://www.tampermonkey.net/
+    - 脚本管理器：https://greasyfork.org/zh-CN
+    - 一些使用的三方脚本网站：https://greasyfork.org/zh-CN/scripts
+    - 网络问题，会安装失败，进入第三方地址下载解压得到crx文件安装
+    - 下载地址：http://www.pc6.com/soft/FireFox_247376.html
+    - 下载解压后，Chrome进入更多工具-扩展程序界面，将crx文件拖入即可安装
+    - 查看![图片043](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/043_JavaScript逆向实例1_Hook钩子方法_代码注入_tampermonkey油猴js脚本管理器安装.png)
+    - 然后点击右上角，扩展程序，点击tampermonkey后面的固定，固定在工具栏
+    - 安装完成之后，在 Chrome 浏览器的右上角会出现 Tampermonkey 的图标
+    
+- 使用 Tampermonkey插件
+    - 点击 Tampermonkey 插件图标，点击“管理面板”按钮，打开脚本管理页面
+    - 显示了我们已经有的一些 Tampermonkey 脚本，包括我们自行创建的，也包括从第三方网站下载安装的
+    - 编辑、调试、删除等管理功能，我们可以方便地对脚本进行管理。
+    - 接下来我们来创建一个新的脚本来试试，点击左侧的“+”号
+    - 会出来一个初始化文件脚本,版本不同可能注释内容有区别
+```javascript
+// ==UserScript==
+// @name         New Userscript
+// @namespace   http://tampermonkey.net/
+// @version     0.1
+// @description try to take over the world!
+// @author       You
+// @match       https://www.tampermonkey.net/documentation.php?ext=dhdg
+// @grant       none
+// ==/UserScript==
+
+(function() {
+   'use strict';
+
+   // Your code here...
+})();
+```
+- 最上面是一些注释，但这些注释是非常有用的，这部分内容叫作 UserScript Header ，
+- 我们可以在里面配置一些脚本的信息，如名称、版本、描述、生效站点等等。
+- 在 UserScript Header 下方是 JavaScript 函数和调用的代码，
+- 其中 use strict 标明代码使用 JavaScript 的严格模式，
+- 在严格模式下可以消除 Javascript 语法的一些不合理、不严谨之处，减少一些怪异行为，
+- 如不能直接使用未声明的变量，这样可以保证代码的运行安全，
+- 同时提高编译器的效率，提高运行速度。
+- 在下方 // Your code here... 这里我们就可以编写自己的代码了。
+
+- 我们将上面 hook 后的 btoa 代码复制进去，然后保存
+- 重新访问目标网址：https://dynamic6.scrape.cuiqingcai.com/
+- 进入开发者工具，然后刷新页面，就会停留在脚本的debugger位置
+- 然后就可以点击调试工具栏继续按钮，调试断点运行
