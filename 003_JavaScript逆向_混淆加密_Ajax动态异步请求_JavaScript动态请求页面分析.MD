@@ -713,8 +713,8 @@ B = funB()
 - Hook 注入代码的三种方式：
     - 上面已经 hook 了 btoa 方法，接下来就是注入代码，三种注入方法：
     - 直接控制台注入；
-    - 复写 JavaScript 代码；
-    - Tampermonkey 注入。
+    - 重写 JavaScript 代码；
+    - Tampermonkey 油猴注入。
 
 - Hook 注入代码方法1：控制台注入
     - 直接复制上面代码到Chrome的console控制台，然后enter执行，执行完这段代码之后
@@ -757,7 +757,23 @@ B = funB()
 ### 5.1.2.2 重写 JavaScript
 - Hook 注入代码方法2：
 - 重写 JavaScript
-    - 我们可以借助于 Chrome 浏览器的 Overrides 功能实现某些 JavaScript 文件的重写和保存，
+    - 我们可以借助于 Chrome 浏览器的 Overrides (重写)功能实现某些 JavaScript 文件的重写和保存，
     - 它会在本地生成一个 JavaScript 文件副本，以后每次刷新的时候会使用副本的内容。
     - 这里我们需要切换到 Sources 选项卡的 Overrides 选项卡，
-    - 然后选择一个文件夹，比如这里我自定了一个文件夹名字叫作 modify
+    - 然后选择一个文件夹，比如这里进入项目文件里面新建了一个文件夹名字叫作 modify 
+    - 然后切换到Sources-Page-js文件夹中，随便选择一个js文件脚本，后面贴上上面 Hook 后的 btoa 代码
+    - 查看![图片042](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/042_JavaScript逆向实例1_Hook钩子方法_代码注入_重写JavaScript1.png)
+    - 注意：修改代码不要格式化代码，直接原始js文件，先end 到结尾 然后换行空一行，粘贴代码，末尾可以添加上 ； 号，添加多个需要加上。
+    - 右键刚刚修改的js文件名称，保存到上面新建的modify文件夹中
+    - 此时可能提示页面崩溃，但是不用担心，重新刷新页面就好了，这时候我们就发现现在浏览器加载的 JavaScript 文件就是我们修改过后的了，文件的下方会有一个标识符，蓝色小点
+    - 然后点击调试继续按钮，没执行到 btoa 方法就暂停一下，我们进入控制台console里面查看
+    - 查看![图片042](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/042_JavaScript逆向实例1_Hook钩子方法_代码注入_重写JavaScript2.png) 
+    - 最先执行了 列表页 的token加密，然后就是详情页id加密，elements里面详情页ID出现了两次，执行了两次
+    - 查看![图片042](003_JavaScript混淆加密_Ajax动态请求_哔哩哔哩JS动态请求分析提取/042_JavaScript逆向实例1_Hook钩子方法_代码注入_重写JavaScript3.png) 
+    
+    - 其实 Overrides 的这个功能非常有用，我们保存了修改后文件到本地，有了它我们可以持久化保存我们任意修改的 JavaScript 代码，
+    - 所以我们想在哪里改都可以了，甚至可以直接修改 JavaScript 的原始执行逻辑也都可以的
+
+### 5.1.2.3 Tampermonkey 注入   
+- Tampermonkey 油猴注入
+如果我们不想用 Overrides 的方式改写 JavaScript 的方式注入的话，还可以借助于浏览器插件来实现注入，这里推荐的浏览器插件叫作 Tampermonkey，中文叫作“油猴”。它是一款浏览器插件，支持 Chrome。利用它我们可以在浏览器加载页面时自动执行某些 JavaScript 脚本。由于执行的是 JavaScript，所以我们几乎可以在网页中完成任何我们想实现的效果，如自动爬虫、自动修改页面、自动响应事件等等。
