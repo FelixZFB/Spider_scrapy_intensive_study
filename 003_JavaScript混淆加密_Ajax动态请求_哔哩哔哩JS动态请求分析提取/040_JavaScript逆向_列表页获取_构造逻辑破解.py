@@ -53,7 +53,7 @@ print('*' * 100 )
 result = response.json()
 # 每部电影放在result里面的results里面，results是一个列表，里面的每部电影是一个字典，参考图片039
 for item in result['results']:
-    # 电影的id
+    # 电影的id，json返回内容里面有电影ID
     id = item['id']
     # 加密后的id，就是初始固定字符串拼接电影ID（转变为字符串后再拼接）然后base64编码
     encrypt_id = base64.b64encode((SECRET + str(id)).encode('utf-8')).decode('utf-8')
