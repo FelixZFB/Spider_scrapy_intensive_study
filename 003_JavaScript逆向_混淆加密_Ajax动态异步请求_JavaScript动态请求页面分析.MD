@@ -774,7 +774,7 @@ B = funB()
     - 其实 Overrides 的这个功能非常有用，我们保存了修改后文件到本地，有了它我们可以持久化保存我们任意修改的 JavaScript 代码，
     - 所以我们想在哪里改都可以了，甚至可以直接修改 JavaScript 的原始执行逻辑也都可以的
 
-### 5.1.2.3 Tampermonkey 注入   
+### 5.1.2.3 Tampermonkey 油猴插件注入   
 - Tampermonkey 油猴注入
     - 如果我们不想用 Overrides 的方式改写 JavaScript 的方式注入的话，还可以借助于浏览器插件来实现注入，
     - 这里推荐的浏览器插件叫作 Tampermonkey，中文叫作“油猴”。它是一款浏览器插件，支持 Chrome。
