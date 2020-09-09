@@ -1,0 +1,49 @@
+Metadata-Version: 2.1
+Name: lxml-stubs
+Version: 0.1.1
+Summary: Type annotations for the lxml package
+Home-page: UNKNOWN
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: Apache Software License
+Description-Content-Type: text/markdown
+Provides-Extra: test
+Requires-Dist: pytest (>=6.0.0) ; extra == 'test'
+Requires-Dist: pytest-mypy-plugins (==1.4.0) ; extra == 'test'
+Requires-Dist: coverage[toml] (==5.2) ; extra == 'test'
+
+# lxml-stubs
+
+## About
+This repository contains external type annotations (see
+[PEP 484](https://www.python.org/dev/peps/pep-0484/)) for the
+[lxml](http://lxml.de/) package.
+
+
+## Installation
+To use these stubs with [mypy](https://github.com/python/mypy), you have to
+install the `lxml-stubs` package.
+
+    pip install lxml-stubs
+
+
+## Contributing
+Contributions should follow the same style guidelines as
+[typeshed](https://github.com/python/typeshed/blob/master/CONTRIBUTING.md).
+
+
+## History
+These type annotations were initially included included in
+[typeshed](https://www.github.com/python/typeshed), but lxml's annotations
+were found to be frequently problematic and have therefore been deleted from
+typeshed.
+
+The code was extracted by Jelle Zijlstra from the original typeshed codebase
+and moved to a separate repository using `git filter-branch`.
+
+
+## Authors
+Numerous people have contributed to the lxml stubs; see the git history for
+details.
+
+
