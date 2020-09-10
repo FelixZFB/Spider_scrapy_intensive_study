@@ -14,6 +14,8 @@ Desc:
 import re
 from lxml.html import HtmlElement, fromstring
 
+# 将 html 里面的字符转化成 lxml 里面的 HtmlElement 对象
+# element 对象其实就是整个网页对应的 HtmlElement 对象，其根节点就是 html
 html = open('sample.html', encoding='utf-8').read()
 element = fromstring(html=html)
 
@@ -94,4 +96,6 @@ print(extract_by_regex(element))
 
 # 最后我们将提取方法定义为下面方法，先使用meta方法提取，然后再使用正则
 def extract_publish_date(element):
-    extract_by_meta(element) or extract_by_regex(element)
+    return extract_by_meta(element) or extract_by_regex(element)
+
+print(extract_publish_date(element))
