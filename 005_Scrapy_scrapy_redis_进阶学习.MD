@@ -1,9 +1,13 @@
 #### Scrapy 入门基础参考 Spider_devlopment_study_note中的md笔记和相关项目
 #### Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note中
 #### ch12 cnblog爬虫(基础爬虫)、sht爬虫(redis爬虫，redis过滤)  
-#### ch17：yunqi爬取(crawl规则爬虫)
+#### ch17：yunqi爬虫(crawl规则爬虫)
 #### TZKT_Study_Note项目中多有个requests和scrapy爬虫实例
-#### P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
+#### P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
+
+
+# 学习视频：传智播客15期 20 爬虫scrapy框架及案例
+# 以下笔记为视频学习笔记
 
 # 1. Scrapy介绍
 - 通用爬虫流程
