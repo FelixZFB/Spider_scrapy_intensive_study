@@ -322,7 +322,7 @@
 
 
 - 进入容器的 mongo 和 redis 数据库
-    - mongo 和 redis 服务都是已经启动的，进入容器终端后只需执行客户端命令即可
+    - 保证 mongo 和 redis 服务都是已经启动的，进入容器终端后只需执行客户端命令即可
     
     - 进入容器的 mongo 数据库：
         - 进入 docker-compose 下面的容器

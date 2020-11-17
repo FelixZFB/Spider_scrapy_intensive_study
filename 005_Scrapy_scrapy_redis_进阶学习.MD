@@ -130,7 +130,7 @@
     - scrapy startproject xxx
 - 创建爬虫
     - cd 项目目录下
-    - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接自定义）
+    - scrapy genspider xxx allowed_domains（该步命令也可以直接进入spider的py文件直接手动书写）
     - scrapy genspider –t crawl xxx allowed_domains  
         - 上面默认继承的是scrapy.Spider类，此处生成scrapy.spiders.CrawlSpider规则爬虫
         - 例如：
