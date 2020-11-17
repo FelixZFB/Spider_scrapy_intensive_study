@@ -234,13 +234,13 @@
     
     
 ## 4.2 Crawlab上传运行爬虫项目实例
-## 4.2.1 requests 普通爬虫 (不推荐)
+## 4.2.1 requests 普通爬虫 (不推荐使用crawlab管理，功能很多不适配)
 - 参考文档：
     - [自定义爬虫-使用CLI命令行工具上传爬虫](https://docs.crawlab.cn/Spider/CustomizedSpider.html)
     - [可配置爬虫--功能是基于scrapy的](https://docs.crawlab.cn/Spider/ConfigurableSpider.html) 
 - 不推荐，不做详细介绍
 
-## 4.2.2 scrapy 爬虫 (推荐)
+## 4.2.2 scrapy 爬虫 (推荐使用crawlab管理，可以管理多个scrapy爬虫)
 
 - 使用007_Crawlab爬虫管理平台下面的tieba爬虫
 - 该爬虫本来是本地运行，要想集成到crawlab中去，需要作以下修改：
