@@ -6,8 +6,8 @@
 #### P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
 
 
-# 学习视频：传智播客15期 20 爬虫scrapy框架及案例
-# 以下笔记为视频学习笔记
+# 学习视频来源：传智播客15期 20 爬虫scrapy框架及案例
+# 以下以上视频学习笔记
 
 # 1. Scrapy介绍
 - 通用爬虫流程
@@ -161,7 +161,7 @@
     - scrapy crawl XX（运行XXX爬虫）
     - scrapy shell http://www.scrapyd.cn（调试网址为http://www.scrapyd.cn的网站）
     - scrapy version 查看版本信息
-    - scrapy list  查看爬虫信息，显示目录所有的爬虫
+    - scrapy list  查看爬虫信息，显示当前目录下所有的爬虫
     
     
 ## 1.4 Scrapy中数据提取的机制总结
