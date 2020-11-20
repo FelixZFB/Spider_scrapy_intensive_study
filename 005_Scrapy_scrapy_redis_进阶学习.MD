@@ -1,9 +1,8 @@
 #### Scrapy 入门基础参考 Spider_devlopment_study_note中的md笔记和相关项目
-#### Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note中
+#### Scrapy spider、crawlspider、redis-spider详细每一步的设置步骤参考Spider_devlopment_study_note的MD笔记
 #### ch12 cnblog爬虫(基础爬虫)、sht爬虫(redis爬虫，redis过滤)  
 #### ch17：yunqi爬虫(crawl规则爬虫)
-#### TZKT_Study_Note项目中多有个requests和scrapy爬虫实例
-#### P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
+#### TZKT_Study_Note项目中多有个requests和scrapy爬虫实例，P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
 
 
 # 学习视频来源：传智播客15期 20 爬虫scrapy框架及案例
@@ -20,6 +19,7 @@
 - ![scrapy爬虫流程](099_爬虫相关图片解释/003_scrapy爬虫流程_实际和002是一样的_只是各部分名称改变了一下.png)
 - 以上两图，整个流程是相同的，只不过名称有所不同，但是功能都是相似的
 
+
 ## 1.1 scrapy各组件的作用
 - ![scrapy各组件作用](099_爬虫相关图片解释/004_scrapy爬虫各组件作用.png)
 - Scrapy主要有5大部件和2个中间件
@@ -29,6 +29,8 @@
     - 图中的橙色箭头线只是表示流向，比如request、response，但是调度器Scheduler和下载器Downloader并没有实际联系
     - 它们之间的联系都需要通过Scrapy Engine引擎
 
+
+### 1.1.1 scrapy 组件介绍
 - 一个核心：    
     - **Scrapy Engine(引擎，相当于大脑)**:
         - 负责Spider、ItemPipeline、Downloader、Scheduler中间的通讯，信号、数据传递等。
@@ -51,7 +53,8 @@
     - **Downloader Middlewares（下载器中间件）**：
         - 下载器中间件位于引擎和下载器之间，它们传输的数据就是requests和responses
         - 主要是对requests和responses进行设置，主要是自定义扩展下载功能的组件。
-        - Scrapy的官方文档中的解释：下载器中间件是介于Scrapy的request/response处理的钩子框架，是用于全局修改Scrapy request和response的一个轻量、底层的系统。
+        - Scrapy的官方文档中的解释：下载器中间件是介于Scrapy的request/response处理的钩子框架，
+        - 是用于全局修改Scrapy request和response的一个轻量、底层的系统。
         - 容易理解的话表述就是：更换代理IP，更换Cookies，更换User-Agent，自动重试等
         - 上述具体的自定义设置在项目文件的settings.py里面，
         
@@ -64,36 +67,114 @@
         - 主要自定扩展和操作引擎和Spider中间通信的功能组件（比如进入Spider的Responses;和从Spider出去的Requests）
         - items虽然也经过爬虫中间件，但是有专门的Item Pipeline(管道)对齐进行处理
 
+- 上面所有组件，我们需要手动编写：
+    - 爬虫、管道、中间件，重点是爬虫和管道，中间件辅助
+    - 下载器和调度器框架自己内部实现
+
+
+### 1.1.2 Item Pipeline 管件
 - 需要手写的两个部件说明：
+- 具体查看：
+    - Spider_devlopment_study_note 中ch12中的cnblogSpider和sht项目中代码文字注释
+    - TZKT_Study_Note项目中多有个requests和scrapy爬虫实例，P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
+
 - Item Pipeline 管件
-    - 爬虫提取出数据存入item后，item中保存的数据需要进一步的处理，比如清洗，去重，存储等
-    - pipeline需要处理process_item函数，必须实现的函数
-        - process_item:
-            - spider提取出的item作为参数传入，同时传入的还有spider
-            - 此方法必须实现
-            - 必须返回一个item对象，被丢弃之后的item不会被之后的pipeline处理
-    - __init__: 构造函数
-        - 进行一些必要的参数初始化
-    - open_spider(spider):
-        - spider对象被开启时调用
-    - close_spider(spider):
-        - spider对象被关闭时调用  
-        
-- Spider 爬虫
+    - 爬虫提取出数据存入item后，item中保存的数据需要进一步的处理，比如清洗，去重，验证，存储等
+    - item常用处理方式：
+        - 方式1：存储item内容到json、csv、xml、pickle、marshal 等格式的文件
+        - 方式2：存储item内容到数据库，最常用就是MongoDB数据库，参考P03_51job爬虫项目
+        - 方式3：下载图片或者视频到本地，参考sht爬虫项目
+    - 爬虫自己默认创建的管道，管道中可以自定义很多功能，但是最终必须要最终实现一个process_item函数，自定义的管道件不需要实现该函数
+        - process_item函数说明:
+            - spider爬虫提取出的item作为参数传入，同时传入的参数还有spider
+            - 一个参数是 item，每次 Spider 生成的 Item 都会作为参数传递过来。另一个参数是 spider，就是 Spider 的实例。
+            - 此方法在默认创建的管道必须实现，默认的管道我们可以修改后实现不同功能，比如存储item到json文件或者存储item到数据库都可以，参考上面案例
+                - sht爬虫项目就是默认管道用来存储item到json文件
+                - P03_51job爬虫项目默认管道就是用于连接数据库，然后存储item到数据库中
+            - 必须return返回一个item对象，这样，被丢弃之后的item不会被之后的pipeline处理
+    - 管道件里面一些默认的函数说明：
+        - __init__: 构造函数
+            - 进行一些必要的参数初始化
+        - process_item(self, item, spider)：
+            - 具体处理item对象的函数
+        - open_spider(self, spider):
+            - spider对象被开启时调用
+        - close_spider(self, spider):
+            - spider对象被关闭时调用  
+        - get_media_requests(self, item, info):
+            - 下载图片或者视频的处理函数，参考sht爬虫项目
+        - file_path(self, request, response=None, info=None):
+            - 文件路径定义函数，即文件夹重命名函数，参考sht爬虫项目
+            
+    - 注意点：
+        - 启用 Item Pipeline 后，Item Pipeline 会自动调用这个方法。
+        - process_item 方法必须返回包含数据的字典或 Item 对象，或者抛出 DropItem 异常。
+
+
+### 1.1.3  Spider 爬虫      
+- Spider 爬虫结构
     - 对应的是文件夹spiders下的py文件
     - __init__: 初始化爬虫名称，可传入start_urls列表，该方法一般不写，爬虫名称、初始URL、允许域名直接放在类下面当做全局变量
     - start_requests: 生成Requests对象交给Scrapy下载并返回response，该方法启动爬虫自动实现
     - parse：根据返回的response解析出相应的item，item自动进入pipeline：如果需要，
     - 解析出url,url自动交给requests模块，一直循环下去
-    - parse_body：进入第二层解析网页详细信息
+    - parse_body：进入二级页面解析网页详细信息
 
-    - Item Pipeline spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
+- Spider 类基本属性：
+    - Spider类：
+        - Spider 继承自 scrapy.spiders.Spider，这个类是最简单最基本的 Spider 类，每个其他的 Spider 必须继承自这个类，
+        - 还有后面要说明的一些特殊 Spider 类，比如redisSpider, crawlSpider 等也都是继承自它
+    - name：
+        - 爬虫名称，是定义 Spider 名字的字符串。
+        - Spider 的名字定义了 Scrapy 如何定位并初始化 Spider，所以其必须是唯一的。 
+        - 不过我们可以生成多个相同的 Spider 实例，这没有任何限制。 
+        - name 是 Spider 最重要的属性，而且是必需的。
+        - 如果该 Spider 爬取单个网站，一个常见的做法是以该网站的域名名称来命名 Spider。
+        - 例如，如果 Spider 爬取 mywebsite.com，该 Spider 通常会被命名为 mywebsite。
+    - allowed_domains：
+        - 允许爬取的域名，是可选配置，不在此范围的链接不会被跟进爬取。
+    - start_urls：
+        - 起始 URL 列表，当我们没有实现 start_requests 方法时，默认会从这个列表开始抓取。
+    - custom_settings：
+        - 这是一个字典，是专属于本 Spider 的配置，此设置会覆盖项目全局的设置，
+        - 而且此设置必须在初始化前被更新，所以它必须定义成类变量。
+    - crawler：
+        - 此属性是由 from_crawler 方法设置的，代表的是本 Spider 类对应的 Crawler 对象，
+        - Crawler 对象中包含了很多项目组件，利用它我们可以获取项目的一些配置信息，
+        - 如最常见的就是获取项目的设置信息，即 Settings。
+    - settings：
+        - 是一个 Settings 对象，利用它我们可以直接获取项目的全局设置变量。
 
-- 注意：
-    - start_request: 此方法仅能被调用一次，读取start_urls内容并启动循环过程
+- Spider 常用的方法：
+    -  start_requests： 
+        - 默认实现的方法，读取并请求 start_urls 属性，并根据返回的结果调用 parse 方法解析结果。
+        - 此方法用于生成初始请求，它必须返回一个可迭代对象，
+        - 此方法会默认使用 start_urls 里面的 URL 来构造 Request，而且 Request 是 GET 请求方式。
+        - 如果我们想在启动时以 POST 方式访问某个站点，可以直接重写这个方法，发送 POST 请求时我们使用 FormRequest 即可。
+    - parse：
+        - 默认处理 start_requests 方法返回的 response 对象
+        - 当 Response 没有指定回调函数时，该方法会默认被调用，它负责处理 Response，处理返回结果，
+        - 并从中提取出想要的数据和下一步的请求，然后返回。
+        - 该方法需要返回一个包含 Request 或 Item 的可迭代对象。
+    - closed：
+        - 当 Spider 关闭时，该方法会被调用，在这里一般会定义释放资源的一些操作或其他收尾操作。
+
+- Spider 类来说，整个爬取循环如下所述：
+    - 以初始的 URL 初始化 Request 对象，并设置回调函数 parse(self, response)。 
+    - 当该 Request 成功请求并返回时，将生成 Response，并作为参数传给该回调函数 parse(self, response)。
+    - 在回调函数 parse 内分析返回的网页内容。返回结果可以有两种形式：
+        - 一种是解析到的有效结果返回字典或 Item 对象。下一步可经过处理后（或直接）保存，
+        - 另一种是解析到的下一个（如下一页）链接，可以利用此链接构造 Request 并设置新的回调函数，返回 Request 继续请求分析。
+    - 返回数据的处理方法：
+        - 如果返回的是字典或 Item 对象，可通过 Feed Exports 等形式存入文件，如果设置了 Pipeline 的话，可以经由 Pipeline 处理（如过滤、修正等）并保存。
+        - 如果返回的是 Reqeust，那么 Request 执行成功得到 Response 之后会再次传递给 Request 中调用的回调函数，可以再次使用选择器来分析新得到的网页内容，并根据分析的数据生成 Item。
+        - 如果是 request 请求下一页就调用 parse 方法继续处理，如果是 request 请求二级页面就调用 parse_body 方法
+
+- spider 补充注意点：
+    - start_request: 此方法默认启动爬虫时候只被调用一次，读取start_urls内容并启动爬取过程
         - start_request是用来处理start_urls的方法，可以scrapy.Spider的源码查看
         - 返回最初始的response交给parse函数处理
-    - name；设置爬虫名称，爬虫名称不能和爬虫项目文件夹名称重复
+    - name: 设置爬虫名称，爬虫名称不能和爬虫项目文件夹名称重复
     - start_urls: 设置开始第一批爬取的url,
         - 该url默认会调用start_request方法，返回response交给parse方法
         - 我们可以在parse之前重写该方法，会覆盖默认的方法
@@ -115,8 +196,15 @@
             - 注意：在爬取搜狗的网站的时候，搜狗的主域名是sogou.com，别写成了错误的“sougou.com”
     - log: 日志记录
      
+- Item Pipeline 和 spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
+
+
+### 1.1.4 爬虫和下载中间件
+- Spider Middleware 和 Downloader Middleware
+ 
         
-## 1.2 scrapy爬取一个网站的流程
+        
+## 1.2 scrapy 爬取一个网站的流程
 - Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
     - 1.首先Spiders（爬虫里面写有start_url）将需要发送请求的url(requests)经ScrapyEngine（引擎）交给Scheduler（调度器）。
     - 2.Scheduler（排序，入队）处理后，经ScrapyEngine，DownloaderMiddlewares(可选，主要有User_Agent, Proxy代理)交给Downloader。
@@ -125,7 +213,8 @@
     - 5.response中提取的url即新的Request经ScrapyEngine交给Scheduler进行下一个循环。直到无Url请求程序停止结束。
     ![scrapy爬虫流程及数据传递流程](099_爬虫相关图片解释/005_scrapy爬虫流程及数据传递流程详解.png)
 
-## 1.3 scrapy项目流程
+
+## 1.3 scrapy 项目流程
 - 创建项目
     - scrapy startproject xxx
 - 创建爬虫
@@ -156,77 +245,128 @@
 - 注意：避免爬虫名和项目名重复 ；
     - 不管在终端还是pycharm 都要切换到当前目录下 cd myspider
     - allowed_domains : 限定爬取的范围
-- 常用的命令：
+- 常用的命令shell终端命令：
     - scrapy startproject xxx（创建项目）
     - scrapy crawl XX（运行XXX爬虫）
     - scrapy shell http://www.scrapyd.cn（调试网址为http://www.scrapyd.cn的网站）
     - scrapy version 查看版本信息
     - scrapy list  查看爬虫信息，显示当前目录下所有的爬虫
+    - scrapy crawl xxx -o xxx.json 将item内容输出存储为json文件，也可以存储为jsv、xml等格式文件
     
     
-## 1.4 Scrapy中数据提取的机制总结
-- Scrapy提供了自己提取数据的机制，它们被称作选择器（Selector，下面用英文表示），它支持xpath，css和正则表达式三种规则
-- Scrapy的Selector建立在lxml库上，这意味它们在解析速度和精度上都非常相似
-- Selector机制下有两个重要的数据类型：SelectorList(包含多个Selector对象的列表)和Selector(一个Selector对象)，其中前者是后者的集合，前者也是一个列表对象。
-- scrapy提供了extract和extract_first这两种方法提取SelectorList和Selector的字符串内容。
-- 在提取列表中的首个元素内容时，建议使用extract_first方法而非采用列表索引方式extract()[0] 
-- extract()没有值的时候返回是一个空列表，extract_first没有值返回是none，推荐使用extract_first，已经帮我判断了是否为none
-    - response.xpath()返回的结果就是SelectorList，里面每一个元素就是一个Selector对象：
-    [<Selector xpath='descendant-or-self::a' data='<a href="image1.html">Name: My image 1 <'>, 
-    <Selector xpath='descendant-or-self::a' data='<a href="image2.html">Name: My image 2 <'>, 
-    <Selector xpath='descendant-or-self::a' data='<a href="image3.html">Name: My image 3 <'>, 
-    <Selector xpath='descendant-or-self::a' data='<a href="image4.html">Name: My image 4 <'>, 
-    <Selector xpath='descendant-or-self::a' data='<a href="image5.html">Name: My image 5 <'>]
-    - 实际上我们需要的内容是data里面的数据，extract提取所有的data和extract_first提取第一个data
+## 1.4 Scrapy 中数据提取器 Selector 总结
+- Selector 介绍
+    - Selector 是基于 lxml 构建的，支持 XPath 选择器、CSS 选择器，以及正则表达式，功能全面，解析速度和准确度非常高
+    - 可以直接利用 Selector 这个类来构建一个选择器对象，然后调用它的相关方法如 xpath、css 等来提取数据。
+    - start_requests方法返回的 response 对象，在scrapy中可以看做就是一个 Selector 对象，直接response.xpath(".//*[@class='day']")或者response.css(".day")提取
+    - 针对一段 HTML 代码，我们可以用如下方式构建 Selector 对象来提取数据.
+    - 具体使用 xpath 还是 css，根据个人习惯，我更倾向 xpath ，使用/更像HTML标签风格，表达式上下结构清晰
+```python
+from scrapy import Selector
 
-- scrapy中选择器返回结果是Selector对象(特殊的列表)，返回的对象实际是一个列表对象：SelectorList(里面有一个或多个Selector)和Selector。
-    - 官方推荐 ：
-    - .extract_first()：提取SelectorList对象中第一个元素的内容。即返回列表中的第一个元素的字符串内容。
-    - .extract()：如果是SelectorList对象使用，则返回包含所有Selector中字符串内容的列表；如果是Selector使用，则返回该Selector的所有内容。
+body = '<html><head><title>Hello World</title></head><body></body></html>'
+selector = Selector(text=body)
+title = selector.xpath('//title/text()').extract_first()
+print(title)
+
+# Hello World
+```
+
+- response 说明：
+    - 可以使用 response.selector.xpath 方法对数据进行了提取。
+    - Scrapy 提供了两个实用的快捷方法，response.xpath 和 response.css，
+    - 它们二者的功能完全等同于 response.selector.xpath 和 response.selector.css。
+    - response.xpath(".//*[@class='day']")或者response.css(".day") 提取
+    - re 正则提取有所不同：
+        - re 都是在文本中提取数据，因此直接 response.txt 中查找匹配数据
+        - title = re.findall("<!--TitleStart-->(.*?)<!--TitleEnd-->", response.text)[0]
+        - publish_date = re.findall("发布时间：20\d{2}-\d{2}-\d{2}", response.text)[0]
+        - 参考005中的cric案例
+    - response.re 直接提取会报错，但是可以使用以下方法后再使用re:
+        - xpath('.')选中全文，然后调用 re 和 re_first 方法，就可以进行正则匹配了。
+        - 直接使用re方法等同于上面的re.findall，re_first等同于re.find
+```
+>>> response.re('Name:\s(.*)')
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'HtmlResponse' object has no attribute 're'
+>>> response.xpath('.').re('Name:\s(.*)<br>')
+['My image 1 ', 'My image 2 ', 'My image 3 ', 'My image 4 ', 'My image 5 ']
+>>> response.xpath('.').re_first('Name:\s(.*)<br>')
+'My image 1 '
+```
+
+- Selector 提取数据机制
+    - Scrapy提供了自己提取数据的机制，它们被称作选择器（Selector，下面用英文表示），它支持xpath，css和正则表达式三种规则
+    - Scrapy的Selector建立在lxml库上，这意味它们在解析速度和精度上都非常相似
+    - Selector机制下有两个重要的数据类型：SelectorList(包含多个Selector对象的列表)和Selector(一个Selector对象)，其中前者是后者的集合，前者也是一个列表对象。
+    - scrapy提供了extract和extract_first这两种方法提取SelectorList和Selector的具体data内容。
+    - 在提取列表中的首个元素内容时，建议使用extract_first方法而非采用列表索引方式extract()[0] 
     - extract()没有值的时候返回是一个空列表，extract_first没有值返回是none，推荐使用extract_first，已经帮我判断了是否为none
-    - 参考Python_advanced_learning中的04文件夹中的XPATH部分有详细总结
-    - SelectorList对象虽然是个列表，但是是一个特殊的列表，不能直接使用列表切片取出内容
-    - requests中可以返回解析的对象，可以直接切片取出，参考TZKT项目中的P02和P03中数据提取区别
-    - 取出title具体的文字内容，可以使用下面两种方式：
-        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract()[0]     内容列表的第一个元素
-        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first().strip()  SelectorList列表中的第一个Selector对象的内容元素
+        - response.xpath()返回的结果就是SelectorList列表对象，里面每一个元素就是一个Selector对象：
+        [<Selector xpath='descendant-or-self::a' data='<a href="image1.html">Name: My image 1 <'>, 
+        <Selector xpath='descendant-or-self::a' data='<a href="image2.html">Name: My image 2 <'>, 
+        <Selector xpath='descendant-or-self::a' data='<a href="image3.html">Name: My image 3 <'>, 
+        <Selector xpath='descendant-or-self::a' data='<a href="image4.html">Name: My image 4 <'>, 
+        <Selector xpath='descendant-or-self::a' data='<a href="image5.html">Name: My image 5 <'>]
+    - 实际上我们需要的内容是data里面的数据，
+        - extract提取所有的 data 对应的内容，
+        - extract_first只提取列表中第一个 selector 的 data 对应的内容
         
-- 特别注意：是extract_first不是extrast_first()
-- Python strip() 方法用于移除字符串头尾指定的字符（默认参数为空格和换行符）或字符序列(传入的参数)。
-- 该方法只能删除开头或是结尾的字符，不能删除中间部分的字符。
+- Selector 中 extract() 和 extract_first() 区别：
+    - scrapy 中选择器返回结果是Selector对象(特殊的列表)，返回的对象实际是一个列表对象：
+    - SelectorList(里面有一个或多个Selector)和Selector。
+    - 官方推荐使用方法 ：
+        - .extract_first()：提取SelectorList对象中第一个元素的内容。即返回列表中的第一个元素的字符串内容。
+        - .extract()：如果是SelectorList对象使用，则返回包含所有Selector中字符串内容的列表；如果是Selector使用，则返回该Selector的所有内容。
+        - extract()没有值的时候返回是一个空列表(XPath出现问题可能会导致数据越界)，
+        - extract_first没有值返回是none值，也不会报错，推荐使用extract_first，已经帮我判断了是否为none
+        - 参考Python_advanced_learning中的04文件夹中的XPATH部分有详细总结
+    - SelectorList对象虽然是个列表，但是是一个特殊的列表，不能直接使用列表切片取出内容
+    - requests 库中使用lxml解析文档后，xpath返回的解析对象(就是一个python中的列表)，可以直接切片取出，参考TZKT项目中的P02和P03中数据提取区别
+    - 取出title具体的文字内容，可以使用下面两种方式：
+        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract()[0]     先提取所有内容得到列表，然后取出列表的第一个元素
+        - title = paper.xpath(".//*[@class='postTitle']/a/text()").extract_first().strip()  SelectorList列表中的第一个Selector对象的内容元素
 
-- 补充1：普通请求里面也可以使用Selector选择器
-    - 需要使用parsel的Selector模块(用法和scrapy中一样)
-    - from parsel import Selector
-    - html = Selector(response.text)    生成一个选择器对象，类似于上面的etree解析
-    - title = html.xpath("xxx").extract_first()
-    - 或者css选择器也可以
-    - title = html.css("xxx").extract_first()
+- 补充注意点：       
+    - 特别注意：是extract_first不是extrast_first()
+    - Python strip() 方法用于移除字符串头尾指定的字符（默认参数为空格和换行符）或字符序列(传入的参数)。
+    - 该方法只能删除开头或是结尾的字符，不能删除中间部分的字符。
+
+    - 补充1：普通请求里面也可以使用Selector选择器
+        - 需要使用parsel的Selector模块(用法和scrapy中一样)
+        - from parsel import Selector
+        - html = Selector(response.text)    生成一个选择器对象，类似于上面的etree解析
+        - title = html.xpath("xxx").extract_first()
+        - 或者css选择器也可以
+        - title = html.css("xxx").extract_first()
     
-- 补充2：
-    - scrapy中初始网址的响应直接使用response.xpath()即可
-    - response查找结果，比如li标签继续查找，也是直接li.xpath()    
+    - 补充2：
+        - scrapy中初始网址的响应直接使用response.xpath()即可
+        - response查找结果，比如li标签继续查找，也是直接li.xpath()    
     
-- 补充3：
-    - Python中requests模块或者普通请求的response中使用Xpath
-    # 1 导入模块
-    import requests
-    from lxml import etree
-    # 2 获取文本，r.text类型是字符串文本内容，
-        如果使用r.content则是bytes字节，还需要解码r.content.decode()
-        解码会自动推测编码格式
-    r = requests.get(url, headers=headers)
-    text = r.text
-    # 3 text解析为xml格式，就可以使用xpath查找了
-    html = etree.HTML(text,etree.HTMLParser())
-    # 4 查找标签，返回值是列表
-    jobs = html.xpath(".//div[@id='resultList']//div[@class='el']")
+    - 补充3：
+        - Python中requests模块或者普通请求的response中使用Xpath
+        # 1 导入模块
+        import requests
+        from lxml import etree
+        # 2 获取文本，r.text类型是字符串文本内容，
+            如果使用r.content则是bytes字节，还需要解码r.content.decode()
+            解码会自动推测编码格式
+        r = requests.get(url, headers=headers)
+        text = r.text
+        # 3 text解析为xml格式，就可以使用xpath查找了
+        html = etree.HTML(text,etree.HTMLParser())
+        # 4 查找标签，返回值是列表
+        jobs = html.xpath(".//div[@id='resultList']//div[@class='el']")
     
-- 补充4：
-    - scrapy中使用正则表达式re解析数据
-    - 直接就是通用的正则用法，参考005中的cric案例
-    - title = re.findall("<!--TitleStart-->(.*?)<!--TitleEnd-->", response.text)[0]
-    - publish_date = re.findall("发布时间：20\d{2}-\d{2}-\d{2}", response.text)[0]
+    - 补充4：
+        - CSS 选择器和 XPath 选择器一样可以嵌套选择。我们可以先用 XPath 选择器选中所有 a 节点，
+        - 再利用 CSS 选择器选中 img 节点，再用 XPath 选择器获取属性
+        - response.xpath('//a').css('img').xpath('@src').extract()
+        - ['image1_thumb.jpg', 'image2_thumb.jpg', 'image3_thumb.jpg', 'image4_thumb.jpg', 'image5_thumb.jpg']
+        - 实际使用不推荐
+    
 
 ## 1.5 scrapy中url地址拼接的多种方式
 - Response返回的url地址，对next_url的url地址进行拼接，构造请求,有5种方式

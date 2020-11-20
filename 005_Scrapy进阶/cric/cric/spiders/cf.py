@@ -26,7 +26,7 @@ class CfSpider(CrawlSpider):
         Rule(LinkExtractor(allow=r'/web/site0/tab5240/module14430/page\d+\.htm'), follow=True),
     )
 
-    #
+    # 自定义回调方法
     def parse_item(self, response):
         #item = {}
         #item['domain_id'] = response.xpath('//input[@id="sid"]/@value').get()
