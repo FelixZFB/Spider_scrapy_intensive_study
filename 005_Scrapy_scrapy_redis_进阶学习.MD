@@ -73,46 +73,7 @@
     - 下载器和调度器框架自己内部实现
 
 
-### 1.1.2 Item Pipeline 管件
-- 需要手写的两个部件说明：
-- 具体查看：
-    - Spider_devlopment_study_note 中ch12中的cnblogSpider和sht项目中代码文字注释
-    - TZKT_Study_Note项目中多有个requests和scrapy爬虫实例，P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
-
-- Item Pipeline 管件
-    - 爬虫提取出数据存入item后，item中保存的数据需要进一步的处理，比如清洗，去重，验证，存储等
-    - item常用处理方式：
-        - 方式1：存储item内容到json、csv、xml、pickle、marshal 等格式的文件
-        - 方式2：存储item内容到数据库，最常用就是MongoDB数据库，参考P03_51job爬虫项目
-        - 方式3：下载图片或者视频到本地，参考sht爬虫项目
-    - 爬虫自己默认创建的管道，管道中可以自定义很多功能，但是最终必须要最终实现一个process_item函数，自定义的管道件不需要实现该函数
-        - process_item函数说明:
-            - spider爬虫提取出的item作为参数传入，同时传入的参数还有spider
-            - 一个参数是 item，每次 Spider 生成的 Item 都会作为参数传递过来。另一个参数是 spider，就是 Spider 的实例。
-            - 此方法在默认创建的管道必须实现，默认的管道我们可以修改后实现不同功能，比如存储item到json文件或者存储item到数据库都可以，参考上面案例
-                - sht爬虫项目就是默认管道用来存储item到json文件
-                - P03_51job爬虫项目默认管道就是用于连接数据库，然后存储item到数据库中
-            - 必须return返回一个item对象，这样，被丢弃之后的item不会被之后的pipeline处理
-    - 管道件里面一些默认的函数说明：
-        - __init__: 构造函数
-            - 进行一些必要的参数初始化
-        - process_item(self, item, spider)：
-            - 具体处理item对象的函数
-        - open_spider(self, spider):
-            - spider对象被开启时调用
-        - close_spider(self, spider):
-            - spider对象被关闭时调用  
-        - get_media_requests(self, item, info):
-            - 下载图片或者视频的处理函数，参考sht爬虫项目
-        - file_path(self, request, response=None, info=None):
-            - 文件路径定义函数，即文件夹重命名函数，参考sht爬虫项目
-            
-    - 注意点：
-        - 启用 Item Pipeline 后，Item Pipeline 会自动调用这个方法。
-        - process_item 方法必须返回包含数据的字典或 Item 对象，或者抛出 DropItem 异常。
-
-
-### 1.1.3  Spider 爬虫      
+### 1.1.2  Spider 爬虫      
 - Spider 爬虫结构
     - 对应的是文件夹spiders下的py文件
     - __init__: 初始化爬虫名称，可传入start_urls列表，该方法一般不写，爬虫名称、初始URL、允许域名直接放在类下面当做全局变量
@@ -200,7 +161,104 @@
 - Item Pipeline 和 spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
 
 
+### 1.1.3 Item Pipeline 管件
+- 具体查看：
+    - Spider_devlopment_study_note 中ch12中的cnblogSpider和sht项目中代码文字注释
+    - TZKT_Study_Note项目中多有个requests和scrapy爬虫实例，P03_51job爬虫，scrapy-redis-MongoDB综合爬虫案例
+
+- Item Pipeline，它的调用发生在 Spider 产生 Item 之后。
+    - 当 Spider 解析完 Response 之后，Item 就会传递到 Item Pipeline，被定义的 Item Pipeline 组件会顺次调用，完成一连串的处理过程，比如数据清洗、存储等。
+    - 它的主要功能有：
+        - 清洗 HTML 数据；
+        - 验证爬取数据，检查爬取字段；
+        - 查重并丢弃重复内容；
+        - 将爬取结果储存到数据库。
+
+- Item Pipeline 管件
+    - 爬虫提取出数据存入item后，item中保存的数据需要进一步的处理，比如清洗，去重，验证，存储等
+    - item常用处理方式：
+        - 方式1：存储item内容到json、csv、xml、pickle、marshal 等格式的文件
+        - 方式2：存储item内容到数据库，最常用就是MongoDB数据库，参考P03_51job爬虫项目
+        - 方式3：下载图片或者视频到本地，参考sht爬虫项目
+    - 爬虫自己默认创建的管道，管道中可以自定义很多功能，但是必须要实现一个process_item方法，自定义的管道件不需要实现该函数
+        - process_item方法说明:
+            - spider爬虫提取出的item作为参数传入，同时传入的参数还有spider
+            - 一个参数是 item，每次 Spider 生成的 Item 都会作为参数传递过来。另一个参数是 spider，就是 Spider 的实例。
+            - 此方法在默认创建的管道必须实现，默认的管道我们可以修改后实现不同功能，比如存储item到json文件或者存储item到数据库都可以，参考上面案例
+                - sht爬虫项目就是默认管道用来存储item到json文件
+                - P03_51job爬虫项目默认管道就是用于连接数据库，然后存储item到数据库中
+            - 必须return返回一个item对象，这样，被丢弃之后的item不会被之后的pipeline处理
+
+- 管道件里面默认常用方法：
+        - __init__: 构造函数
+            - 进行一些必要的参数初始化
+        - process_item(self, item, spider)：
+            - 具体处理item对象的函数
+            - 如果返回的是 Item 对象，那么此 Item 会被低优先级的 Item Pipeline 的 process_item() 方法进行处理，直到所有的方法被调用完毕。
+            - 如果抛出的是 DropItem 异常，那么此 Item 就会被丢弃，不再进行处理。
+        - open_spider(self, spider):
+            - spider对象被开启时调用
+            - 在这里我们可以做一些初始化操作，如开启数据库连接等。
+            - 其中参数 spider 就是被开启的 Spider 对象。
+        - close_spider(self, spider):
+            - spider对象被关闭时调用  
+            -  Spider 关闭的时候自动调用的，在这里我们可以做一些收尾工作，
+            - 如关闭数据库连接等，其中参数 spider 就是被关闭的 Spider 对象
+        - from_crawler(cls, crawler)：
+            - from_crawler() 方法是一个类方法，用 @classmethod 标识，是一种依赖注入的方式。
+            - 它的参数是 crawler，通过 crawler 对象，我们可以拿到 Scrapy 的所有核心组件，
+            - 如全局配置的每个信息，然后创建一个 Pipeline 实例。
+            - 参数 cls 就是 Class，最后返回一个 Class 实例。
+        - get_media_requests(self, item, info):
+            - 下载图片或者视频的处理函数，参考sht爬虫项目
+        - file_path(self, request, response=None, info=None):
+            - 文件路径定义函数，即文件夹重命名函数，参考sht爬虫项目
+            
+    - 注意点：
+        - 启用 Item Pipeline 后，Item Pipeline 会自动调用这个方法。
+        - process_item 方法必须返回包含数据的字典或 Item 对象，或者抛出 DropItem 异常。
+
+- 文件下载和图片下载管件：
+    - 官方文档中关于文件和图片下载说明：https://doc.scrapy.org/en/latest/topics/media-pipeline.html
+    - 参考代码 sht 项目中自定义图片下载管道，sht 项目中使用了 image_urls字段
+    
+    - 注意：内置的 ImagesPipeline 会默认读取 Item 的 image_urls 字段，并认为该字段是一个列表形式，它会遍历 Item 的 image_urls 字段，然后取出每个 URL 进行图片下载。
+    - Item 的图片链接字段并不是 image_urls 字段表示的，也不是列表形式，而是单个的 URL。所以为了实现下载，我们需要重新定义下载的部分逻辑，即需要自定义 ImagePipeline，继承内置的 ImagesPipeline，重写方法。
+```
+from scrapy import Request
+from scrapy.exceptions import DropItem
+from scrapy.pipelines.images import ImagesPipeline
+class ImagePipeline(ImagesPipeline):
+    def file_path(self, request, response=None, info=None):
+        url = request.url
+        file_name = url.split('/')[-1]
+        return file_name
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem('Image Downloaded Failed')
+        return item
+    def get_media_requests(self, item, info):
+        yield Request(item['url'])
+```
+- 自定义图片下载管道说明:
+    -  ImagePipeline，继承 Scrapy 内置的 ImagesPipeline，重写了下面几个方法。
+    - get_media_requests()。它的第一个参数 item 是爬取生成的 Item 对象。我们将它的 url 字段取出来，然后直接生成 Request 对象。此 Request 加入调度队列，等待被调度，执行下载。
+    - file_path()。它的第一个参数 request 就是当前下载对应的 Request 对象。这个方法用来返回保存的文件名，直接将图片链接的最后一部分当作文件名即可。它利用 split() 函数分割链接并提取最后一部分，返回结果。这样此图片下载之后保存的名称就是该函数返回的文件名。
+    - item_completed()，它是当单个 Item 完成下载时的处理方法。因为并不是每张图片都会下载成功，所以我们需要分析下载结果并剔除下载失败的图片。如果某张图片下载失败，那么我们就不需保存此 Item 到数据库。该方法的第一个参数 results 就是该 Item 对应的下载结果，它是一个列表形式，列表每一个元素是一个元组，其中包含了下载成功或失败的信息。这里我们遍历下载结果找出所有成功的下载列表。如果列表为空，那么该 Item 对应的图片下载失败，随即抛出异常 DropItem，该 Item 忽略。否则返回该 Item，说明此 Item 有效。
+    - 具体对比查看 sht 项目中自定义图片下载管道，该管道实现功能更复杂一点
+    - 补充1：
+        - 自定义图片管道可以定义多个，每个管道可以用来处理 item 中不同 url 列表字段，只需要 get_media_requests 方法中取出即可
+        - 如果是 url 有多个元素就 for 循环取出(查看 sht 项目)，如果就一个元素直接上面代码中 yield 请求
+    - 补充2：
+        - 需要优先调用 ImagePipeline 对 Item 做下载后的筛选，下载失败的 Item 就直接忽略，它们就不会保存到 MongoDB 和 MySQL 里。
+        - 随后再调用其他存储的 Pipeline，这样就能确保存入数据库的图片都是下载成功的。
+
+
 ### 1.1.4 爬虫中间件
+- Spider Middleware： 实际使用中主要用来处理 Response 对象
+- Downloader Middleware： 实际使用中主要用来处理 Request 对象
+
 - Spider Middleware 和 Downloader Middleware
 - 参考099文件中 002 和 005 图片
 - 具体查看 middlewares.py 中的两个类，scrapy 默认中间件对直接获取到的 response、requests、items 是不作处理，直接返回，需要处理需要自己定义
@@ -210,23 +268,22 @@
     - 我们可以在 Spider 生成的 Request 发送给 Scheduler 之前，也就是在 Request 发送给 Scheduler 之前对 Request 进行处理。
     - 我们可以在 Spider 生成的 Item 发送给 Item Pipeline 之前，也就是在 Item 发送给 Item Pipeline 之前对 Item 进行处理。
     
-    - Scrapy 其实已经提供了许多 Spider Middleware，它们被 SPIDER_MIDDLEWARES_BASE 这个变量所定义。
+    - Scrapy 其实已经默认提供了许多 Spider Middleware，它们被 SPIDER_MIDDLEWARES_BASE 这个变量所定义。
     - SPIDER_MIDDLEWARES_BASE 变量的内容如下：
     - 第一个 Middleware 是最靠近引擎的，最后一个 Middleware 是最靠近 Spider 的
     
-```
 {
-    'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
-    
-    'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
-    
-    'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
-    
-     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
-    
-    'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
+'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
+
+'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
+
+'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
+
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
+
+'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
 }
-```
+
 
 - Spider Middleware 核心方法
     - Spider Middleware 为 Scrapy 提供了基础的功能。如果我们想要扩展其功能，只需要实现某几个方法即可。
@@ -276,11 +333,182 @@
 
 
 ### 1.1.4 下载中间件
+- Downloader Middleware 即下载中间件，它是处于 Scrapy 的 Request 和 Response 之间的处理模块。
+- Scheduler 从队列中拿出一个 Request 发送给 Downloader 执行下载，这个过程会经过 Downloader Middleware 的处理。
+- 另外，当 Downloader 将 Request 下载完成得到 Response 返回给 Spider 时会再次经过 Downloader Middleware 处理。       
         
+- Downloader Middleware 在整个架构中起作用的位置是以下两个:
+    - 在 Scheduler 调度出队列的 Request 发送给 Downloader 下载之前，也就是我们可以在 Request 执行下载之前对其进行修改。
+    - 在下载后生成的 Response 发送给 Spider 之前，也就是我们可以在生成 Resposne 被 Spider 解析之前对其进行修改。
+    - Downloader Middleware 的功能十分强大，修改 User-Agent、处理重定向、设置代理、失败重试、设置 Cookies 等功能都需要借助它来实现。
+
+- Downloader Middleware 变量 
+    - Scrapy 其实已经默认提供了许多 Downloader Middleware，比如负责失败重试、自动重定向等功能的 Middleware，它们被 DOWNLOADER_MIDDLEWARES_BASE 变量所定义。
+    - DOWNLOADER_MIDDLEWARES_BASE 变量的内容如下所示：   
+{
+
+    'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+
+    'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+
+    'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+
+    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 400,
+
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 500,
+
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 550,
+
+    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
+
+    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+
+    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+
+    'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+
+    'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+
+}
+    - 如果自己定义的 Downloader Middleware 要添加到项目里，DOWNLOADER_MIDDLEWARES_BASE 变量不能直接修改。
+    - Scrapy 提供了另外一个设置变量 DOWNLOADER_MIDDLEWARES，我们直接修改这个变量就可以添加自己定义的 Downloader Middleware，
+    - 以及对应禁用 DOWNLOADER_MIDDLEWARES_BASE 里面定义的 Downloader Middleware。
         
+- Downloader Middleware 核心方法
+    - Scrapy 内置的 Downloader Middleware 为 Scrapy 提供了基础的功能，但在项目实战中我们往往需要单独定义 Downloader Middleware。
+    - 不用担心，这个过程非常简单，我们只需要实现某几个方法即可。
+    - 每个 Downloader Middleware 都定义了一个或多个方法的类，核心的方法有如下三个。
+        - process_request(request, spider)
+        - process_response(request, response, spider)
+        - process_exception(request, exception, spider)
         
-        
-        
+- process_request(request, spider) 方法
+    - 图上流向：Scrapy Engine ---> Downloader
+    - Request 被 Scrapy 引擎调度给 Downloader 之前，process_request() 方法就会被调用，
+    - 也就是在 Request 从队列里调度出来到 Downloader 下载执行之前，我们都可以用 process_request() 方法对 Request 进行处理。
+    - 方法的返回值必须为 None、Response 对象、Request 对象之一，或者抛出 IgnoreRequest 异常。
+    
+    - process_request() 方法的参数有如下两个。
+        - request，即 Request 对象，即被处理的 Request；
+        - spider，即 Spider 对象，即此 Request 对应的 Spider。
+    
+    - 返回类型不同，产生的效果也不同。下面归纳一下不同的返回情况。
+        - 当返回为 None 时，Scrapy 将继续处理该 Request，接着执行其他 Downloader Middleware 的 process_request() 方法，直到 Downloader 把 Request 执行后得到 Response 才结束。这个过程其实就是修改 Request 的过程，不同的 Downloader Middleware 按照设置的优先级顺序依次对 Request 进行修改，最后推送至 Downloader 执行。
+        - 当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_request() 和 process_exception() 方法就不会被继续调用，每个 Downloader Middleware 的 process_response() 方法转而被依次调用。调用完毕之后，直接将 Response 对象发送给 Spider 来处理。
+        - 当返回为 Request 对象时，更低优先级的 Downloader Middleware 的 process_request() 方法会停止执行。这个 Request 会重新放到调度队列里，其实它就是一个全新的 Request，等待被调度。如果被 Scheduler 调度了，那么所有的 Downloader Middleware 的 process_request() 方法会被重新按照顺序执行。
+        - 如果 IgnoreRequest 异常抛出，则所有的 Downloader Middleware 的 process_exception() 方法会依次执行。如果没有一个方法处理这个异常，那么 Request 的 errorback() 方法就会回调。如果该异常还没有被处理，那么它便会被忽略。
+
+- process_response(request, response, spider) 方法
+    - 图上流向：Downloader --->  Scrapy Engine
+    - Downloader 执行 Request 下载之后，会得到对应的 Response。Scrapy 引擎便会将 Response 发送给 Spider 进行解析。
+    - 在发送之前，我们都可以用 process_response() 方法来对 Response 进行处理。
+    - 方法的返回值必须为 Request 对象、Response 对象之一，或者抛出 IgnoreRequest 异常。
+
+    - process_response() 方法的参数有如下三个。
+        - request，是 Request 对象，即此 Response 对应的 Request。
+        - response，是 Response 对象，即此被处理的 Response。
+        - spider，是 Spider 对象，即此 Response 对应的 Spider。
+
+    - 下面对不同的返回情况做一下归纳：
+        - 当返回为 Request 对象时，更低优先级的 Downloader Middleware 的 process_response() 方法不会继续调用。该 Request 对象会重新放到调度队列里等待被调度，它相当于一个全新的 Request。然后，该 Request 会被 process_request() 方法顺次处理。
+        - 当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_response() 方法会继续调用，继续对该 Response 对象进行处理。
+        - 如果 IgnoreRequest 异常抛出，则 Request 的 errorback() 方法会回调。如果该异常还没有被处理，那么它便会被忽略。
+
+- process_exception(request, exception, spider) 方法
+    - 当 Downloader 或 process_request() 方法抛出异常时，例如抛出 IgnoreRequest 异常，process_exception() 方法就会被调用。
+    - 方法的返回值必须为 None、Response 对象、Request 对象之一。
+
+    - process_exception() 方法的参数有如下三个：
+        - request，即 Request 对象，即产生异常的 Request。
+        - exception，即 Exception 对象，即抛出的异常。
+        - spdier，即 Spider 对象，即 Request 对应的 Spider。
+
+    - 下面归纳一下不同的返回值。
+        - 当返回为 None 时，更低优先级的 Downloader Middleware 的 process_exception() 会被继续顺次调用，直到所有的方法都被调度完毕。
+        - 当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_exception() 方法不再被继续调用，每个 Downloader Middleware 的 process_response() 方法转而被依次调用。
+        - 当返回为 Request 对象时，更低优先级的 Downloader Middleware 的 process_exception() 也不再被继续调用，该 Request 对象会重新放到调度队列里面等待被调度，它相当于一个全新的 Request。然后，该 Request 又会被 process_request() 方法顺次处理。
+
+### 1.1.5 下载中间件修改实例(自定义UserAgent)
+- Scrapy 发送的 Request 使用的 User-Agent 是 Scrapy/1.4.0(+http://scrapy.org)，
+- 这其实是由 Scrapy 内置的 UserAgentMiddleware 设置的，UserAgentMiddleware 的源码如下所示：
+```
+from scrapy import signals
+
+class UserAgentMiddleware(object):
+
+    def __init__(self, user_agent='Scrapy'):
+
+        self.user_agent = user_agent
+
+    @classmethod
+
+    def from_crawler(cls, crawler):
+
+        o = cls(crawler.settings['USER_AGENT'])
+
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+
+        return o
+
+    def spider_opened(self, spider):
+
+        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
+
+    def process_request(self, request, spider):
+
+        if self.user_agent:
+
+            request.headers.setdefault(b'User-Agent', self.user_agent)
+
+```
+- 上述代码执行步骤：
+    - from_crawler() 方法中，首先尝试获取 settings 里面的 USER_AGENT，然后把 USER_AGENT 传递给 init() 方法进行初始化，
+    - 其参数就是 user_agent。如果没有传递 USER_AGENT 参数就默认设置为 Scrapy 字符串。
+    - 我们新建的项目没有设置 USER_AGENT，所以这里的 user_agent 变量就是 Scrapy。
+    - 接下来，在 process_request() 方法中，将 user-agent 变量设置为 headers 变量的一个属性，这样就成功设置了 User-Agent。
+    - 因此，User-Agent 就是通过此 Downloader Middleware 的 process_request() 方法设置的。
+      
+- 修改请求时的 User-Agent 可以有两种方式：
+    - 一是修改 settings 里面的 USER_AGENT 变量；
+    - setting.py 里面加一行 USER_AGENT 的定义即可
+    - USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+    - 二是通过 Downloader Middleware 的 process_request() 方法来修改。
+
+- 设置随机的 User-Agent，那就需要借助 Downloader Middleware 了。所以接下来我们用 Downloader Middleware 实现一个随机 User-Agent 的设置。
+    - 第一步：middlewares.py 里面自定义添加一个 RandomUserAgentMiddleware 的类
+```
+import random
+
+class RandomUserAgentMiddleware():
+
+    def __init__(self):
+
+        self.user_agents = ['Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)',
+
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2',
+
+            'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1'
+
+        ]
+
+    def process_request(self, request, spider):
+
+        request.headers['User-Agent'] = random.choice(self.user_agents)
+# 类的 __init__() 方法中定义了三个不同的 User-Agent，并用一个列表来表示。
+# 接下来实现了 process_request() 方法，它有一个参数 request，我们直接修改 request 的属性即可。
+# 在这里我们直接设置了 request 对象的 headers 属性的 User-Agent，设置内容是随机选择的 User-Agent，这样一个 Downloader Middleware 就写好了。
+```
+- 第二步：在 settings.py 中，将 DOWNLOADER_MIDDLEWARES 取消注释(默认该变量没有启用)，并设置成如下内容：
+    - DOWNLOADER_MIDDLEWARES = {'scrapydownloadertest.middlewares.RandomUserAgentMiddleware': 543,}
+
+    
+    
 ## 1.2 scrapy 爬取一个网站的流程
 - Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
     - 1.首先Spiders（爬虫里面写有start_url）将需要发送请求的url(requests)经ScrapyEngine（引擎）交给Scheduler（调度器）。
