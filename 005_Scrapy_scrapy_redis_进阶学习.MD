@@ -63,9 +63,10 @@
         - 使用post发送账号密码登陆请求：本项目文件夹中login项目
         
     - **Spider Middlewares（爬虫中间件）**：
-        - 爬虫中间件位于引擎和爬虫之间，它们传输的数据就是responses、requests、items
+        - 爬虫中间件位于引擎和爬虫之间，它们传输的数据就是response、requests、items
         - 主要自定扩展和操作引擎和Spider中间通信的功能组件（比如进入Spider的Responses;和从Spider出去的Requests）
-        - items虽然也经过爬虫中间件，但是有专门的Item Pipeline(管道)对齐进行处理
+        - items虽然也经过爬虫中间件，但是有专门的Item Pipeline(管道)对起进行处理
+        - scrapy 默认是未做任何处理，直接返回直接获取到的 response、requests、items
 
 - 上面所有组件，我们需要手动编写：
     - 爬虫、管道、中间件，重点是爬虫和管道，中间件辅助
@@ -199,9 +200,85 @@
 - Item Pipeline 和 spider详细具体参考Spider_devlopment_study_note项目中的ch12中的cnblog和sht爬虫
 
 
-### 1.1.4 爬虫和下载中间件
+### 1.1.4 爬虫中间件
 - Spider Middleware 和 Downloader Middleware
- 
+- 参考099文件中 002 和 005 图片
+- 具体查看 middlewares.py 中的两个类，scrapy 默认中间件对直接获取到的 response、requests、items 是不作处理，直接返回，需要处理需要自己定义
+
+- Spider Middleware 有如下三个作用。
+    - 我们可以在 Downloader 生成的 Response 发送给 Spider 处理之前，也就是在 Response 发送给 Spider 之前对 Response 进行处理。
+    - 我们可以在 Spider 生成的 Request 发送给 Scheduler 之前，也就是在 Request 发送给 Scheduler 之前对 Request 进行处理。
+    - 我们可以在 Spider 生成的 Item 发送给 Item Pipeline 之前，也就是在 Item 发送给 Item Pipeline 之前对 Item 进行处理。
+    
+    - Scrapy 其实已经提供了许多 Spider Middleware，它们被 SPIDER_MIDDLEWARES_BASE 这个变量所定义。
+    - SPIDER_MIDDLEWARES_BASE 变量的内容如下：
+    - 第一个 Middleware 是最靠近引擎的，最后一个 Middleware 是最靠近 Spider 的
+    
+```
+{
+    'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
+    
+    'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
+    
+    'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
+    
+     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
+    
+    'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
+}
+```
+
+- Spider Middleware 核心方法
+    - Spider Middleware 为 Scrapy 提供了基础的功能。如果我们想要扩展其功能，只需要实现某几个方法即可。
+    - 核心方法有如下 4 个，查看 middlewares.py 文件，里面默认有两个类，一个爬虫中间件类，一个下载器中间件类：
+        - process_spider_input(response, spider)
+        - process_spider_output(response, result, spider)
+        - process_spider_exception(response, exception, spider)
+        - process_start_requests(start_requests, spider)
+
+- process_spider_input(response, spider) 方法
+    - Downloader 生成的 Response 发送给 Spider 处理之前，也就是在 Response 发送给 Spider 之前对 Response 进行处理
+    - 当 Response 通过 Spider Middleware 时，该方法被调用，处理该 Response。
+    - 图上流向：Scrapy Engine ---> Spider
+    - 方法的参数有两个：
+        - response，即 Response 对象，即被处理的 Response；    
+        - spider，即 Spider 对象，即该 response 对应的 Spider 爬虫。
+    - process_spider_input() 应该返回 None 或者抛出一个异常。
+    - 如果其返回 None，Scrapy 将会继续处理该 Response，调用所有其他的 Spider Middleware 直到 Spider 爬虫处理该 Response。
+    - 如果其抛出一个异常，Scrapy 将不会调用任何其他 Spider Middleware 的 process_spider_input() 方法，并调用 Request 的 errback() 方法。 
+    - errback 的输出将会以另一个方向被重新输入到中间件中，使用 process_spider_output() 方法来处理，当其抛出异常时则调用 process_spider_exception() 来处理。
+
+- process_spider_output(response, result, spider) 方法
+    - 当 Spider 处理 Response 返回结果时，该方法被调用
+    - 图上流向：Spider ---> Scrapy Engine
+    - 方法的参数有三个：
+        - response，即 Response 对象，即生成该输出的 Response；
+        - result，包含 Request 或 Item 对象的可迭代对象，即 Spider 返回的结果；
+        - spider，即 Spider 对象，即其结果对应的 Spider。
+    - process_spider_output() 必须返回包含 Request 或 Item 对象的可迭代对象。
+    
+- process_spider_exception(response, exception, spider) 方法
+    - 当 Spider 或 Spider Middleware 的 process_spider_input() 方法抛出异常时， 该方法被调用。
+    - 方法的参数有三个：
+        - response，即 Response 对象，即异常被抛出时被处理的 Response；
+        - exception，即 Exception 对象，被抛出的异常；
+        - spider，即 Spider 对象，即抛出该异常的 Spider。
+    - process_spider_exception() 必须返回结果，要么返回 None ， 要么返回一个包含 Response 或 Item 对象的可迭代对象。
+        - 如果其返回 None ，Scrapy 将继续处理该异常，调用其他 Spider Middleware 中的 process_spider_exception() 方法，直到所有 Spider Middleware 都被调用。
+        - 如果其返回一个可迭代对象，则其他 Spider Middleware 的 process_spider_output() 方法被调用， 其他的 process_spider_exception() 将不会被调用。
+
+- process_start_requests(start_requests, spider) 方法
+    - 该方法以 Spider 爬虫启动的 Request 为参数时被调用，执行的过程类似于 process_spider_output() ，只不过其没有相关联的 Response 并且必须返回 Request。
+    - 方法的参数有两个：
+        - start_requests，即包含 Request 的可迭代对象，即 Start Requests；
+        - spider，即 Spider 对象，即 Start Requests 所属的 Spider。
+    - 其必须返回另一个包含 Request 对象的可迭代对象，该对象去下载器下载后再返回 Response。
+
+
+### 1.1.4 下载中间件
+        
+        
+        
         
         
 ## 1.2 scrapy 爬取一个网站的流程
