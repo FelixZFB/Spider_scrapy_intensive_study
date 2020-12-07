@@ -388,6 +388,7 @@ class ImagePipeline(ImagesPipeline):
         - process_response(request, response, spider)
         - process_exception(request, exception, spider)
         
+        
 - process_request(request, spider) 方法
     - 图上流向：Scrapy Engine ---> Downloader
     - Request 被 Scrapy 引擎调度给 Downloader 之前，process_request() 方法就会被调用，
