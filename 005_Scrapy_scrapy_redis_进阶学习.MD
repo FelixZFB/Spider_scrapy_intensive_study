@@ -43,13 +43,16 @@
         - 负责下载Scrapy Engine(引擎)发送过来的所有Requests请求对象，
         - 并将其获取到的Responses对象交还给Scrapy Engine(引擎)，由引擎交给Spider爬虫来处理，
     - **Spider（爬虫）**：
+        - xxx_spider.py
         - 它负责处理所有Responses对象,从中分析提取数据，获取Item字段需要的数据，
         - 并将需要继续爬取的URL提交给引擎，引擎再次交给Scheduler(调度器)
         - 将items数据提交给引擎，引擎再提交给Item Pipeline进行处理(存储到数据库，下载等等)
     - **Item Pipeline(管道)**：
+        - pipelines.py
         - 它负责处理Spider中获取到的Item，并进行进行后期处理（详细分析、过滤、存储等）的地方.
 
 - 两个中间件：   
+    - middlewares.py
     - **Downloader Middlewares（下载器中间件）**：
         - 下载器中间件位于引擎和下载器之间，它们传输的数据就是requests和responses
         - 主要是对requests和responses进行设置，主要是自定义扩展下载功能的组件。
@@ -180,7 +183,7 @@
         - 方式1：存储item内容到json、csv、xml、pickle、marshal 等格式的文件
         - 方式2：存储item内容到数据库，最常用就是MongoDB数据库，参考P03_51job爬虫项目
         - 方式3：下载图片或者视频到本地，参考sht爬虫项目
-    - 爬虫自己默认创建的管道，管道中可以自定义很多功能，但是必须要实现一个process_item方法，自定义的管道件不需要实现该函数
+    - 爬虫自己默认创建的管道，管道中可以自定义很多功能，但是默认创建的管道必须要实现一个process_item方法，自定义的管道件类不需要实现该函数
         - process_item方法说明:
             - spider爬虫提取出的item作为参数传入，同时传入的参数还有spider
             - 一个参数是 item，每次 Spider 生成的 Item 都会作为参数传递过来。另一个参数是 spider，就是 Spider 的实例。
@@ -223,7 +226,10 @@
     - 参考代码 sht 项目中自定义图片下载管道，sht 项目中使用了 image_urls字段
     
     - 注意：内置的 ImagesPipeline 会默认读取 Item 的 image_urls 字段，并认为该字段是一个列表形式，它会遍历 Item 的 image_urls 字段，然后取出每个 URL 进行图片下载。
-    - Item 的图片链接字段并不是 image_urls 字段表示的，也不是列表形式，而是单个的 URL。所以为了实现下载，我们需要重新定义下载的部分逻辑，即需要自定义 ImagePipeline，继承内置的 ImagesPipeline，重写方法。
+    - Item 的图片链接字段并不是 image_urls 字段表示的，也不是列表形式，而是单个的 URL。
+    - 所以为了实现下载，我们需要重新定义下载的部分逻辑，即需要自定义 ImagePipeline，继承内置的 ImagesPipeline，重写方法。
+    
+- 自定义图片下载管道示例：
 ```
 from scrapy import Request
 from scrapy.exceptions import DropItem
@@ -242,22 +248,23 @@ class ImagePipeline(ImagesPipeline):
         yield Request(item['url'])
 ```
 - 自定义图片下载管道说明:
-    -  ImagePipeline，继承 Scrapy 内置的 ImagesPipeline，重写了下面几个方法。
+    - ImagePipeline，继承 Scrapy 内置的 ImagesPipeline，重写了下面几个方法。
     - get_media_requests()。它的第一个参数 item 是爬取生成的 Item 对象。我们将它的 url 字段取出来，然后直接生成 Request 对象。此 Request 加入调度队列，等待被调度，执行下载。
     - file_path()。它的第一个参数 request 就是当前下载对应的 Request 对象。这个方法用来返回保存的文件名，直接将图片链接的最后一部分当作文件名即可。它利用 split() 函数分割链接并提取最后一部分，返回结果。这样此图片下载之后保存的名称就是该函数返回的文件名。
     - item_completed()，它是当单个 Item 完成下载时的处理方法。因为并不是每张图片都会下载成功，所以我们需要分析下载结果并剔除下载失败的图片。如果某张图片下载失败，那么我们就不需保存此 Item 到数据库。该方法的第一个参数 results 就是该 Item 对应的下载结果，它是一个列表形式，列表每一个元素是一个元组，其中包含了下载成功或失败的信息。这里我们遍历下载结果找出所有成功的下载列表。如果列表为空，那么该 Item 对应的图片下载失败，随即抛出异常 DropItem，该 Item 忽略。否则返回该 Item，说明此 Item 有效。
     - 具体对比查看 sht 项目中自定义图片下载管道，该管道实现功能更复杂一点
     - 补充1：
-        - 自定义图片管道可以定义多个，每个管道可以用来处理 item 中不同 url 列表字段，只需要 get_media_requests 方法中取出即可
-        - 如果是 url 有多个元素就 for 循环取出(查看 sht 项目)，如果就一个元素直接上面代码中 yield 请求
+        - 自定义图片管道可以定义多个，每个管道可以用来处理 item 中不同 url 列表字段，只需要 get_media_requests 方法中取出每个 url 即可
+        - 如果是 url 有多个元素就 for 循环取出(查看 sht 项目)，如果就 url 列表中就只有一个元素就直接上面示例代码中 yield 请求
     - 补充2：
         - 需要优先调用 ImagePipeline 对 Item 做下载后的筛选，下载失败的 Item 就直接忽略，它们就不会保存到 MongoDB 和 MySQL 里。
-        - 随后再调用其他存储的 Pipeline，这样就能确保存入数据库的图片都是下载成功的。
+        - 随后再调用其他用于存储的 Pipeline，这样就能确保存入数据库的图片都是下载成功的。
+
 
 
 ### 1.1.4 爬虫中间件
-- Spider Middleware： 实际使用中主要用来处理 Response 对象
-- Downloader Middleware： 实际使用中主要用来处理 Request 对象
+- Spider Middleware： 爬虫中间件实际使用中主要用来处理 Response 对象
+- Downloader Middleware： 下载中间件实际使用中主要用来处理 Request 对象
 
 - Spider Middleware 和 Downloader Middleware
 - 参考099文件中 002 和 005 图片
@@ -388,7 +395,6 @@ class ImagePipeline(ImagesPipeline):
         - process_response(request, response, spider)
         - process_exception(request, exception, spider)
         
-        
 - process_request(request, spider) 方法
     - 图上流向：Scrapy Engine ---> Downloader
     - Request 被 Scrapy 引擎调度给 Downloader 之前，process_request() 方法就会被调用，
@@ -435,8 +441,8 @@ class ImagePipeline(ImagesPipeline):
         - 当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_exception() 方法不再被继续调用，每个 Downloader Middleware 的 process_response() 方法转而被依次调用。
         - 当返回为 Request 对象时，更低优先级的 Downloader Middleware 的 process_exception() 也不再被继续调用，该 Request 对象会重新放到调度队列里面等待被调度，它相当于一个全新的 Request。然后，该 Request 又会被 process_request() 方法顺次处理。
 
-### 1.1.5 下载中间件修改实例(自定义UserAgent)
-- Scrapy 发送的 Request 使用的 User-Agent 是 Scrapy/1.4.0(+http://scrapy.org)，
+### 1.1.5 下载中间件修改实例(自定义UserAgent，随机的UserAgent)
+- Scrapy 默认发送的 Request 使用的 User-Agent 是 Scrapy/1.4.0(+http://scrapy.org)，
 - 这其实是由 Scrapy 内置的 UserAgentMiddleware 设置的，UserAgentMiddleware 的源码如下所示：
 ```
 from scrapy import signals
@@ -471,17 +477,18 @@ class UserAgentMiddleware(object):
 - 上述代码执行步骤：
     - from_crawler() 方法中，首先尝试获取 settings 里面的 USER_AGENT，然后把 USER_AGENT 传递给 init() 方法进行初始化，
     - 其参数就是 user_agent。如果没有传递 USER_AGENT 参数就默认设置为 Scrapy 字符串。
-    - 我们新建的项目没有设置 USER_AGENT，所以这里的 user_agent 变量就是 Scrapy。
+    - 我们新建的项目没有设置 USER_AGENT，所以这里的 user_agent 变量就是默认给定的 Scrapy。
     - 接下来，在 process_request() 方法中，将 user-agent 变量设置为 headers 变量的一个属性，这样就成功设置了 User-Agent。
     - 因此，User-Agent 就是通过此 Downloader Middleware 的 process_request() 方法设置的。
       
 - 修改请求时的 User-Agent 可以有两种方式：
-    - 一是修改 settings 里面的 USER_AGENT 变量；
-    - setting.py 里面加一行 USER_AGENT 的定义即可
-    - USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+    - 一是直接修改 settings 里面的 USER_AGENT 变量，默认是被注释掉未启用状态；
+        - setting.py 里面加一行 USER_AGENT 的定义即可
+        - USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
     - 二是通过 Downloader Middleware 的 process_request() 方法来修改。
 
-- 设置随机的 User-Agent，那就需要借助 Downloader Middleware 了。所以接下来我们用 Downloader Middleware 实现一个随机 User-Agent 的设置。
+- 设置随机的 User-Agent，那就需要借助 Downloader Middleware 了。
+    - 所以接下来我们用 Downloader Middleware 实现一个随机 User-Agent 的设置。
     - 第一步：middlewares.py 里面自定义添加一个 RandomUserAgentMiddleware 的类
 ```
 import random
@@ -506,9 +513,9 @@ class RandomUserAgentMiddleware():
 # 在这里我们直接设置了 request 对象的 headers 属性的 User-Agent，设置内容是随机选择的 User-Agent，这样一个 Downloader Middleware 就写好了。
 ```
 - 第二步：在 settings.py 中，将 DOWNLOADER_MIDDLEWARES 取消注释(默认该变量没有启用)，并设置成如下内容：
+    - 即要在设置中启用我们自定义的下载中间件
     - DOWNLOADER_MIDDLEWARES = {'scrapydownloadertest.middlewares.RandomUserAgentMiddleware': 543,}
 
-    
     
 ## 1.2 scrapy 爬取一个网站的流程
 - Scrapy爬取一个网站的工作流程如下，结合上面的图片理解：  
