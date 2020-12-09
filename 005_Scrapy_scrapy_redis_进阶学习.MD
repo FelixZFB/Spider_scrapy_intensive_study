@@ -402,8 +402,8 @@ ITEM_PIPELINES = {
 
 
 ### 1.1.4 爬虫中间件
-- Spider Middleware： 爬虫中间件实际使用中主要用来处理 Response 对象
-- Downloader Middleware： 下载中间件实际使用中主要用来处理 Request 对象
+- Spider Middleware： 爬虫中间件实际使用中主要用来处理 Response 对象，爬虫对 Response 对象处理前进行处理(比如修改 Response 对象中的状态码等)
+- Downloader Middleware： 下载中间件实际使用中主要用来处理 Request 对象，下载器下载前对 Request 进行处理(比如修改 Request 对象的请求头)
 
 - Spider Middleware 和 Downloader Middleware
 - 参考099文件中 002 和 005 图片
@@ -479,6 +479,9 @@ ITEM_PIPELINES = {
 
 
 ### 1.1.4 下载中间件
+- Spider Middleware： 爬虫中间件实际使用中主要用来处理 Response 对象，爬虫对 Response 对象处理前进行处理(比如修改 Response 对象中的状态码等)
+- Downloader Middleware： 下载中间件实际使用中主要用来处理 Request 对象，下载器下载前对 Request 进行处理(比如修改 Request 对象的请求头)
+
 - Downloader Middleware 即下载中间件，它是处于 Scrapy 的 Request 和 Response 之间的处理模块。
 - Scheduler 从队列中拿出一个 Request 发送给 Downloader 执行下载，这个过程会经过 Downloader Middleware 的处理。
 - 另外，当 Downloader 将 Request 下载完成得到 Response 返回给 Spider 时会再次经过 Downloader Middleware 处理。       
@@ -580,6 +583,7 @@ ITEM_PIPELINES = {
         - 当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_exception() 方法不再被继续调用，每个 Downloader Middleware 的 process_response() 方法转而被依次调用。
         - 当返回为 Request 对象时，更低优先级的 Downloader Middleware 的 process_exception() 也不再被继续调用，该 Request 对象会重新放到调度队列里面等待被调度，它相当于一个全新的 Request。然后，该 Request 又会被 process_request() 方法顺次处理。
 
+
 ### 1.1.5 下载中间件修改实例(自定义UserAgent，随机的UserAgent)
 - Scrapy 默认发送的 Request 使用的 User-Agent 是 Scrapy/1.4.0(+http://scrapy.org)，
 - 这其实是由 Scrapy 内置的 UserAgentMiddleware 设置的，UserAgentMiddleware 的源码如下所示：
@@ -654,6 +658,23 @@ class RandomUserAgentMiddleware():
 - 第二步：在 settings.py 中，将 DOWNLOADER_MIDDLEWARES 取消注释(默认该变量没有启用)，并设置成如下内容：
     - 即要在设置中启用我们自定义的下载中间件
     - DOWNLOADER_MIDDLEWARES = {'scrapydownloadertest.middlewares.RandomUserAgentMiddleware': 543,}
+
+
+### 1.1.6 Scrapy 爬取 JS 动态渲染页面 
+- 越来越多的网页在浏览器中呈现的结果是经过 JavaScript 渲染得到的，
+- 如果我们使用 Scrapy 直接对其进行抓取的话，其结果和使用 requests 没有什么区别
+- 获取到的不是页面展示的真实内容，而是一些 JavaScript 代码
+- 我们可以将 Selenium 或 Pyppeteer 通过 Downloader Middleware 和 Scrapy 融合起来，实现 JavaScript 渲染页面的抓取
+
+- Downloader Middleware 中有三个我们可以实现的方法 process_request、process_response 以及 process_exception 方法
+    - process_request 方法和其不同的返回值的效果,具体查看上面 ### 1.1.4 Downloader Middleware 里面的内容
+    - process_request 方法当返回为 Response 对象时，更低优先级的 Downloader Middleware 的 process_request 和 process_exception 方法就不会被继续调用，每个 Downloader Middleware 的 process_response 方法转而被依次调用。调用完毕之后，直接将 Response 对象发送给 Spider 来处理。
+    - 当返回结果为 Response 对象时，低优先级的 process_request 方法就不会被继续调用了，这个 Response 对象会直接经由 process_response 方法处理后转交给 Spider 来解析。
+    - process_request 接收的参数是 request，即 Request 对象，怎么会返回 Response 对象呢？原因可想而知了，这个 Request 对象不再经由 Scrapy 的 Downloader 来处理了，而是在 process_request 方法里面直接就完成了 Request 的发送操作，然后在得到了对应的 Response 结果后再将其返回就好了。
+    - 对于 JavaScript 渲染的页面来说，照这个方法来做，我们就可以把 Selenium 或 Pyppeteer 加载页面的过程在 process_request 方法里面实现，得到网页渲染完后的源代码后直接构造 Response 返回即可，这样我们就完成了借助 Downloader Middleware 实现 Scrapy 爬取动态渲染页面的过程。
+    
+- 我们可以直接使用 GerapyPyppeteer 库
+- 具体使用实例查看：https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46#/detail/pc?id=1706
 
     
 ## 1.2 scrapy 爬取一个网站的流程
@@ -834,6 +855,7 @@ AttributeError: 'HtmlResponse' object has no attribute 're'
         - 参考tieba爬虫项目
     - 方法5：scrapy.Request(url,callback,meta,dont_filter)
 
+
 ## 1.6 scrapy.Request()方法中的参数说明？
 - scrapy.Request() ===>相当于构造了一个requests对象
 - scrapy.Request(url[,callback,method="GET",headers,body,cookies,meta,dont_filter=False])
@@ -849,6 +871,7 @@ AttributeError: 'HtmlResponse' object has no attribute 're'
     - 重点注意：cookies参数，必须单独作为一个参数，不能像之前requests库一样，将cookies放在headers内部
         - 并且传入的cookies是一个字典，键值的形式，参考## 2.6 scrapy携带cookies登录
 
+
 ## 1.7 为什么要单独定义item？
 - 定义item即提前规划好哪些字段需要抓取，scrapy.Field()仅仅是提前占坑，
     - 通过item.py能够让别人清楚自己的爬虫是在抓取什么数据；
@@ -857,6 +880,7 @@ AttributeError: 'HtmlResponse' object has no attribute 're'
     - Item使用之前需要先导入并且实例化，之后的使用方法和使用字典相同
         - from yanguan.items import YanguanItem
         - item = YanguanItem() #实例化
+
 
 ## 1.8 pipeline的使用
 - pipeline里面可以写多个管道分别用于处理不同爬虫的item，
@@ -891,6 +915,7 @@ def process_item(self, item, spider):
         self._process_bookeDetail_item(item)
     return item
 ```
+  
         
 ## 1.9 scrapy中logging模块的使用
 - 第一步：settings中设置LOG_LEVEL="WARNING" 级别可以自定义
@@ -900,12 +925,14 @@ def process_item(self, item, spider):
         import logging 然后实例化logger，然后设置logger输出
         ![logging日志使用](099_爬虫相关图片解释/010_logging日志模块在scrapy中的使用1.png)
         ![logging日志使用](099_爬虫相关图片解释/010_logging日志模块在scrapy中的使用2.png)
+  
         
 ## 1.10 scrapy爬虫启动后的debug信息
 - 爬虫启动运行后，CMD窗口会显示一系列信息，常见信息具体含义参考下图
 - 主要展示启动爬虫，爬取过程的一系列信息，日志信息，爬取的页面，爬取结果等等
 - 我们一般只关注里面出现的警告错误信息
 ![终端窗口的debug信息](099_爬虫相关图片解释/011_spider爬虫启动后的终端窗口的debug信息.png)
+ 
  
 ## 1.11 scrapy shell终端调试窗口
 - scrapy调试工具
@@ -916,6 +943,7 @@ def process_item(self, item, spider):
     - 使用response.xpath(),查看是否可以返回我们需要的结果
     ![scrapy shell调试](099_爬虫相关图片解释/012_终端scrapy%20shell调试.png)
 - 退出调试执行命令：exit
+
 
 ## 1.12 下一页网址寻找，url地址JS动态生成的如何解决？
 - 情况1：下一页的URL地址直接在响应中，直接正则查找即可
@@ -928,7 +956,7 @@ def process_item(self, item, spider):
     - 参考Spider_devlopment_study_note项目中ch17中的云起书院爬虫
 
 
-# 2 CrawlSpider规则爬虫   
+# 2 CrawlSpider 规则爬虫   
 ## 2.1 Spider、CrawlSpider、XMLFeedSpider和RedisSpider有什么区别？
 - Spider: scrapy.Spider,是所有Spider的基类，它是最基础的爬虫，所有的spider都会继承scrapy.Spider。
     - 它提供了start\_requests()方法的默认实现，
@@ -1000,6 +1028,7 @@ rules = [
     - scrapy genspider -t crawl cf bxjg.circ.gov.cn 创建crawl爬虫，爬虫名cf（处罚），后面网址是允许的域名
     ![circ爬虫创建](099_爬虫相关图片解释/014_circ保监会CrawlSpider创建.png)
     - 该爬虫需要使用代理访问，直接启动爬取会封IP一段时间
+  
     
 ## 2.3 scrapy模拟登陆携带cookies
 - start_urls默认是调用的库里面的start_requests方法解析
@@ -1008,6 +1037,7 @@ rules = [
 - 参考下面的图片：
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies1.png)
 ![scrapy模拟登陆携带cookies](099_爬虫相关图片解释/015_scrapy模拟登陆携带cookies2.png)
+
 
 ## 2.4 自定义中间件middlewares
 - 中间件自定义和管道一样，先去自定义，然后settings里面启用，
@@ -1054,6 +1084,7 @@ rules = [
 - 具体参考下图及circ爬虫中的middlewares和settings中的代码
 ![自定义下载中间件](099_爬虫相关图片解释/016_自定义下载器中间件.png)
 
+
 ## 2.5 scrapy发送post登录请求
 - scrapy中的Request默认就是使用的get方法
 - 登录需要传递FormData数据，使用的是post请求
@@ -1075,6 +1106,7 @@ rules = [
     - 具体参考login爬虫项目中的renren.py爬虫文件及下面图片
     ![scrapy模拟登陆之自动登录](099_爬虫相关图片解释/018_scrapy模拟登陆之自动登录.png)
     
+    
 ## 2.6 scrapy携带cookies登录
 - cookies参数，必须单独作为一个参数，不能像之前requests库一样，将cookies放在headers内部
 - 并且传入的cookies是一个字典，使用分割加字典推导式生成所需的字典形式的cookies
@@ -1082,21 +1114,24 @@ rules = [
 - 下图中注释掉的部分，就是错误的写法
 ![scrapy携带cookies登陆注意](099_爬虫相关图片解释/019_scrapy携带cookies登陆注意.png)
 
+
 ## 2.7 爬虫实例
 - tieba爬虫是scrapy.Spider普通爬虫      该爬虫注意allowed_domains = ['tieba.baidu.com']当时写错了，参考代码
 - tencent爬虫是CrawlSpider规则爬虫      网址是动态生成的爬取失败，有反爬措施，待研究
 
 
-# 3 Scrapy_redis爬虫入门
-- scrapy-redis项目官网：https://github.com/rolando/scrapy-redis.git
-- 下载项目到本地，进入虚拟环境，切换到到放置项目的文件夹
-- 执行以下命令，自动下载项目文件到本地：
-    - git clone https://github.com/rolando/scrapy-redis.git
-    - 自带三个爬虫项目示例，位于example-project里面
-- 参考官方案例
-- Spider_development项目中的ch12 sht爬虫(redis爬虫，redis过滤)  
-- TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
-- 里面都有每步设置详细说明解释，settings里面重点设置scrapy-redis
+
+# 3 分布式爬虫 (scrapy-redis爬虫)
+- Scrapy_redis爬虫入门
+    - scrapy-redis项目官网：https://github.com/rolando/scrapy-redis.git
+    - 下载项目到本地，进入虚拟环境，切换到到放置项目的文件夹
+    - 执行以下命令，自动下载项目文件到本地：
+        - git clone https://github.com/rolando/scrapy-redis.git
+        - 自带三个爬虫项目示例，位于example-project里面
+    - 参考官方案例
+    - Spider_development项目中的ch12 sht爬虫(redis爬虫，redis过滤)  
+    - TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
+    - 里面都有每步设置详细说明解释，settings里面重点设置scrapy-redis
 
 ## 3.1 scrapy-redis爬虫流程及其优势
 - 相对于scrapy爬虫，数据都是存储在项目本地
