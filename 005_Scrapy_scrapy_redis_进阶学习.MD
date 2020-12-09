@@ -228,8 +228,9 @@
     - 注意：内置的 ImagesPipeline 会默认读取 Item 的 image_urls 字段，并认为该字段是一个列表形式，它会遍历 Item 的 image_urls 字段，然后取出每个 URL 进行图片下载。
     - Item 的图片链接字段并不是 image_urls 字段表示的，也不是列表形式，而是单个的 URL。
     - 所以为了实现下载，我们需要重新定义下载的部分逻辑，即需要自定义 ImagePipeline，继承内置的 ImagesPipeline，重写方法。
-    
-- 自定义图片下载管道示例：
+
+
+- 下载保存图片的管道示例，ImagePipeline：   
 ```
 from scrapy import Request
 from scrapy.exceptions import DropItem
@@ -260,6 +261,144 @@ class ImagePipeline(ImagesPipeline):
         - 需要优先调用 ImagePipeline 对 Item 做下载后的筛选，下载失败的 Item 就直接忽略，它们就不会保存到 MongoDB 和 MySQL 里。
         - 随后再调用其他用于存储的 Pipeline，这样就能确保存入数据库的图片都是下载成功的。
 
+
+- MongoDB 保存数据的管道示例
+- pipelines.py 里添加如下类的实现，MongoDB里面需要先手动创建用于存储的数据库，比如此处数据库名称是 images360
+```python
+import pymongo
+
+class MongoPipeline(object):
+
+    def __init__(self, mongo_uri, mongo_db):
+
+        self.mongo_uri = mongo_uri
+
+        self.mongo_db = mongo_db
+
+    @classmethod
+
+    def from_crawler(cls, crawler):
+
+        return cls(mongo_uri=crawler.settings.get('MONGO_URI'),
+
+            mongo_db=crawler.settings.get('MONGO_DB')
+
+        )
+
+    def open_spider(self, spider):
+
+        self.client = pymongo.MongoClient(self.mongo_uri)
+
+        self.db = self.client[self.mongo_db]
+
+    def process_item(self, item, spider):
+
+        self.db[item.collection].insert(dict(item))
+
+        return item
+
+    def close_spider(self, spider):
+
+        self.client.close()
+
+```
+- 同时需要用到两个变量，MONGO_URI 和 MONGO_DB，即存储到 MongoDB 的链接地址和数据库名称。我们在 settings.py 里添加这两个变量，如下所示：
+    - MONGO_URI = 'localhost'
+    - MONGO_DB = 'images360'
+    - 分别定义了数据库地址和数据库名称
+    - 这里最主要的方法是 process_item()，直接调用 Collection 对象的 insert 方法即可完成数据的插入，最后返回 Item 对象
+
+
+- MySQL 保存数据的管道示例
+- 首先需要MySQL 中创建数据库和数据表
+    - 新建一个数据库，名字还是 images360，SQL 语句如下所示：
+        - CREATE DATABASE images360 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+    - 新建一个数据表，包含 id、url、title、thumb 四个字段，SQL 语句如下所示：
+        - CREATE TABLE images (id VARCHAR(255) NULL PRIMARY KEY, url VARCHAR(255) NULL , title VARCHAR(255) NULL , thumb VARCHAR(255) NULL)
+    - 执行完 SQL 语句之后，我们就成功创建好了数据表。接下来就可以往表里存储数据了。
+- 实现一个 MySQLPipeline，代码如下所示：
+```python
+import pymysql
+
+class MysqlPipeline():
+
+    def __init__(self, host, database, user, password, port):
+
+        self.host = host
+
+        self.database = database
+
+        self.user = user
+
+        self.password = password
+
+        self.port = port
+
+    @classmethod
+
+    def from_crawler(cls, crawler):
+
+        return cls(host=crawler.settings.get('MYSQL_HOST'),
+
+            database=crawler.settings.get('MYSQL_DATABASE'),
+
+            user=crawler.settings.get('MYSQL_USER'),
+
+            password=crawler.settings.get('MYSQL_PASSWORD'),
+
+            port=crawler.settings.get('MYSQL_PORT'),
+
+        )
+
+    def open_spider(self, spider):
+
+        self.db = pymysql.connect(self.host, self.user, self.password, self.database, charset='utf8', port=self.port)
+
+        self.cursor = self.db.cursor()
+
+    def close_spider(self, spider):
+
+        self.db.close()
+
+    def process_item(self, item, spider):
+
+        data = dict(item)
+
+        keys = ', '.join(data.keys())
+
+        values = ', '.join(['% s'] * len(data))
+
+        sql = 'insert into % s (% s) values (% s)' % (item.table, keys, values)
+
+        self.cursor.execute(sql, tuple(data.values()))
+
+        self.db.commit()
+
+        return item
+
+```
+- 如前所述，这里用到的数据插入方法是一个动态构造 SQL 语句的方法。
+- 这里还需要几个 MySQL 的配置，我们在 settings.py 里添加几个变量，如下所示：
+```python
+MYSQL_HOST = 'localhost'
+MYSQL_DATABASE = 'images360'
+MYSQL_PORT = 3306
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = '123456'
+```
+- 分别定义了 MySQL 的地址、数据库名称、端口、用户名、密码。这样，MySQL Pipeline 就完成了。
+
+
+- 上面定义了三个 Item Pipeline 的定义就完成了。最后只需要启用就可以了，修改 settings.py，设置 ITEM_PIPELINES，如下所示：
+```python
+ITEM_PIPELINES = {
+    'images360.pipelines.ImagePipeline': 300,
+    'images360.pipelines.MongoPipeline': 301,
+    'images360.pipelines.MysqlPipeline': 302,
+}
+```
+- 注意调用的顺序。我们需要优先调用 ImagePipeline 对 Item 做下载后的筛选，下载失败的 Item 就直接忽略，它们就不会保存到 MongoDB 和 MySQL 里。
+- 随后再调用其他两个存储的 Pipeline，这样就能确保存入数据库的图片都是下载成功的。
 
 
 ### 1.1.4 爬虫中间件
