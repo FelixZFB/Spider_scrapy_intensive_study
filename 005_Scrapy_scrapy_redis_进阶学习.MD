@@ -496,33 +496,33 @@ ITEM_PIPELINES = {
     - DOWNLOADER_MIDDLEWARES_BASE 变量的内容如下所示：   
 {
 
-    'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+    'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
 
-    'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+    'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
 
-    'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+    'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
 
-    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 400,
+    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 400,
 
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 500,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 500,
 
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 550,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 550,
 
-    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
+    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
 
-    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
 
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
 
-    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
 
-    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
 
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
 
-    'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+    'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
 
-    'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+    'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
 
 }
     - 如果自己定义的 Downloader Middleware 要添加到项目里，DOWNLOADER_MIDDLEWARES_BASE 变量不能直接修改。
@@ -592,29 +592,29 @@ from scrapy import signals
 
 class UserAgentMiddleware(object):
 
-    def __init__(self, user_agent='Scrapy'):
+    def __init__(self, user_agent='Scrapy'):
 
-        self.user_agent = user_agent
+        self.user_agent = user_agent
 
-    @classmethod
+    @classmethod
 
-    def from_crawler(cls, crawler):
+    def from_crawler(cls, crawler):
 
-        o = cls(crawler.settings['USER_AGENT'])
+        o = cls(crawler.settings['USER_AGENT'])
 
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
 
-        return o
+        return o
 
-    def spider_opened(self, spider):
+    def spider_opened(self, spider):
 
-        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
+        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
 
-    def process_request(self, request, spider):
+    def process_request(self, request, spider):
 
-        if self.user_agent:
+        if self.user_agent:
 
-            request.headers.setdefault(b'User-Agent', self.user_agent)
+            request.headers.setdefault(b'User-Agent', self.user_agent)
 
 ```
 - 上述代码执行步骤：
@@ -633,24 +633,24 @@ class UserAgentMiddleware(object):
 - 设置随机的 User-Agent，那就需要借助 Downloader Middleware 了。
     - 所以接下来我们用 Downloader Middleware 实现一个随机 User-Agent 的设置。
     - 第一步：middlewares.py 里面自定义添加一个 RandomUserAgentMiddleware 的类
-```
+```python
 import random
 
 class RandomUserAgentMiddleware():
 
-    def __init__(self):
+    def __init__(self):
 
-        self.user_agents = ['Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)',
+        self.user_agents = ['Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)',
 
-            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2',
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0 Safari/537.2',
 
-            'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1'
+            'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1'
 
-        ]
+        ]
 
-    def process_request(self, request, spider):
+    def process_request(self, request, spider):
 
-        request.headers['User-Agent'] = random.choice(self.user_agents)
+        request.headers['User-Agent'] = random.choice(self.user_agents)
 # 类的 __init__() 方法中定义了三个不同的 User-Agent，并用一个列表来表示。
 # 接下来实现了 process_request() 方法，它有一个参数 request，我们直接修改 request 的属性即可。
 # 在这里我们直接设置了 request 对象的 headers 属性的 User-Agent，设置内容是随机选择的 User-Agent，这样一个 Downloader Middleware 就写好了。
@@ -1122,6 +1122,114 @@ rules = [
 
 
 # 3 分布式爬虫 (scrapy-redis爬虫)
+- Scrapy 基本的爬虫功能，虽然爬虫是异步加多线程的，但是我们却只能在一台主机上运行，所以爬取效率还是有限的，而分布式爬虫则是将多台主机组合起来，共同完成一个爬取任务，这将大大提高爬取的效率。
+- 分布式爬虫架构
+    - Scrapy 单机爬虫中有一个本地爬取队列 Queue，这个队列是利用 deque 模块实现的。如果新的 Request 生成就会放到队列里面，随后 Request 被 Scheduler 调度。之后，Request 交给 Downloader 执行爬取
+    - 两个 Scheduler 同时从队列里面获取 Request，每个 Scheduler 都会有其对应的 Downloader，那么在带宽足够、正常爬取且不考虑队列存取压力的情况下，爬取效率会有什么变化呢？没错，爬取效率会翻倍。
+    - Scheduler 可以扩展多个，Downloader 也可以扩展多个。而爬取队列 Queue 必须始终为一个，也就是所谓的共享爬取队列。这样才能保证 Scheduer 从队列里调度某个 Request 之后，其他 Scheduler 不会重复调度此 Request，就可以做到多个 Schduler 同步爬取。这就是分布式爬虫的基本雏形
+    - 我们需要做的就是在多台主机上同时运行爬虫任务协同爬取，而协同爬取的前提就是共享爬取队列。这样各台主机就不需要维护各自的爬取队列了，而是从共享爬取队列存取 Request。但是各台主机还有各自的 Scheduler 和 Downloader，所以调度和下载功能是分别完成的。如果不考虑队列存取性能消耗，爬取效率还是可以成倍提高的。
+    - ![scrapy 单机爬虫](099_爬虫相关图片解释/020_scrapy单机爬虫示意图.png)
+    - ![scrapy 分布式爬虫](099_爬虫相关图片解释/020_scrapy分布式爬虫示意图.png)
+
+- 分布式爬虫维护爬取队列 Queue
+    - 首先需要考虑的就是性能问题，那什么数据库存取效率高呢？这时我们自然想到了基于内存存储的 Redis，而且 Redis 还支持多种数据结构，例如列表 List、集合 Set、有序集合 Sorted Set 等，存取的操作也非常简单，所以在这里我们采用 Redis 来维护爬取队列。
+    - redis 几种数据结构存储实际各有千秋，分析如下：
+        - 列表数据结构有 lpush、lpop、rpush、rpop 方法，所以我们可以用它实现一个先进先出的爬取队列，也可以实现一个先进后出的栈式爬取队列。
+        - 集合的元素是无序且不重复的，这样我们就可以非常方便地实现一个随机排序的不重复的爬取队列。
+        - 有序集合带有分数表示，而 Scrapy 的 Request 也有优先级的控制，所以我们用有序集合就可以实现一个带优先级调度的队列。
+        - 这些不同的队列我们需要根据具体爬虫的需求灵活选择。
+        - scrapy-redis 爬虫默认使用的是无序集合
+
+- Scrapy 如何去重  
+    - Scrapy 有自动去重功能，它的去重使用了 Python 中的集合。这个集合记录了 Scrapy 中每个 Request 的指纹，这个指纹实际上就是 Request 的散列值。
+    - 我们可以看看 Scrapy 关于 request 指纹加密的源代码，如下所示：     
+    
+```python
+import hashlib
+
+def request_fingerprint(request, include_headers=None):
+
+    if include_headers:
+
+        include_headers = tuple(to_bytes(h.lower())
+
+                                 for h in sorted(include_headers))
+
+    cache = _fingerprint_cache.setdefault(request, {})
+
+    if include_headers not in cache:
+
+        fp = hashlib.sha1()
+
+        fp.update(to_bytes(request.method))
+
+        fp.update(to_bytes(canonicalize_url(request.url)))
+
+        fp.update(request.body or b'')
+
+        if include_headers:
+
+            for hdr in include_headers:
+
+                if hdr in request.headers:
+
+                    fp.update(hdr)
+
+                    for v in request.headers.getlist(hdr):
+
+                        fp.update(v)
+
+        cache[include_headers] = fp.hexdigest()
+
+    return cache[include_headers]
+
+```
+- request_fingerprint 就是计算 Request 指纹的方法，其方法内部使用的是 hashlib 的 sha1 方法。
+- 计算的字段包括 Request 的 Method、URL、Body、Headers 这几部分内容，这里只要有一点不同，那么计算的结果就不同。计算得到的结果是加密后的字符串，也就是指纹。每个 Request 都有独有的指纹，指纹就是一个字符串，判定字符串是否重复比判定 Request 对象是否重复容易得多，所以指纹可以作为判定 Request 是否重复的依据。
+- 如何判定是否重复呢？Scrapy 是这样实现的，如下所示：
+```python
+def __init__(self):
+
+    self.fingerprints = set()
+ 
+def request_seen(self, request):
+
+    fp = self.request_fingerprint(request)
+
+    if fp in self.fingerprints:
+
+        return True
+
+    self.fingerprints.add(fp)
+
+```
+- 在去重的类 RFPDupeFilter 中，有一个 request_seen 方法，这个方法有一个参数 request，它的作用就是检测该 Request 对象是否重复。这个方法调用 request_fingerprint 获取该 Request 的指纹，检测这个指纹是否存在于 fingerprints 变量中，而 fingerprints 是一个集合，集合的元素都是不重复的。如果指纹存在，那么就返回 True，说明该 Request 是重复的，否则将这个指纹加入集合中。如果下次还有相同的 Request 传递过来，指纹也是相同的，那么这时指纹就已经存在于集合中，Request 对象就会直接判定为重复。这样去重的目的就实现了。
+- Scrapy 的去重过程就是，利用集合元素的不重复特性来实现 Request 的去重。
+- 多台主机去重，这个指纹集合也需要是共享的，Redis 正好有集合的存储数据结构，我们可以利用 Redis 的集合作为指纹集合，那么这样去重集合也是共享的。每台主机新生成 Request 之后，会把该 Request 的指纹与集合比对，如果指纹已经存在，说明该 Request 是重复的，否则将 Request 的指纹加入这个集合中即可。利用同样的原理不同的存储结构我们也可以实现分布式 Reqeust 的去重。
+
+
+- Scrapy 分布式爬虫如何防止中断
+    - 因为爬取队列本身就是用数据库保存的，如果爬虫中断了，数据库中的 Request 依然是存在的，下次启动就会接着上次中断的地方继续爬取。
+    - 所以，当 Redis 的队列为空时，爬虫会重新爬取；当 Redis 的队列不为空时，爬虫便会接着上次中断之处继续爬取。
+
+- 以上内容只是解释了分布式爬虫实现的原理，实际就是 Scrapy-Redis 爬虫源码的实现，以及它的详细工作原理
+- 分布式爬虫直接使用 scrapy_redis 库实现即可，安装该库，直接继承该爬虫，具体查看 ## 3.2 中详细内容
+
+
+## 3.0 scrapy-redis 分布式爬虫原理
+- 核心源码解读
+- 查看：https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46#/detail/pc?id=1708
+
+- 本地的 scrapy-redis 爬虫并不是真正意义的分布式爬虫，因为 Redis 队列我们使用的是本地的 Redis，
+- 所以多个爬虫需要运行在本地才可以，如果想实现真正意义的分布式爬虫，可以使用远程 Redis，这样我们就能在多台主机运行爬虫连接此 Redis 从而实现真正意义上的分布式爬虫了
+- 不过没关系，我们可以在本地启动多个爬虫模拟分布式爬虫的爬取效果。
+    - 我们可以打开多个命令行窗口分别启动运行如下命令：
+    - scrapy crawl xxx_spider
+    - 后面启动的爬虫启动时检测到有当前队列中 Request 存在就直接读取已经存在的 Request，然后接着爬取了
+
+
+
+## 3.1 scrapy-redis 分布式爬虫流程及其优势
 - Scrapy_redis爬虫入门
     - scrapy-redis项目官网：https://github.com/rolando/scrapy-redis.git
     - 下载项目到本地，进入虚拟环境，切换到到放置项目的文件夹
@@ -1133,27 +1241,27 @@ rules = [
     - TZKT_Study_Note项目中P03_51job爬虫，scrapy-redis-MongoDB综合爬虫
     - 里面都有每步设置详细说明解释，settings里面重点设置scrapy-redis
 
-## 3.1 scrapy-redis爬虫流程及其优势
-- 相对于scrapy爬虫，数据都是存储在项目本地
-- scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
-- redis数据库可以本地持久化，里面可以存储数据(但是实际应用中数据持久化一般存储在MongoDB或者MySQL中，redis只是用来分布式爬取和去重)
-- 本来是一台电脑一个爬虫，现在通过将requests和items存储在redis数据库，多台电脑通过从redis数据库
-- 中取出requests然后去爬取，爬取结果又存储到redis数据库中，可以轻松实现分布式爬虫
-- 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
-- 由于redis中数据可以本地持久化，爬取过的对象本地已经有了，就不会在爬取了，
-- 可以断点爬取，这次爬虫关闭后，下次启动爬虫，只会爬取未爬过的request对象
-- redis的这种属性就可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
-- 而scrapy.Spider和CrawlSpider爬虫关闭后再次打开，会完全重新开始爬取
-- 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
+- Scrapy_redis爬虫优势
+    - 相对于scrapy爬虫，数据都是存储在项目本地
+    - scrapy-redis中scheduler调度器中的requests和ItemPipeline管道中的items都是存储在redis数据库中
+    - redis数据库可以本地持久化，里面可以存储数据(但是实际应用中数据持久化一般存储在MongoDB或者MySQL中，redis只是用来分布式爬取和去重)
+    - 本来是一台电脑一个爬虫，现在通过将requests和items存储在redis数据库，多台电脑通过从redis数据库
+    - 中取出requests然后去爬取，爬取结果又存储到redis数据库中，可以轻松实现分布式爬虫
+    - 同时，redis中的set无序集合和zset有序集合类型数据，具有自动去掉重复元素的功能
+    - 由于redis中数据可以本地持久化，爬取过的对象本地已经有了，就不会在爬取了，
+    - 可以断点爬取，这次爬虫关闭后，下次启动爬虫，只会爬取未爬过的request对象
+    - redis的这种属性就可以实现增量式爬虫，爬取过的requests就不在爬取，只会不但爬取新的requests
+    - 而scrapy.Spider和CrawlSpider爬虫关闭后再次打开，会完全重新开始爬取
+    - 爬虫流程参考![scrapy-redis爬虫流程](099_爬虫相关图片解释/020_scrapy-redis的爬虫流程.png)
 
-## 3.2 scrapy-redis爬虫实例各功能介绍
+## 3.2 scrapy-redis 爬虫实例各功能介绍
 - 参考以下官方项目下的爬虫示例，以dmoz.py爬虫为例
 - 006_scrapy_redis爬虫/scrapy-redis/example-project/example/spiders/dmoz.py
 - dmoz.py爬虫主程序可以继承Spider\CrawlSpider（这两个可以实现增量式爬虫）或者RedisSpider都可以 
-- 如果继承RedisSpider(可以实现分布式爬虫)，不需要再爬虫里面写start_urls，但是需要传入一个键的名称redis_key = 'sht:start_urls'
+- 如果继承RedisSpider(可以实现分布式爬虫)，不需要在爬虫文件里面写start_urls，但是需要传入一个键的名称redis_key = 'sht:start_urls'
 - RedisSpider启动步骤：
     - 启动redis客户端
-    - 启动爬虫，爬虫的自动监听传入的redis_key
+    - pycharm中的spider.py中或者命令端先启动爬虫，爬虫的自动监听传入的redis_key
     - 传入键名和键值，lpush sht:start_urls http://www.sht.com
     - 爬虫开始爬取，网址爬取结束后，爬虫会一直等于等待状态，然后我们可以继续传入新的网址，然后继续爬取
     - 要结束爬取，直接停止爬虫主程序即可
@@ -1236,8 +1344,8 @@ return added != 0
 
 - 普通的scrapy.Spider或者CrawlSpider只需要settings里面增加一些设置，具体参考settings.py文件里面的设置
 - 就可以将普通的Spider或者CrawlSpider变成scrapy_redis增量式爬虫，参考下面京东图书爬虫实例
-- scrapy_redis增量式爬虫的爬虫基类还是scrapy库里面的爬虫，只需要设置settings里面即可，还是有start_urls
-- scrapy_redis分布式爬虫继承的scrapy_redis库里面的爬虫，不需要设置start_urls，需要设置一个键，settings里面设置相同
+- scrapy_redis增量式爬虫的爬虫基类还是scrapy库里面的爬虫，只需要设置settings里面即可，还是要设置start_urls
+- scrapy_redis分布式爬虫继承的scrapy_redis库里面的RedisSpider爬虫，需要先安装，然后导入RedisSpider，不需要设置start_urls，需要设置一个键，settings里面设置相同
 
 ## 4.1 京东图书爬虫(scrapy_redis增量式爬虫)
 - 006文件下面的book项目中的jdbook京东图书增量式爬虫

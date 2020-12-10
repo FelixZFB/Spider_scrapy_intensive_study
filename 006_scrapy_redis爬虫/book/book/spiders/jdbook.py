@@ -8,7 +8,8 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
 
-# 开始项目时候创建的就是普通爬虫，settings中设置以后就可以变成scrapy-redis爬虫增量式爬虫
+# 该jdbook爬虫是普通的scrapy-redis增量式爬虫(使用redis去重，爬取过的不在爬取)，dangdang爬虫是scrapy-redis分布式爬虫
+# 开始项目时候创建的就是普通爬虫，settings中设置以后就可以变成scrapy-redis增量式爬虫
 class JdbookSpider(scrapy.Spider):
     name = 'jdbook'
     allowed_domains = ['jd.com', 'p.3.cn']
