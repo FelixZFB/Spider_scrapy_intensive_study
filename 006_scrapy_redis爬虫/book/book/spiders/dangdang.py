@@ -42,7 +42,6 @@ class DangdangSpider(RedisSpider): # 2 修改爬虫继承的类
                             callback=self.parse_book_list
                         )
 
-
     def parse_book_list(self, response):
         item = response.meta['item']
         # 图书列表获取
